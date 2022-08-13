@@ -176,13 +176,13 @@ Status: yet to appear in source file
 The implementation would cover all sane cases. The struct's definitions would
 be roughly as the following:
 ```go tree
-type struct tree {
+type tree struct {
   strings []string
   nodes   []node
 }
 ```
 ```go node
-type struct node {
+type node struct {
   pref     string
   mark     int
   children []int
