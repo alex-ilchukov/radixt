@@ -25,7 +25,7 @@ list. One can mark its nodes, and find the marks, going over the nodes and their
 
 ## Goals of the project
 
-The goals of project can be found in [corresponding document][./GOALS.md]. In
+The goals of project can be found in [corresponding document](./GOALS.md). In
 short, those would be the following:
 *   [ ] definition of tree interface;
 *   [ ] null tree implementation;
