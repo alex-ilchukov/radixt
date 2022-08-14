@@ -206,7 +206,7 @@ insertion.
     ```
 
 2.  The inserted string coincides with a string of a node, which is already 
-    present in the tree. The insertion the does nothing:
+    present in the tree. The insertion then does nothing:
     ```
     "authorization", mark: 0
                 |
