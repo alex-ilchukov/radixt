@@ -158,7 +158,7 @@ type Tree interface {
 }
 ```
 
-Status: yet to appear in source file
+Status: realized in source file
 
 
 ## Null implementation
@@ -168,7 +168,7 @@ value of Tree interface above. It would have no nodes at all and would be just
 empty struct. Obviously, only one empty instance of null implementation would 
 be required, so there would be no factory.
 
-Status: yet to appear in source file
+Status: realized in source file
 
 
 ## Generic implementation
@@ -206,7 +206,7 @@ insertion.
     ```
 
 2.  The inserted string coincides with a string of a node, which is already 
-    present in the tree. The insertion the does nothing:
+    present in the tree. The insertion then does nothing:
     ```
     "authorization", mark: 0
                 |
@@ -296,7 +296,7 @@ insertion.
 
 It's pretty obvious that insertion process uses heavily the lookup process.
 
-Status: yet to appear in source file
+Status: realized in source file
 
 
 ## The lookup process
