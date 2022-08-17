@@ -52,7 +52,7 @@ func TestNew(t *testing.T) {
 	}
 }
 
-var lookupResetTests = []struct {
+var lResetTests = []struct {
 	tree  radixt.Tree
 	input string
 	ln    int
@@ -80,11 +80,11 @@ var lookupResetTests = []struct {
 	{tree: withBlank, input: "", ln: 0, lnpos: 0},
 }
 
-const testLookupResetError = "Test Lookup Reset %d: got l.n = %d, l.npos = " +
-	"%d (should be %d and %d)"
+const testLResetError = "Test L Reset %d: got l.n = %d, l.npos = %d (should " +
+	"be %d and %d)"
 
-func TestLookupReset(t *testing.T) {
-	for i, tt := range lookupResetTests {
+func TestLReset(t *testing.T) {
+	for i, tt := range lResetTests {
 		tree := tt.tree
 		input := tt.input
 		l := New(tree)
@@ -96,7 +96,7 @@ func TestLookupReset(t *testing.T) {
 		l.Reset()
 		if l.n != tt.ln || l.npos != tt.lnpos {
 			t.Errorf(
-				testLookupResetError,
+				testLResetError,
 				i,
 				l.n,
 				l.npos,
@@ -107,7 +107,7 @@ func TestLookupReset(t *testing.T) {
 	}
 }
 
-var lookupFeedTests = []struct {
+var lFeedTests = []struct {
 	tree   radixt.Tree
 	input  string
 	result bool
@@ -148,11 +148,11 @@ var lookupFeedTests = []struct {
 	{tree: withBlank, input: "authe", result: false},
 }
 
-const testLookupFeedError = "Test Lookup Feed %d: after input data %s got " +
-	"%t for input byte %d (should be %t)"
+const testLFeedError = "Test L Feed %d: after input data %s got %t for " +
+	"input byte %d (should be %t)"
 
-func TestLookupFeed(t *testing.T) {
-	for i, tt := range lookupFeedTests {
+func TestLFeed(t *testing.T) {
+	for i, tt := range lFeedTests {
 		tree := tt.tree
 		last := len(tt.input) - 1
 		input := tt.input[:last]
@@ -166,7 +166,7 @@ func TestLookupFeed(t *testing.T) {
 		result := l.Feed(b)
 		if result != tt.result {
 			t.Errorf(
-				testLookupFeedError,
+				testLFeedError,
 				i,
 				input,
 				result,
@@ -177,7 +177,7 @@ func TestLookupFeed(t *testing.T) {
 	}
 }
 
-var lookupFoundTests = []struct {
+var lFoundTests = []struct {
 	tree   radixt.Tree
 	input  string
 	result bool
@@ -204,23 +204,23 @@ var lookupFoundTests = []struct {
 	{tree: withBlank, input: "", result: true},
 }
 
-const testLookupFoundError = "Test Lookup Found %d: for input data %s got " +
-	"%t (should be %t)"
+const testLFoundError = "Test L Found %d: for input data %s got %t (should " +
+	"be %t)"
 
-func TestLookupFound(t *testing.T) {
-	for i, tt := range lookupFoundTests {
+func TestLFound(t *testing.T) {
+	for i, tt := range lFoundTests {
 		tree := tt.tree
 		input := tt.input
-		lookup := New(tree)
+		l := New(tree)
 
 		for j := 0; j < len(input); j++ {
-			lookup.Feed(input[j])
+			l.Feed(input[j])
 		}
 
-		result := lookup.Found()
+		result := l.Found()
 		if result != tt.result {
 			t.Errorf(
-				testLookupFoundError,
+				testLFoundError,
 				i,
 				tt.input,
 				result,
@@ -230,7 +230,7 @@ func TestLookupFound(t *testing.T) {
 	}
 }
 
-var lookupTreeTests = []struct {
+var lTreeTests = []struct {
 	tree   radixt.Tree
 	result radixt.Tree
 }{
@@ -240,21 +240,21 @@ var lookupTreeTests = []struct {
 	{tree: withBlank, result: withBlank},
 }
 
-const testLookupTreeError = "Test Lookup Tree %d: got %v (should be %v)"
+const testLTreeError = "Test L Tree %d: got %v (should be %v)"
 
-func TestLookupTree(t *testing.T) {
-	for i, tt := range lookupTreeTests {
+func TestLTree(t *testing.T) {
+	for i, tt := range lTreeTests {
 		tree := tt.tree
 		l := New(tree)
 
 		result := l.Tree()
 		if result != tt.result {
-			t.Errorf(testLookupTreeError, i, result, tt.result)
+			t.Errorf(testLTreeError, i, result, tt.result)
 		}
 	}
 }
 
-var lookupNodeTests = []struct {
+var lNodeTests = []struct {
 	tree   radixt.Tree
 	input  string
 	result int
@@ -281,23 +281,23 @@ var lookupNodeTests = []struct {
 	{tree: withBlank, input: "", result: 0},
 }
 
-const testLookupNodeError = "Test Lookup Node %d: for input data %s got " +
+const testLNodeError = "Test L Node %d: for input data %s got " +
 	"%d (should be %d)"
 
-func TestLookupNode(t *testing.T) {
-	for i, tt := range lookupNodeTests {
+func TestLNode(t *testing.T) {
+	for i, tt := range lNodeTests {
 		tree := tt.tree
 		input := tt.input
-		lookup := New(tree)
+		l := New(tree)
 
 		for j := 0; j < len(input); j++ {
-			lookup.Feed(input[j])
+			l.Feed(input[j])
 		}
 
-		result := lookup.Node()
+		result := l.Node()
 		if result != tt.result {
 			t.Errorf(
-				testLookupNodeError,
+				testLNodeError,
 				i,
 				tt.input,
 				result,
