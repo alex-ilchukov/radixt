@@ -27,10 +27,10 @@ list. One can mark its nodes, and find the marks, going over the nodes and their
 
 The goals of project can be found in [corresponding document](./GOALS.md). In
 short, those would be the following:
-*   [ ] definition of tree interface;
-*   [ ] null tree implementation;
-*   [ ] generic tree implementation;
-*   [ ] implementation of lookup process;
+*   [X] definition of tree interface;
+*   [X] null tree implementation;
+*   [X] generic tree implementation;
+*   [X] implementation of lookup process;
 *   [ ] compactified implementations;
 *   [ ] fossilization of a tree into Golang code.
 
@@ -55,4 +55,60 @@ import "github.com/alex-ilchukov/radixt"
 
 ## Usage
 
-TODO: fill the section, when lookup process will be implemented
+One would need a radix tree, which implements [`radixt.Tree`](./tree.go) 
+interface, to invoke lookups of strings. Such a tree can be created, for 
+example, from strings with use of [`generic`](./generic) subpackage:
+```go
+import "github.com/alex-ilchukov/radixt/generic"
+…
+tree := generic.New("authorization", "content-length", "content-type")
+```
+
+If one has a proper tree, it can be used for lookups in the following way:
+```go
+import "github.com/alex-ilchukov/radixt/lookup"
+…
+l := lookup.New(tree) // Here tree is an implmentation of radixt.Tree
+```
+
+To lookup a string:
+```go
+s := "content-length"
+l.Reset()
+for i := 0; i < len(s); i++ {
+  // Can be changed to just l.Feed(s[i]) if early break is unrequired
+  if !l.Feed(s[i]) {
+    break
+  }
+}
+```
+
+To lookup a consequence of bytes:
+```
+import "io"
+…
+var r io.ByteReader = …
+l.Reset()
+for {
+  b, err := r.ReadByte()
+  if err != nil {
+    … // break, return or whatelse
+  }
+  if !l.Feed(b) {
+    … // same
+  }
+}
+```
+
+To get boolean true or false as status of the lookup:
+```go
+l.Found()
+```
+
+To get a "mark" (just an integer) of the node if it is found, or -1 if it is 
+not:
+```go
+l.Tree().NodeMark(l.Node())
+```
+
+More examples of usage can be found in [./examples] directory.
