@@ -314,7 +314,7 @@ has found corresponding string in the tree. Its algorithm is as following.
     the current node, its mark, and if position is more or equal to length of
     node prefix.
 
-Status: yet to appear in source file
+Status: realized in source file
 
 
 ## Compactified implementations
