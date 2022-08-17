@@ -68,7 +68,7 @@ If one has a proper tree, it can be used for lookups in the following way:
 ```go
 import "github.com/alex-ilchukov/radixt/lookup"
 …
-l := lookup.New(tree) // Here tree is an implmentation of radixt.Tree
+l := lookup.New(tree) // Here tree is an implementation of radixt.Tree
 ```
 
 To lookup a string:
@@ -84,7 +84,7 @@ for i := 0; i < len(s); i++ {
 ```
 
 To lookup a consequence of bytes:
-```
+```go
 import "io"
 …
 var r io.ByteReader = …
@@ -111,4 +111,4 @@ not:
 l.Tree().NodeMark(l.Node())
 ```
 
-More examples of usage can be found in [./examples] directory.
+More examples of usage can be found in [examples](./examples) directory.
