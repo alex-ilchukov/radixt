@@ -10,6 +10,7 @@ import (
 	"github.com/alex-ilchukov/radixt/null"
 )
 
+// Do analyzes radix tree t and returns result of the analysis.
 func Do(t radixt.Tree) A {
 	if t == nil {
 		t = null.Tree
