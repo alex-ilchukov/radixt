@@ -49,6 +49,7 @@ var doTests = []struct {
 			P:   "",
 			Pml: 0,
 			N:   map[int]N{},
+			Nt:  map[int]int{},
 			Ca:  map[int]int{},
 		},
 	},
@@ -58,6 +59,7 @@ var doTests = []struct {
 			P:   "",
 			Pml: 0,
 			N:   map[int]N{},
+			Nt:  map[int]int{},
 			Ca:  map[int]int{},
 		},
 	},
@@ -67,6 +69,7 @@ var doTests = []struct {
 			P:   "",
 			Pml: 0,
 			N:   map[int]N{},
+			Nt:  map[int]int{},
 			Ca:  map[int]int{},
 		},
 	},
@@ -177,6 +180,19 @@ var doTests = []struct {
 					PrefPos:  0,
 				},
 			},
+			Nt: map[int]int{
+				0:  0,
+				1:  9,
+				2:  10,
+				3:  8,
+				4:  3,
+				5:  4,
+				6:  1,
+				7:  2,
+				8:  5,
+				9:  6,
+				10: 7,
+			},
 			Ca: map[int]int{0: 6, 1: 1, 2: 3, 3: 1},
 		},
 	},
@@ -277,6 +293,18 @@ var doTests = []struct {
 					PrefPos:  13,
 				},
 			},
+			Nt: map[int]int{
+				0: 0,
+				1: 1,
+				2: 2,
+				3: 3,
+				4: 4,
+				5: 5,
+				6: 7,
+				7: 8,
+				8: 9,
+				9: 6,
+			},
 			Ca: map[int]int{0: 8, 3: 1, 6: 1},
 		},
 	},
@@ -320,6 +348,43 @@ func guilty(a, b A) string {
 			case v != v1:
 				return fmt.Sprintf(
 					"Ca and values at key %d: %d != %d",
+					k,
+					v,
+					v1,
+				)
+			}
+		}
+
+	case !reflect.DeepEqual(a.Nt, b.Nt):
+		for k, v := range a.Nt {
+			v1, has := b.Nt[k]
+			switch {
+			case !has:
+				return fmt.Sprintf(
+					"Nt and unnessesary key %d",
+					k,
+				)
+			case v != v1:
+				return fmt.Sprintf(
+					"Nt and values at key %d: %d != %d",
+					k,
+					v,
+					v1,
+				)
+			}
+		}
+
+		for k, v1 := range b.Nt {
+			v, has := a.Nt[k]
+			switch {
+			case !has:
+				return fmt.Sprintf(
+					"Nt and required key %d",
+					k,
+				)
+			case v != v1:
+				return fmt.Sprintf(
+					"Nt and values at key %d: %d != %d",
 					k,
 					v,
 					v1,
