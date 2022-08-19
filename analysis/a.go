@@ -14,5 +14,6 @@ type A struct {
 	P   string
 	Pml int
 	N   map[int]N
+	Nt  map[int]int
 	Ca  map[int]int
 }
