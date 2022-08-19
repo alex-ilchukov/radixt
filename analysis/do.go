@@ -15,7 +15,7 @@ func Do(t radixt.Tree) A {
 		t = null.Tree
 	}
 
-	nodes := nodes(t)
+	nodes, nt := nodes(t)
 	indices := make([]int, len(nodes))
 	parents := make(map[int]int)
 	prefixes := []string{}
@@ -56,21 +56,21 @@ func Do(t radixt.Tree) A {
 		n[index] = nodes[i]
 	}
 
-	return A{P: p, Pml: pml, N: n, Ca: ca}
+	return A{P: p, Pml: pml, N: n, Nt: nt, Ca: ca}
 }
 
-func nodes(t radixt.Tree) []N {
-	result := []N{}
-	stack := []int{}
+func nodes(t radixt.Tree) ([]N, map[int]int) {
+	nodes := []N{}
+	nt := map[int]int{}
+	queue := []int{}
 	root := t.Root()
 	if t.Has(root) {
-		stack = append(stack, root)
+		queue = append(queue, root)
 	}
 
-	for len(stack) > 0 {
-		l := len(stack)
-		n := stack[l-1]
-		stack = stack[:l-1]
+	for len(queue) > 0 {
+		n := queue[0]
+		queue = queue[1:]
 
 		r := N{
 			Index:    n,
@@ -82,15 +82,16 @@ func nodes(t radixt.Tree) []N {
 
 		t.NodeEachChild(n, func(c int) bool {
 			r.Children = append(r.Children, c)
-			stack = append(stack, c)
+			queue = append(queue, c)
 			return false
 		})
 
 		sort.Ints(r.Children)
-		result = append(result, r)
+		nodes = append(nodes, r)
+		nt[n] = len(nt)
 	}
 
-	return result
+	return nodes, nt
 }
 
 func calcNonNode(indices []int) int {
