@@ -10,7 +10,10 @@ import (
 	"github.com/alex-ilchukov/radixt/null"
 )
 
-// Do analyzes radix tree t and returns result of the analysis.
+// Do analyzes radix tree t and returns result of the analysis. It guarantees
+// to return the same result for the same tree with the same order of subfield
+// slices. It is safe to invoke the function concurrently for the same tree or
+// for different trees.
 func Do(t radixt.Tree) A {
 	if t == nil {
 		t = null.Tree
