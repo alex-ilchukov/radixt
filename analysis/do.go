@@ -65,7 +65,7 @@ func Do(t radixt.Tree) A {
 
 func chunk(t radixt.Tree, n int) string {
 	buf := []byte{}
-	npos := 0
+	npos := uint(0)
 	for {
 		b, within := t.ByteAt(n, npos)
 		if !within {
