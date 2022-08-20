@@ -6,8 +6,8 @@ type N struct {
 	// Index of the node in the tree.
 	Index int
 
-	// Prefix of the node.
-	Pref string
+	// Chunk of the node.
+	Chunk string
 
 	// String, associated with the node, or empty string if no string is
 	// associated.
@@ -23,8 +23,8 @@ type N struct {
 	// ascending of the indices.
 	Children []int
 
-	// Position of prefix in the [A.P] string.
-	PrefPos int
+	// Position of chunk in the [A.P] string.
+	ChunkPos int
 }
 
 // A struct represents result data of analysis of radix tree.
