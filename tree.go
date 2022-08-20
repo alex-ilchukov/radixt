@@ -11,10 +11,10 @@ package radixt
 //     instead of "node with index n" just "node n" expression is used.
 //  3. First bytes of non-empty children prefixes should be unique for every
 //     node.
+//  4. Empty chunk is allowed only for root nodes of the trees.
 //
 // The interface does not put any limitations on order of node indices, leaving
-// that detail to implementations. Also, there is no limitation on amount of
-// nodes with empty prefixes.
+// that detail to implementations.
 type Tree interface {
 	// Size should return amount of nodes in the tree.
 	Size() int
