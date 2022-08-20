@@ -6,12 +6,12 @@
 // inner node, so there are marks to distinguish if a node points to a result
 // string or not. Example:
 //
-//	                        ""
+//	                  "", mark: 0
 //	        /                            \
-//	"authorization", mark: 0       "content-", mark: -1
+//	"authorization", mark: 1       "content-", mark: 0
 //	                               /                  \
-//	                         "length", mark: 1   "type", mark: 2
+//	                         "length", mark: 2   "type", mark: 3
 //
-// Here in the example strings "authorization", "length", "type" are result
-// strings, while "content-" is not.
+// In the example strings "authorization", "content-length", "content-type" are
+// result strings, while "" or "content-" are not.
 package radixt
