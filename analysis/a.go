@@ -25,11 +25,11 @@ type N struct {
 
 // A struct represents result data of analysis of radix tree.
 type A struct {
-	// P is the string of all prefixes "crammed" together.
-	P string
+	// C is the string of all node chunks "crammed" together.
+	C string
 
-	// Pml is the maximum over prefix lengths of all nodes.
-	Pml int
+	// Cml is the maximum over chunk lengths of all nodes.
+	Cml int
 
 	// N is map from all node indices to node data in form of [N] structs.
 	N map[int]N
