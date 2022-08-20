@@ -30,7 +30,7 @@ func (tree) EachChild(int, func(int) bool) {
 }
 
 // ByteAt always returns 0 and boolean false.
-func (tree) ByteAt(int, int) (byte, bool) {
+func (tree) ByteAt(int, uint) (byte, bool) {
 	return 0, false
 }
 
