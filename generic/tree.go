@@ -181,7 +181,7 @@ func New(strings ...string) *tree {
 
 	t.nodes = []node{{chunk: strings[0], mark: 1}}
 	for m, s := range strings[1:] {
-		t.insert(s, uint(m + 2))
+		t.insert(s, uint(m+2))
 	}
 
 	return t
