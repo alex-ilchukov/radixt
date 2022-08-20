@@ -94,139 +94,45 @@ func TestTreeRoot(t *testing.T) {
 	}
 }
 
-var treeNodeMarkTests = []struct {
+var treeMarkTests = []struct {
 	tree   *tree
 	n      int
-	result int
+	result uint
 }{
-	{tree: empty, n: -2, result: -1},
-	{tree: empty, n: -1, result: -1},
-	{tree: empty, n: 0, result: -1},
-	{tree: empty, n: 1, result: -1},
-	{tree: empty, n: 100, result: -1},
-	{tree: atree, n: -2, result: -1},
-	{tree: atree, n: -1, result: -1},
-	{tree: atree, n: 0, result: -1},
-	{tree: atree, n: 1, result: 0},
-	{tree: atree, n: 2, result: 1},
-	{tree: atree, n: 3, result: -1},
-	{tree: atree, n: 4, result: 2},
-	{tree: atree, n: 5, result: 3},
-	{tree: atree, n: 6, result: 4},
-	{tree: atree, n: 7, result: -1},
-	{tree: atree, n: 8, result: 5},
-	{tree: atree, n: 9, result: 6},
-	{tree: atree, n: 10, result: 7},
-	{tree: atree, n: 100, result: -1},
+	{tree: empty, n: -2, result: 0},
+	{tree: empty, n: 0, result: 0},
+	{tree: empty, n: 0, result: 0},
+	{tree: empty, n: 1, result: 0},
+	{tree: empty, n: 100, result: 0},
+	{tree: atree, n: -2, result: 0},
+	{tree: atree, n: 0, result: 0},
+	{tree: atree, n: 0, result: 0},
+	{tree: atree, n: 1, result: 1},
+	{tree: atree, n: 2, result: 2},
+	{tree: atree, n: 3, result: 0},
+	{tree: atree, n: 4, result: 3},
+	{tree: atree, n: 5, result: 4},
+	{tree: atree, n: 6, result: 5},
+	{tree: atree, n: 7, result: 0},
+	{tree: atree, n: 8, result: 6},
+	{tree: atree, n: 9, result: 7},
+	{tree: atree, n: 10, result: 8},
+	{tree: atree, n: 100, result: 0},
 }
 
-const testTreeNodeMarkError = "Tree Node Mark Test %d: got %d for mark of " +
-	"node %d (should be %d)"
+const testTreeMarkError = "Tree Mark Test %d: got %d for mark of node %d " +
+	"(should be %d)"
 
-func TestTreeNodeMark(t *testing.T) {
-	for i, tt := range treeNodeMarkTests {
-		result := tt.tree.NodeMark(tt.n)
+func TestTreeMark(t *testing.T) {
+	for i, tt := range treeMarkTests {
+		result := tt.tree.Mark(tt.n)
 		if result != tt.result {
-			t.Errorf(
-				testTreeNodeMarkError,
-				i,
-				result,
-				tt.n,
-				tt.result,
-			)
+			t.Errorf(testTreeMarkError, i, result, tt.n, tt.result)
 		}
 	}
 }
 
-var treeNodeStringTests = []struct {
-	tree   *tree
-	n      int
-	result string
-}{
-	{tree: empty, n: -2, result: ""},
-	{tree: empty, n: -1, result: ""},
-	{tree: empty, n: 0, result: ""},
-	{tree: empty, n: 1, result: ""},
-	{tree: empty, n: 100, result: ""},
-	{tree: atree, n: -2, result: ""},
-	{tree: atree, n: -1, result: ""},
-	{tree: atree, n: 0, result: ""},
-	{tree: atree, n: 1, result: "authority"},
-	{tree: atree, n: 2, result: "authorization"},
-	{tree: atree, n: 3, result: ""},
-	{tree: atree, n: 4, result: "author"},
-	{tree: atree, n: 5, result: "authentication"},
-	{tree: atree, n: 6, result: "auth"},
-	{tree: atree, n: 7, result: ""},
-	{tree: atree, n: 8, result: "content-type"},
-	{tree: atree, n: 9, result: "content-length"},
-	{tree: atree, n: 10, result: "content-disposition"},
-	{tree: atree, n: 100, result: ""},
-}
-
-const testTreeNodeStringError = "Tree Node String Test %d: got %s for " +
-	"string of node %d (should be %s)"
-
-func TestTreeNodeString(t *testing.T) {
-	for i, tt := range treeNodeStringTests {
-		result := tt.tree.NodeString(tt.n)
-		if result != tt.result {
-			t.Errorf(
-				testTreeNodeStringError,
-				i,
-				result,
-				tt.n,
-				tt.result,
-			)
-		}
-	}
-}
-
-var treeNodePrefTests = []struct {
-	tree   *tree
-	n      int
-	result string
-}{
-	{tree: empty, n: -2, result: ""},
-	{tree: empty, n: -1, result: ""},
-	{tree: empty, n: 0, result: ""},
-	{tree: empty, n: 1, result: ""},
-	{tree: empty, n: 100, result: ""},
-	{tree: atree, n: -2, result: ""},
-	{tree: atree, n: -1, result: ""},
-	{tree: atree, n: 0, result: ""},
-	{tree: atree, n: 1, result: "ty"},
-	{tree: atree, n: 2, result: "zation"},
-	{tree: atree, n: 3, result: "i"},
-	{tree: atree, n: 4, result: "or"},
-	{tree: atree, n: 5, result: "entication"},
-	{tree: atree, n: 6, result: "auth"},
-	{tree: atree, n: 7, result: "content-"},
-	{tree: atree, n: 8, result: "type"},
-	{tree: atree, n: 9, result: "length"},
-	{tree: atree, n: 10, result: "disposition"},
-	{tree: atree, n: 100, result: ""},
-}
-
-const testTreeNodePrefError = "Tree Node Pref Test %d: got %s for string of " +
-	"node %d (should be %s)"
-
-func TestTreeNodePref(t *testing.T) {
-	for i, tt := range treeNodePrefTests {
-		result := tt.tree.NodePref(tt.n)
-		if result != tt.result {
-			t.Errorf(
-				testTreeNodePrefError,
-				i,
-				result,
-				tt.n,
-				tt.result,
-			)
-		}
-	}
-}
-
-var treeNodeEachChildTests = []struct {
+var treeEachChildTests = []struct {
 	tree *tree
 	n    int
 	sum  int
@@ -252,12 +158,11 @@ var treeNodeEachChildTests = []struct {
 	{tree: atree, n: 100, sum: 0},
 }
 
-const testTreeNodeEachChildError = "Tree Node Each Child Test %d: got %d " +
-	"for sum of indices of the first two children of node %d (should be " +
-	"%d)"
+const testTreeEachChildError = "Tree Each Child Test %d: got %d for sum of " +
+	"indices of the first two children of node %d (should be %d)"
 
-func TestTreeNodeEachChild(t *testing.T) {
-	for i, tt := range treeNodeEachChildTests {
+func TestTreeEachChild(t *testing.T) {
+	for i, tt := range treeEachChildTests {
 		sum := 0
 		counter := 0
 
@@ -270,81 +175,70 @@ func TestTreeNodeEachChild(t *testing.T) {
 			return counter >= 2
 		}
 
-		tt.tree.NodeEachChild(tt.n, e)
+		tt.tree.EachChild(tt.n, e)
 		if sum != tt.sum {
-			t.Errorf(
-				testTreeNodeEachChildError,
-				i,
-				sum,
-				tt.n,
-				tt.sum,
-			)
+			t.Errorf(testTreeEachChildError, i, sum, tt.n, tt.sum)
 		}
 	}
 }
 
-var treeNodeTransitTests = []struct {
-	tree   *tree
-	n      int
-	pos    int
-	b      byte
-	result int
+var treeByteAtTests = []struct {
+	tree    *tree
+	n       int
+	npos    int
+	result1 byte
+	result2 bool
 }{
-	{tree: empty, n: -2, pos: -1, b: 97, result: -1},
-	{tree: empty, n: -2, pos: 0, b: 97, result: -1},
-	{tree: empty, n: -1, pos: -1, b: 97, result: -1},
-	{tree: empty, n: -1, pos: 0, b: 97, result: -1},
-	{tree: empty, n: 0, pos: -1, b: 97, result: -1},
-	{tree: empty, n: 0, pos: 0, b: 97, result: -1},
-	{tree: empty, n: 1, pos: -1, b: 97, result: -1},
-	{tree: empty, n: 1, pos: 0, b: 97, result: -1},
-	{tree: empty, n: 6, pos: -1, b: 97, result: -1},
-	{tree: empty, n: 6, pos: 0, b: 97, result: -1},
-	{tree: empty, n: 100, pos: -1, b: 97, result: -1},
-	{tree: empty, n: 100, pos: 0, b: 97, result: -1},
-	{tree: atree, n: -2, pos: -1, b: 97, result: -1},
-	{tree: atree, n: -2, pos: 0, b: 97, result: -1},
-	{tree: atree, n: -1, pos: -1, b: 97, result: -1},
-	{tree: atree, n: -1, pos: 0, b: 97, result: -1},
-	{tree: atree, n: 0, pos: -1, b: 97, result: -1},
-	{tree: atree, n: 0, pos: 0, b: 97, result: 6},
-	{tree: atree, n: 0, pos: 1, b: 97, result: 6},
-	{tree: atree, n: 0, pos: -1, b: 99, result: -1},
-	{tree: atree, n: 0, pos: 0, b: 99, result: 7},
-	{tree: atree, n: 0, pos: 1, b: 99, result: 7},
-	{tree: atree, n: 0, pos: 0, b: 117, result: -1},
-	{tree: atree, n: 0, pos: 1, b: 117, result: -1},
-	{tree: atree, n: 1, pos: -1, b: 97, result: -1},
-	{tree: atree, n: 1, pos: 0, b: 97, result: -1},
-	{tree: atree, n: 6, pos: -1, b: 97, result: -1},
-	{tree: atree, n: 6, pos: 0, b: 97, result: 6},
-	{tree: atree, n: 6, pos: 0, b: 117, result: -1},
-	{tree: atree, n: 6, pos: 1, b: 117, result: 6},
-	{tree: atree, n: 6, pos: 2, b: 116, result: 6},
-	{tree: atree, n: 6, pos: 3, b: 104, result: 6},
-	{tree: atree, n: 6, pos: 4, b: 111, result: 4},
-	{tree: atree, n: 6, pos: 5, b: 111, result: 4},
-	{tree: atree, n: 6, pos: 4, b: 101, result: 5},
-	{tree: atree, n: 6, pos: 5, b: 101, result: 5},
-	{tree: atree, n: 100, pos: -1, b: 97, result: -1},
-	{tree: atree, n: 100, pos: 0, b: 97, result: -1},
+	{tree: empty, n: -2, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: -2, npos: 0, result1: 0, result2: false},
+	{tree: empty, n: -1, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: -1, npos: 0, result1: 0, result2: false},
+	{tree: empty, n: 0, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: 0, npos: 0, result1: 0, result2: false},
+	{tree: empty, n: 1, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: 1, npos: 0, result1: 0, result2: false},
+	{tree: empty, n: 6, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: 6, npos: 0, result1: 0, result2: false},
+	{tree: empty, n: 100, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: 100, npos: 0, result1: 0, result2: false},
+	{tree: atree, n: -2, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: -2, npos: 0, result1: 0, result2: false},
+	{tree: atree, n: -1, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: -1, npos: 0, result1: 0, result2: false},
+	{tree: atree, n: 0, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: 0, npos: 0, result1: 0, result2: false},
+	{tree: atree, n: 1, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: 1, npos: 0, result1: 116, result2: true},
+	{tree: atree, n: 1, npos: 1, result1: 121, result2: true},
+	{tree: atree, n: 1, npos: 2, result1: 0, result2: false},
+	{tree: atree, n: 1, npos: 3, result1: 0, result2: false},
+	{tree: atree, n: 6, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: 6, npos: 0, result1: 97, result2: true},
+	{tree: atree, n: 6, npos: 1, result1: 117, result2: true},
+	{tree: atree, n: 6, npos: 2, result1: 116, result2: true},
+	{tree: atree, n: 6, npos: 3, result1: 104, result2: true},
+	{tree: atree, n: 6, npos: 4, result1: 0, result2: false},
+	{tree: atree, n: 6, npos: 5, result1: 0, result2: false},
+	{tree: atree, n: 100, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: 100, npos: 0, result1: 0, result2: false},
 }
 
-const testTreeNodeTransitError = "Tree Node Transit Test %d: got %d for " +
-	"transition of node %d by byte %d at position %d (should be %d)"
+const testTreeByteAtError = "Tree ByteAt Test %d: got %d and %t for byte at " +
+	"position %d of chunk of node %d (should be %d and %t)"
 
-func TestTreeNodeTransit(t *testing.T) {
-	for i, tt := range treeNodeTransitTests {
-		result := tt.tree.NodeTransit(tt.n, tt.pos, tt.b)
-		if result != tt.result {
+func TestTreeByteAt(t *testing.T) {
+	for i, tt := range treeByteAtTests {
+		result1, result2 := tt.tree.ByteAt(tt.n, tt.npos)
+		if result1 != tt.result1 || result2 != tt.result2 {
 			t.Errorf(
-				testTreeNodeTransitError,
+				testTreeByteAtError,
 				i,
-				result,
+				result1,
+				result2,
+				tt.npos,
 				tt.n,
-				tt.b,
-				tt.pos,
-				tt.result,
+				tt.result1,
+				tt.result2,
 			)
 		}
 	}
