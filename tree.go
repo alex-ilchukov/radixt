@@ -32,31 +32,7 @@ type Tree interface {
 	// otherwise.
 	NodeMark(n int) int
 
-	// NodeString should return associated string of the node n or empty
-	// string, if the node is not associated with a string.
-	NodeString(n int) string
-
-	// NodePref should return associated prefix of the node n.
-	NodePref(n int) string
-
 	// NodeEachChild should call func e for every child of the node n,
 	// until e returns boolean true.
 	NodeEachChild(n int, e func(int) bool)
-
-	// NodeTransit should implement the transition from node n to the same
-	// node or its child (perhaps, grandchild, grandgrandchild et cetera),
-	// accordingly to the following algorithm. Let start with prefix of the
-	// node n, then
-	//  1) if npos is less than length of the prefix, and byte of the
-	//     prefix at npos is b, then the implementation should return n;
-	//  2) if npos is less than length of the prefix, but byte of the
-	//     prefix at npos is not b, then the implementation should return
-	//     some non-node index;
-	//  3) if npos is more or equal to length of the prefix, then the
-	//     implementation should look for b in first bytes of children
-	//     (grandchildren, grandgrandchildren), skipping all intermediate
-	//     nodes with empty prefixes; if such a child node is found, then
-	//     implementation should return it, otherwise it should return
-	//     some non-node index.
-	NodeTransit(n, npos int, b byte) int
 }
