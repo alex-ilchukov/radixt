@@ -26,10 +26,10 @@ type Tree interface {
 	// non-node index otherwise.
 	Root() int
 
-	// NodeMark should return ``mark'' of the node n. That is, it should
-	// return negative number, if the node is not associated with a string
-	// from original string list, or the index of the associated string
-	// otherwise.
+	// Mark should return mark of the node n. That is, it should return
+	// zero, if the node is not associated with a string from original
+	// string list, or the index of the associated string otherwise,
+	// incremented by one.
 	Mark(n int) uint
 
 	// NodeEachChild should call func e for every child of the node n,
