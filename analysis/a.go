@@ -9,10 +9,6 @@ type N struct {
 	// Chunk of the node.
 	Chunk string
 
-	// String, associated with the node, or empty string if no string is
-	// associated.
-	String string
-
 	// Mark of the node
 	Mark int
 
