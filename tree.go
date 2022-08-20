@@ -32,7 +32,7 @@ type Tree interface {
 	// incremented by one.
 	Mark(n int) uint
 
-	// NodeEachChild should call func e for every child of the node n,
-	// until e returns boolean true.
-	NodeEachChild(n int, e func(int) bool)
+	// EachChild should call func e for every child of the node n, until e
+	// returns boolean true.
+	EachChild(n int, e func(int) bool)
 }
