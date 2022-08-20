@@ -22,8 +22,8 @@ func Do(t radixt.Tree) A {
 	nodes, nt := nodes(t)
 	indices := make([]int, len(nodes))
 	parents := make(map[int]int)
-	prefixes := []string{}
-	pml := 0
+	chunks := []string{}
+	cml := 0
 	ca := make(map[int]int)
 
 	for i, n := range nodes {
@@ -35,15 +35,15 @@ func Do(t radixt.Tree) A {
 		}
 
 		ca[len(n.Children)] += 1
-		prefixes = append(prefixes, n.Pref)
+		chunks = append(chunks, n.Chunk)
 
-		if pml < len(n.Pref) {
-			pml = len(n.Pref)
+		if cml < len(n.Chunk) {
+			cml = len(n.Chunk)
 		}
 	}
 
 	nonnode := calcNonNode(indices)
-	p := cramPrefixes(prefixes)
+	c := cramChunks(chunks)
 	n := make(map[int]N)
 
 	for i := range nodes {
@@ -55,12 +55,28 @@ func Do(t radixt.Tree) A {
 			nodes[i].Parent = nonnode
 		}
 
-		nodes[i].PrefPos = strings.Index(p, nodes[i].Pref)
+		nodes[i].ChunkPos = strings.Index(c, nodes[i].Chunk)
 
 		n[index] = nodes[i]
 	}
 
-	return A{P: p, Pml: pml, N: n, Nt: nt, Ca: ca}
+	return A{C: c, Cml: cml, N: n, Nt: nt, Ca: ca}
+}
+
+func chunk(t radixt.Tree, n int) string {
+	buf := []byte{}
+	npos := 0
+	for {
+		b, within := t.ByteAt(n, npos)
+		if !within {
+			break
+		}
+
+		buf = append(buf, b)
+		npos++
+	}
+
+	return string(buf)
 }
 
 func nodes(t radixt.Tree) ([]N, map[int]int) {
@@ -78,13 +94,12 @@ func nodes(t radixt.Tree) ([]N, map[int]int) {
 
 		r := N{
 			Index:    n,
-			Pref:     t.NodePref(n),
-			String:   t.NodeString(n),
-			Mark:     t.NodeMark(n),
+			Chunk:    chunk(t, n),
+			Mark:     t.Mark(n),
 			Children: []int{},
 		}
 
-		t.NodeEachChild(n, func(c int) bool {
+		t.EachChild(n, func(c int) bool {
 			r.Children = append(r.Children, c)
 			queue = append(queue, c)
 			return false
@@ -113,20 +128,20 @@ func calcNonNode(indices []int) int {
 	return r
 }
 
-func cramPrefixes(prefixes []string) string {
-	sort.SliceStable(prefixes, func(i, j int) bool {
-		pi := prefixes[i]
-		pj := prefixes[j]
+func cramChunks(chunks []string) string {
+	sort.SliceStable(chunks, func(i, j int) bool {
+		pi := chunks[i]
+		pj := chunks[j]
 		li := len(pi)
 		lj := len(pj)
 
 		return li > lj || (li == lj && pi <= pj)
 	})
 
-	l := len(prefixes)
+	l := len(chunks)
 	t := 0
 	byteSlices := make([][]byte, l)
-	for i, p := range prefixes {
+	for i, p := range chunks {
 		byteSlices[i] = []byte(p)
 		t += len(p)
 	}

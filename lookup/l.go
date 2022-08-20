@@ -10,6 +10,7 @@ type L struct {
 	t    radixt.Tree
 	n    int
 	npos int
+	stop bool
 }
 
 // New creates and initializes new lookup state accordingly to the provided
@@ -30,31 +31,63 @@ func New(t radixt.Tree) *L {
 func (l *L) Reset() {
 	l.n = l.t.Root()
 	l.npos = 0
+	l.stop = false
 }
 
 // Feed takes byte b and returns if the byte is found in radix tree accordingly
 // to the state or not.
 func (l *L) Feed(b byte) bool {
-	t := l.t
-	n := l.n
-	l.n = t.NodeTransit(n, l.npos, b)
-	if !t.Has(l.n) {
+	if l.stop {
 		return false
 	}
-	if l.n == n {
-		l.npos++
-	} else {
-		l.npos = 1
+
+	t := l.t
+	n := l.n
+	byteAt, within := t.ByteAt(n, l.npos)
+	if within {
+		if byteAt == b {
+			l.npos++
+			return true
+		}
+
+		l.stop = true
+		return false
 	}
 
-	return true
+	l.stop = true
+	t.EachChild(n, func(c int) bool {
+		byteAt, _ := t.ByteAt(c, 0)
+		if byteAt == b {
+			l.n = c
+			l.stop = false
+			l.npos = 1
+			return true
+		}
+
+		return false
+	})
+
+	return !l.stop
 }
 
 // Found returns if the lookup state points to string in the tree or not.
 func (l *L) Found() bool {
+	if l.stop {
+		return false
+	}
+
 	t := l.t
 	n := l.n
-	return t.NodeMark(n) >= 0 && len(t.NodePref(n)) <= l.npos
+	if t.Mark(n) == 0 {
+		return false
+	}
+
+	_, within := t.ByteAt(n, l.npos)
+	if within {
+		return false
+	}
+
+	return true
 }
 
 // Tree returns radix tree.
@@ -62,8 +95,7 @@ func (l *L) Tree() radixt.Tree {
 	return l.t
 }
 
-// Node returns index of current tree node or non-node index if the lookup
-// process has already finished with failure.
+// Node returns index of current tree node.
 func (l *L) Node() int {
 	return l.n
 }

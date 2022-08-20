@@ -3,14 +3,13 @@ package generic
 import "github.com/alex-ilchukov/radixt"
 
 type node struct {
-	pref     string
-	mark     int
+	chunk    string
+	mark     uint
 	children []int
 }
 
 type tree struct {
-	strings []string
-	nodes   []node
+	nodes []node
 }
 
 // Size returns amount of nodes in the tree.
@@ -32,42 +31,20 @@ func (t *tree) Root() int {
 	return -1
 }
 
-// NodeMark returns mark of node n, if the tree has the node and the node is
-// marked, or -1 otherwise.
-func (t *tree) NodeMark(n int) int {
+// Mark returns mark of node n, if the tree has the node and the node is
+// marked, or zero otherwise.
+func (t *tree) Mark(n int) uint {
 	if t.Has(n) {
 		return t.mark(n)
 	}
 
-	return -1
+	return 0
 }
 
-// NodeMark returns string of node n, if the tree has the node and the node is
-// marked, or empty string otherwise.
-func (t *tree) NodeString(n int) string {
-	mark := t.NodeMark(n)
-	if mark >= 0 {
-		return t.strings[mark]
-	}
-
-	return ""
-}
-
-// NodePref returns prefix string of node n, if the tree has the node, or empty
-// string otherwise.
-func (t *tree) NodePref(n int) string {
-	if t.Has(n) {
-		return t.pref(n)
-	}
-
-	return ""
-}
-
-// NodeEachChild calls func e for every child of node n, if the tree has the
-// node, until the func returns boolean true. The order of going over the
-// children is fixed for every node, but may not coincide with any natural
-// order.
-func (t *tree) NodeEachChild(n int, e func(int) bool) {
+// EachChild calls func e for every child of node n, if the tree has the node,
+// until the func returns boolean true. The order of going over the children is
+// fixed for every node, but may not coincide with any natural order.
+func (t *tree) EachChild(n int, e func(int) bool) {
 	if !t.Has(n) {
 		return
 	}
@@ -79,29 +56,23 @@ func (t *tree) NodeEachChild(n int, e func(int) bool) {
 	}
 }
 
-// NodeTransit transits from node n accordingly to the following rules. Let
-// start with prefix of the node.
-//  1. If npos is less than length of the prefix, and byte of the prefix at
-//     npos is b, then n is returned.
-//  2. If npos is less than length of the prefix, but byte of the prefix at
-//     npos is not b, then -1 (which is non-node) is returned.
-//  3. If npos is more or equal to length of the prefix, then children of n are
-//     checked; if there is a child with b as first byte of its prefix, then
-//     the child is returned; if there is no such a child, -1 is returned.
-func (t *tree) NodeTransit(n, npos int, b byte) int {
-	if t.Has(n) && npos >= 0 {
-		return t.transit(n, npos, b)
+// ByteAt returns default byte value and boolean false, if npos is outside of
+// chunk of the node n, or byte of the chunk at npos and boolean true
+// otherwise.
+func (t *tree) ByteAt(n, npos int) (b byte, within bool) {
+	if !t.Has(n) || npos < 0 {
+		return
 	}
 
-	return -1
+	return t.byteAt(n, npos)
 }
 
-func (t *tree) mark(n int) int {
+func (t *tree) mark(n int) uint {
 	return t.nodes[n].mark
 }
 
-func (t *tree) pref(n int) string {
-	return t.nodes[n].pref
+func (t *tree) chunk(n int) string {
+	return t.nodes[n].chunk
 }
 
 func (t *tree) children(n int) []int {
@@ -109,13 +80,25 @@ func (t *tree) children(n int) []int {
 }
 
 func (t *tree) end(n, npos int) bool {
-	return len(t.pref(n)) <= npos
+	return len(t.chunk(n)) <= npos
+}
+
+func (t *tree) byteAt(n, npos int) (b byte, within bool) {
+	chunk := t.chunk(n)
+	if len(chunk) <= npos {
+		return
+	}
+
+	within = true
+	b = chunk[npos]
+
+	return
 }
 
 func (t *tree) transit(n, npos int, b byte) int {
-	pref := t.pref(n)
-	if npos < len(pref) {
-		if pref[npos] == b {
+	byteAt, within := t.byteAt(n, npos)
+	if within {
+		if byteAt == b {
 			return n
 		}
 
@@ -123,7 +106,8 @@ func (t *tree) transit(n, npos int, b byte) int {
 	}
 
 	for _, c := range t.children(n) {
-		if t.pref(c)[0] == b {
+		byteAt, _ = t.byteAt(c, 0)
+		if byteAt == b {
 			return c
 		}
 	}
@@ -151,44 +135,43 @@ func (t *tree) find(s string) (found bool, n, pos, npos int) {
 	return
 }
 
-func (t *tree) insert(s string) {
+func (t *tree) insert(s string, mark uint) {
 	found, n, pos, npos := t.find(s)
 	switch {
 	case !found:
 		if !t.end(n, npos) {
-			t.splitNode(n, npos, -1)
+			t.splitNode(n, npos, 0)
 		}
 
-		t.addChild(n, s[pos:])
+		t.addChild(n, s[pos:], mark)
 
 	case !t.end(n, npos):
-		t.splitNode(n, npos, len(t.strings))
+		t.splitNode(n, npos, mark)
 
-	case t.mark(n) < 0:
-		t.nodes[n].mark = len(t.strings)
+	case t.mark(n) == 0:
+		t.nodes[n].mark = mark
 
 	default:
 		return
 	}
-
-	t.strings = append(t.strings, s)
 }
 
-func (t *tree) splitNode(n, npos, mark int) {
+func (t *tree) splitNode(n, npos int, mark uint) {
 	no := t.nodes[n]
-	pref := no.pref
-	no.pref = pref[npos:]
+	chunk := no.chunk
+	no.chunk = chunk[npos:]
 	t.nodes = append(t.nodes, no)
-	t.nodes[n] = node{pref[:npos], mark, []int{len(t.nodes) - 1}}
+	t.nodes[n] = node{chunk[:npos], mark, []int{len(t.nodes) - 1}}
 }
 
-func (t *tree) addChild(n int, pref string) {
-	t.nodes = append(t.nodes, node{pref, len(t.strings), nil})
+func (t *tree) addChild(n int, chunk string, mark uint) {
+	t.nodes = append(t.nodes, node{chunk, mark, nil})
 	t.nodes[n].children = append(t.nodes[n].children, len(t.nodes)-1)
 }
 
 // New creates a new generic tree, inserting the provided strings, and returns
-// a pointer on the tree
+// a pointer on the tree. Node marks are indicies of the strings, incremented
+// by one.
 func New(strings ...string) *tree {
 	t := new(tree)
 
@@ -196,12 +179,9 @@ func New(strings ...string) *tree {
 		return t
 	}
 
-	s := strings[0]
-	t.strings = []string{s}
-	t.nodes = []node{{pref: s}}
-
-	for _, s = range strings[1:] {
-		t.insert(s)
+	t.nodes = []node{{chunk: strings[0], mark: 1}}
+	for m, s := range strings[1:] {
+		t.insert(s, uint(m+2))
 	}
 
 	return t

@@ -19,29 +19,19 @@ func (tree) Root() int {
 	return -1
 }
 
-// NodeMark always returns -1.
-func (tree) NodeMark(int) int {
-	return -1
+// Mark always returns 0.
+func (tree) Mark(int) uint {
+	return 0
 }
 
-// NodeString always returns empty string.
-func (tree) NodeString(int) string {
-	return ""
-}
-
-// NodePref always returns empty string.
-func (tree) NodePref(int) string {
-	return ""
-}
-
-// NodeEachChild does nothing.
-func (tree) NodeEachChild(int, func(int) bool) {
+// EachChild does nothing.
+func (tree) EachChild(int, func(int) bool) {
 	return
 }
 
-// NodeTransit always returns -1.
-func (tree) NodeTransit(int, int, byte) int {
-	return -1
+// ByteAt always returns 0 and boolean false.
+func (tree) ByteAt(int, int) (byte, bool) {
+	return 0, false
 }
 
 // Tree is the only accessible instance of the implementation.
