@@ -59,12 +59,12 @@ func (t *tree) EachChild(n int, e func(int) bool) {
 // ByteAt returns default byte value and boolean false, if npos is outside of
 // chunk of the node n, or byte of the chunk at npos and boolean true
 // otherwise.
-func (t *tree) ByteAt(n, npos int) (b byte, within bool) {
-	if !t.Has(n) || npos < 0 {
-		return
+func (t *tree) ByteAt(n int, npos uint) (b byte, within bool) {
+	if t.Has(n) {
+		return t.byteAt(n, npos)
 	}
 
-	return t.byteAt(n, npos)
+	return
 }
 
 func (t *tree) mark(n int) uint {
@@ -79,13 +79,13 @@ func (t *tree) children(n int) []int {
 	return t.nodes[n].children
 }
 
-func (t *tree) end(n, npos int) bool {
-	return len(t.chunk(n)) <= npos
+func (t *tree) end(n int, npos uint) bool {
+	return uint(len(t.chunk(n))) <= npos
 }
 
-func (t *tree) byteAt(n, npos int) (b byte, within bool) {
+func (t *tree) byteAt(n int, npos uint) (b byte, within bool) {
 	chunk := t.chunk(n)
-	if len(chunk) <= npos {
+	if uint(len(chunk)) <= npos {
 		return
 	}
 
@@ -95,7 +95,7 @@ func (t *tree) byteAt(n, npos int) (b byte, within bool) {
 	return
 }
 
-func (t *tree) transit(n, npos int, b byte) int {
+func (t *tree) transit(n int, npos uint, b byte) int {
 	byteAt, within := t.byteAt(n, npos)
 	if within {
 		if byteAt == b {
@@ -115,7 +115,7 @@ func (t *tree) transit(n, npos int, b byte) int {
 	return -1
 }
 
-func (t *tree) find(s string) (found bool, n, pos, npos int) {
+func (t *tree) find(s string) (found bool, n, pos int, npos uint) {
 	l := len(s)
 	for ; pos < l; pos++ {
 		m := t.transit(n, npos, s[pos])
@@ -156,7 +156,7 @@ func (t *tree) insert(s string, mark uint) {
 	}
 }
 
-func (t *tree) splitNode(n, npos int, mark uint) {
+func (t *tree) splitNode(n int, npos uint, mark uint) {
 	no := t.nodes[n]
 	chunk := no.chunk
 	no.chunk = chunk[npos:]

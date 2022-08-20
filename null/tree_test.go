@@ -118,22 +118,22 @@ func TestEachChild(t *testing.T) {
 var treeByteAtTests = []struct {
 	tree    tree
 	n       int
-	npos    int
+	npos    uint
 	result1 byte
 	result2 bool
 }{
-	{tree: Tree, n: -2, npos: -1, result1: 0, result2: false},
 	{tree: Tree, n: -2, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: -1, npos: -1, result1: 0, result2: false},
+	{tree: Tree, n: -2, npos: 1, result1: 0, result2: false},
 	{tree: Tree, n: -1, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: 0, npos: -1, result1: 0, result2: false},
+	{tree: Tree, n: -1, npos: 1, result1: 0, result2: false},
 	{tree: Tree, n: 0, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: 1, npos: -1, result1: 0, result2: false},
+	{tree: Tree, n: 0, npos: 1, result1: 0, result2: false},
 	{tree: Tree, n: 1, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: 6, npos: -1, result1: 0, result2: false},
+	{tree: Tree, n: 1, npos: 1, result1: 0, result2: false},
 	{tree: Tree, n: 6, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: 100, npos: -1, result1: 0, result2: false},
+	{tree: Tree, n: 6, npos: 1, result1: 0, result2: false},
 	{tree: Tree, n: 100, npos: 0, result1: 0, result2: false},
+	{tree: Tree, n: 100, npos: 1, result1: 0, result2: false},
 }
 
 const testTreeByteAtError = "Tree ByteAt Test %d: got %d and %t for byte at " +

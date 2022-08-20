@@ -31,7 +31,7 @@ var newTests = []struct {
 	t     radixt.Tree
 	lt    radixt.Tree
 	ln    int
-	lnpos int
+	lnpos uint
 }{
 	{t: nil, lt: null.Tree, ln: -1, lnpos: 0},
 	{t: null.Tree, lt: null.Tree, ln: -1, lnpos: 0},
@@ -56,7 +56,7 @@ var lResetTests = []struct {
 	tree  radixt.Tree
 	input string
 	ln    int
-	lnpos int
+	lnpos uint
 }{
 	{tree: nil, input: "", ln: -1, lnpos: 0},
 	{tree: nil, input: "content-type", ln: -1, lnpos: 0},

@@ -9,7 +9,7 @@ import (
 type L struct {
 	t    radixt.Tree
 	n    int
-	npos int
+	npos uint
 	stop bool
 }
 

@@ -185,42 +185,40 @@ func TestTreeEachChild(t *testing.T) {
 var treeByteAtTests = []struct {
 	tree    *tree
 	n       int
-	npos    int
+	npos    uint
 	result1 byte
 	result2 bool
 }{
-	{tree: empty, n: -2, npos: -1, result1: 0, result2: false},
 	{tree: empty, n: -2, npos: 0, result1: 0, result2: false},
-	{tree: empty, n: -1, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: -2, npos: 1, result1: 0, result2: false},
 	{tree: empty, n: -1, npos: 0, result1: 0, result2: false},
-	{tree: empty, n: 0, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: -1, npos: 1, result1: 0, result2: false},
 	{tree: empty, n: 0, npos: 0, result1: 0, result2: false},
-	{tree: empty, n: 1, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: 0, npos: 1, result1: 0, result2: false},
 	{tree: empty, n: 1, npos: 0, result1: 0, result2: false},
-	{tree: empty, n: 6, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: 1, npos: 1, result1: 0, result2: false},
 	{tree: empty, n: 6, npos: 0, result1: 0, result2: false},
-	{tree: empty, n: 100, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: 6, npos: 1, result1: 0, result2: false},
 	{tree: empty, n: 100, npos: 0, result1: 0, result2: false},
-	{tree: atree, n: -2, npos: -1, result1: 0, result2: false},
+	{tree: empty, n: 100, npos: 1, result1: 0, result2: false},
 	{tree: atree, n: -2, npos: 0, result1: 0, result2: false},
-	{tree: atree, n: -1, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: -2, npos: 1, result1: 0, result2: false},
 	{tree: atree, n: -1, npos: 0, result1: 0, result2: false},
-	{tree: atree, n: 0, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: -1, npos: 1, result1: 0, result2: false},
 	{tree: atree, n: 0, npos: 0, result1: 0, result2: false},
-	{tree: atree, n: 1, npos: -1, result1: 0, result2: false},
+	{tree: atree, n: 0, npos: 1, result1: 0, result2: false},
 	{tree: atree, n: 1, npos: 0, result1: 116, result2: true},
 	{tree: atree, n: 1, npos: 1, result1: 121, result2: true},
 	{tree: atree, n: 1, npos: 2, result1: 0, result2: false},
 	{tree: atree, n: 1, npos: 3, result1: 0, result2: false},
-	{tree: atree, n: 6, npos: -1, result1: 0, result2: false},
 	{tree: atree, n: 6, npos: 0, result1: 97, result2: true},
 	{tree: atree, n: 6, npos: 1, result1: 117, result2: true},
 	{tree: atree, n: 6, npos: 2, result1: 116, result2: true},
 	{tree: atree, n: 6, npos: 3, result1: 104, result2: true},
 	{tree: atree, n: 6, npos: 4, result1: 0, result2: false},
 	{tree: atree, n: 6, npos: 5, result1: 0, result2: false},
-	{tree: atree, n: 100, npos: -1, result1: 0, result2: false},
 	{tree: atree, n: 100, npos: 0, result1: 0, result2: false},
+	{tree: atree, n: 100, npos: 1, result1: 0, result2: false},
 }
 
 const testTreeByteAtError = "Tree ByteAt Test %d: got %d and %t for byte at " +
