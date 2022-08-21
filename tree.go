@@ -14,7 +14,8 @@ package radixt
 //  4. Empty chunk is allowed only for root nodes of the trees.
 //
 // The interface does not put any limitations on order of node indices, leaving
-// that detail to implementations.
+// that detail to implementations. It also does not put any limitations on
+// values.
 type Tree interface {
 	// Size should return amount of nodes in the tree.
 	Size() int
