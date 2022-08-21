@@ -49,5 +49,5 @@ type A struct {
 
 	// Ca is map from amounts of children to amount of nodes with those
 	// children.
-	Ca map[int]int
+	Ca map[uint]uint
 }
