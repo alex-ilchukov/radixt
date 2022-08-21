@@ -19,9 +19,9 @@ func (tree) Root() int {
 	return -1
 }
 
-// Mark always returns 0.
-func (tree) Mark(int) uint {
-	return 0
+// Value always returns 0 and boolean false.
+func (tree) Value(int) (v uint, has bool) {
+	return
 }
 
 // EachChild does nothing.
