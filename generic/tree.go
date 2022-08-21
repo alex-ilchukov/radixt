@@ -4,12 +4,13 @@ import "github.com/alex-ilchukov/radixt"
 
 type node struct {
 	chunk    string
-	mark     uint
+	value    uint
 	children []int
 }
 
 type tree struct {
-	nodes []node
+	noValue uint
+	nodes   []node
 }
 
 // Size returns amount of nodes in the tree.
@@ -31,14 +32,22 @@ func (t *tree) Root() int {
 	return -1
 }
 
-// Mark returns mark of node n, if the tree has the node and the node is
-// marked, or zero otherwise.
-func (t *tree) Mark(n int) uint {
-	if t.Has(n) {
-		return t.mark(n)
+// Value returns value v of node n with boolean true flag, if the tree has the
+// node and the node has value, or default unsigned integer with boolean false
+// otherwise.
+func (t *tree) Value(n int) (v uint, has bool) {
+	if !t.Has(n) {
+		return
 	}
 
-	return 0
+	v = t.value(n)
+	if v == t.noValue {
+		v = 0
+	} else {
+		has = true
+	}
+
+	return
 }
 
 // EachChild calls func e for every child of node n, if the tree has the node,
@@ -67,8 +76,8 @@ func (t *tree) ByteAt(n int, npos uint) (b byte, within bool) {
 	return
 }
 
-func (t *tree) mark(n int) uint {
-	return t.nodes[n].mark
+func (t *tree) value(n int) uint {
+	return t.nodes[n].value
 }
 
 func (t *tree) chunk(n int) string {
@@ -135,42 +144,42 @@ func (t *tree) find(s string) (found bool, n, pos int, npos uint) {
 	return
 }
 
-func (t *tree) insert(s string, mark uint) {
+func (t *tree) insert(s string, value uint) {
 	found, n, pos, npos := t.find(s)
 	switch {
 	case !found:
 		if !t.end(n, npos) {
-			t.splitNode(n, npos, 0)
+			t.splitNode(n, npos, t.noValue)
 		}
 
-		t.addChild(n, s[pos:], mark)
+		t.addChild(n, s[pos:], value)
 
 	case !t.end(n, npos):
-		t.splitNode(n, npos, mark)
+		t.splitNode(n, npos, value)
 
-	case t.mark(n) == 0:
-		t.nodes[n].mark = mark
+	case t.value(n) == t.noValue:
+		t.nodes[n].value = value
 
 	default:
 		return
 	}
 }
 
-func (t *tree) splitNode(n int, npos uint, mark uint) {
+func (t *tree) splitNode(n int, npos uint, value uint) {
 	no := t.nodes[n]
 	chunk := no.chunk
 	no.chunk = chunk[npos:]
 	t.nodes = append(t.nodes, no)
-	t.nodes[n] = node{chunk[:npos], mark, []int{len(t.nodes) - 1}}
+	t.nodes[n] = node{chunk[:npos], value, []int{len(t.nodes) - 1}}
 }
 
-func (t *tree) addChild(n int, chunk string, mark uint) {
-	t.nodes = append(t.nodes, node{chunk, mark, nil})
+func (t *tree) addChild(n int, chunk string, value uint) {
+	t.nodes = append(t.nodes, node{chunk, value, nil})
 	t.nodes[n].children = append(t.nodes[n].children, len(t.nodes)-1)
 }
 
 // New creates a new generic tree, inserting the provided strings, and returns
-// a pointer on the tree. Node marks are indicies of the strings, incremented
+// a pointer on the tree. Node values are indicies of the strings, incremented
 // by one.
 func New(strings ...string) *tree {
 	t := new(tree)
@@ -179,9 +188,11 @@ func New(strings ...string) *tree {
 		return t
 	}
 
-	t.nodes = []node{{chunk: strings[0], mark: 1}}
-	for m, s := range strings[1:] {
-		t.insert(s, uint(m+2))
+	t.noValue = uint(len(strings))
+	t.nodes = []node{{chunk: strings[0], value: 0}}
+
+	for v, s := range strings[1:] {
+		t.insert(s, uint(v+1))
 	}
 
 	return t
