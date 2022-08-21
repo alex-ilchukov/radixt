@@ -4,7 +4,7 @@ import "testing"
 
 var treeSizeTests = []struct {
 	tree   tree
-	result int
+	result uint
 }{
 	{tree: Tree, result: 0},
 }
