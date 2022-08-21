@@ -70,7 +70,8 @@ func (l *L) Feed(b byte) bool {
 	return !l.stop
 }
 
-// Found returns if the lookup state points to string in the tree or not.
+// Found returns if the lookup state points to result string with value in the
+// tree or not.
 func (l *L) Found() bool {
 	if l.stop {
 		return false
@@ -78,7 +79,8 @@ func (l *L) Found() bool {
 
 	t := l.t
 	n := l.n
-	if t.Mark(n) == 0 {
+	_, has := t.Value(n)
+	if !has {
 		return false
 	}
 
