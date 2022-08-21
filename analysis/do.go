@@ -2,7 +2,6 @@ package analysis
 
 import (
 	"bytes"
-	"math"
 	"sort"
 	"strings"
 
@@ -24,6 +23,7 @@ func Do(t radixt.Tree) A {
 	parents := make(map[int]int)
 	chunks := []string{}
 	cml := uint(0)
+	cma := uint(0)
 	vm := uint(0)
 	ca := make(map[uint]uint)
 
@@ -35,10 +35,15 @@ func Do(t radixt.Tree) A {
 			parents[c] = index
 		}
 
-		ca[uint(len(n.Children))] += 1
+		cl := uint(len(n.Children))
+		if cma < cl {
+			cma = cl
+		}
+
+		ca[cl] += 1
 		chunks = append(chunks, n.Chunk)
 
-		cl := uint(len(n.Chunk))
+		cl = uint(len(n.Chunk))
 		if cml < cl {
 			cml = cl
 		}
@@ -48,7 +53,6 @@ func Do(t radixt.Tree) A {
 		}
 	}
 
-	nonnode := calcNonNode(indices)
 	c := cramChunks(chunks)
 	n := make(map[int]N)
 
@@ -58,7 +62,7 @@ func Do(t radixt.Tree) A {
 		if has {
 			nodes[i].Parent = parent
 		} else {
-			nodes[i].Parent = nonnode
+			nodes[i].Root = true
 		}
 
 		nodes[i].ChunkPos = uint(strings.Index(c, nodes[i].Chunk))
@@ -66,7 +70,7 @@ func Do(t radixt.Tree) A {
 		n[index] = nodes[i]
 	}
 
-	return A{C: c, Cml: cml, Vm: vm, N: n, Nt: nt, Ca: ca}
+	return A{C: c, Cml: cml, Cma: cma, Vm: vm, N: n, Nt: nt, Ca: ca}
 }
 
 func chunk(t radixt.Tree, n int) string {
@@ -119,21 +123,6 @@ func nodes(t radixt.Tree) ([]N, map[int]int) {
 	}
 
 	return nodes, nt
-}
-
-func calcNonNode(indices []int) int {
-	sort.Ints(indices)
-	l := len(indices)
-	r := math.MinInt
-	for i := 0; i < l; i++ {
-		if r < indices[i] {
-			return r
-		}
-
-		r++
-	}
-
-	return r
 }
 
 func cramChunks(chunks []string) string {
