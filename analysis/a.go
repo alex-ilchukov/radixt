@@ -34,7 +34,7 @@ type A struct {
 	C string
 
 	// Cml is the maximum over chunk lengths of all nodes.
-	Cml int
+	Cml uint
 
 	// Vm is the maximum over values of all nodes.
 	Vm uint
