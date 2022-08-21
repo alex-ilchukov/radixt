@@ -25,7 +25,7 @@ type N struct {
 	Children []int
 
 	// ChunkPos is position of chunk in the [A.P] string.
-	ChunkPos int
+	ChunkPos uint
 }
 
 // A struct represents result data of analysis of radix tree.
