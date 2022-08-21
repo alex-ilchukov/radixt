@@ -14,13 +14,13 @@ type tree struct {
 }
 
 // Size returns amount of nodes in the tree.
-func (t *tree) Size() int {
-	return len(t.nodes)
+func (t *tree) Size() uint {
+	return uint(len(t.nodes))
 }
 
 // Has returns if the tree has node n or not.
 func (t *tree) Has(n int) bool {
-	return 0 <= n && n < t.Size()
+	return 0 <= n && n < len(t.nodes)
 }
 
 // Root returns -1 for empty tree and 0 otherwise.
