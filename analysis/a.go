@@ -9,8 +9,12 @@ type N struct {
 	// Chunk is chunk of the node.
 	Chunk string
 
-	// Mark is mark of the node.
-	Mark uint
+	// HasValue reflects the fact if the node has value or not.
+	HasValue bool
+
+	// Value is value of the node, if the node has value (see [HasValue]),
+	// or default unsigned integer otherwise.
+	Value uint
 
 	// Parent is index of parent of the node, or non-node index if the node
 	// is root.
@@ -31,6 +35,9 @@ type A struct {
 
 	// Cml is the maximum over chunk lengths of all nodes.
 	Cml int
+
+	// Vm is the maximum over values of all nodes.
+	Vm uint
 
 	// N is map from all node indices to node data in form of [N] structs.
 	N map[int]N

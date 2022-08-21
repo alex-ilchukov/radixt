@@ -14,7 +14,8 @@ package radixt
 //  4. Empty chunk is allowed only for root nodes of the trees.
 //
 // The interface does not put any limitations on order of node indices, leaving
-// that detail to implementations.
+// that detail to implementations. It also does not put any limitations on
+// values.
 type Tree interface {
 	// Size should return amount of nodes in the tree.
 	Size() int
@@ -26,18 +27,17 @@ type Tree interface {
 	// non-node index otherwise.
 	Root() int
 
-	// Mark should return mark of the node n. That is, it should return
-	// zero, if the node is not associated with a string from original
-	// string list, or the index of the associated string otherwise,
-	// incremented by one.
-	Mark(n int) uint
+	// Value should return value v of node n with boolean true flag, if the
+	// tree has the node and the node has value, or default unsigned
+	// integer with boolean false otherwise.
+	Value(n int) (v uint, has bool)
 
 	// EachChild should call func e for every child of the node n, until e
 	// returns boolean true.
 	EachChild(n int, e func(int) bool)
 
-	// ByteAt should return default byte value and boolean false, if npos
-	// is outside of chunk of the node n, or byte of the chunk at npos and
-	// boolean true otherwise.
-	ByteAt(n int, npos uint) (byte, bool)
+	// ByteAt should return byte b at npos of chunk of node n with boolean
+	// true flag, if the tree has the node and npos is within the chunk, or
+	// default byte value and boolean false otherwise.
+	ByteAt(n int, npos uint) (b byte, within bool)
 }

@@ -48,6 +48,7 @@ var doTests = []struct {
 		result: A{
 			C:   "",
 			Cml: 0,
+			Vm:  0,
 			N:   map[int]N{},
 			Nt:  map[int]int{},
 			Ca:  map[int]int{},
@@ -58,6 +59,7 @@ var doTests = []struct {
 		result: A{
 			C:   "",
 			Cml: 0,
+			Vm:  0,
 			N:   map[int]N{},
 			Nt:  map[int]int{},
 			Ca:  map[int]int{},
@@ -68,6 +70,7 @@ var doTests = []struct {
 		result: A{
 			C:   "",
 			Cml: 0,
+			Vm:  0,
 			N:   map[int]N{},
 			Nt:  map[int]int{},
 			Ca:  map[int]int{},
@@ -79,11 +82,13 @@ var doTests = []struct {
 			C: "dispositionenticationcontent-lengthzationauth" +
 				"typeor",
 			Cml: 11,
+			Vm:  7,
 			N: map[int]N{
 				0: {
 					Index:    0,
 					Chunk:    "",
-					Mark:     0,
+					Value:    0,
+					HasValue: false,
 					Parent:   NoParent,
 					Children: []int{6, 7},
 					ChunkPos: 0,
@@ -91,7 +96,8 @@ var doTests = []struct {
 				1: {
 					Index:    1,
 					Chunk:    "ty",
-					Mark:     1,
+					Value:    0,
+					HasValue: true,
 					Parent:   3,
 					Children: []int{},
 					ChunkPos: 45,
@@ -99,7 +105,8 @@ var doTests = []struct {
 				2: {
 					Index:    2,
 					Chunk:    "zation",
-					Mark:     2,
+					Value:    1,
+					HasValue: true,
 					Parent:   3,
 					Children: []int{},
 					ChunkPos: 35,
@@ -107,7 +114,8 @@ var doTests = []struct {
 				3: {
 					Index:    3,
 					Chunk:    "i",
-					Mark:     0,
+					Value:    0,
+					HasValue: false,
 					Parent:   4,
 					Children: []int{1, 2},
 					ChunkPos: 1,
@@ -115,7 +123,8 @@ var doTests = []struct {
 				4: {
 					Index:    4,
 					Chunk:    "or",
-					Mark:     3,
+					Value:    2,
+					HasValue: true,
 					Parent:   6,
 					Children: []int{3},
 					ChunkPos: 49,
@@ -123,7 +132,8 @@ var doTests = []struct {
 				5: {
 					Index:    5,
 					Chunk:    "entication",
-					Mark:     4,
+					Value:    3,
+					HasValue: true,
 					Parent:   6,
 					Children: []int{},
 					ChunkPos: 11,
@@ -131,7 +141,8 @@ var doTests = []struct {
 				6: {
 					Index:    6,
 					Chunk:    "auth",
-					Mark:     5,
+					Value:    4,
+					HasValue: true,
 					Parent:   0,
 					Children: []int{4, 5},
 					ChunkPos: 41,
@@ -139,7 +150,8 @@ var doTests = []struct {
 				7: {
 					Index:    7,
 					Chunk:    "content-",
-					Mark:     0,
+					Value:    0,
+					HasValue: false,
 					Parent:   0,
 					Children: []int{8, 9, 10},
 					ChunkPos: 21,
@@ -147,7 +159,8 @@ var doTests = []struct {
 				8: {
 					Index:    8,
 					Chunk:    "type",
-					Mark:     6,
+					Value:    5,
+					HasValue: true,
 					Parent:   7,
 					Children: []int{},
 					ChunkPos: 45,
@@ -155,7 +168,8 @@ var doTests = []struct {
 				9: {
 					Index:    9,
 					Chunk:    "length",
-					Mark:     7,
+					Value:    6,
+					HasValue: true,
 					Parent:   7,
 					Children: []int{},
 					ChunkPos: 29,
@@ -163,7 +177,8 @@ var doTests = []struct {
 				10: {
 					Index:    10,
 					Chunk:    "disposition",
-					Mark:     8,
+					Value:    7,
+					HasValue: true,
 					Parent:   7,
 					Children: []int{},
 					ChunkPos: 0,
@@ -190,11 +205,13 @@ var doTests = []struct {
 		result: A{
 			C:   "OPTIONSDELETETRACEATCHHEADGETOSTUT",
 			Cml: 7,
+			Vm:  7,
 			N: map[int]N{
 				0: {
 					Index:    0,
 					Chunk:    "",
-					Mark:     0,
+					Value:    0,
+					HasValue: false,
 					Parent:   NoParent,
 					Children: []int{1, 2, 3, 4, 5, 9},
 					ChunkPos: 0,
@@ -202,7 +219,8 @@ var doTests = []struct {
 				1: {
 					Index:    1,
 					Chunk:    "DELETE",
-					Mark:     1,
+					Value:    0,
+					HasValue: true,
 					Parent:   0,
 					Children: []int{},
 					ChunkPos: 7,
@@ -210,7 +228,8 @@ var doTests = []struct {
 				2: {
 					Index:    2,
 					Chunk:    "GET",
-					Mark:     2,
+					Value:    1,
+					HasValue: true,
 					Parent:   0,
 					Children: []int{},
 					ChunkPos: 26,
@@ -218,7 +237,8 @@ var doTests = []struct {
 				3: {
 					Index:    3,
 					Chunk:    "HEAD",
-					Mark:     3,
+					Value:    2,
+					HasValue: true,
 					Parent:   0,
 					Children: []int{},
 					ChunkPos: 22,
@@ -226,7 +246,8 @@ var doTests = []struct {
 				4: {
 					Index:    4,
 					Chunk:    "OPTIONS",
-					Mark:     4,
+					Value:    3,
+					HasValue: true,
 					Parent:   0,
 					Children: []int{},
 					ChunkPos: 0,
@@ -234,7 +255,8 @@ var doTests = []struct {
 				5: {
 					Index:    5,
 					Chunk:    "P",
-					Mark:     0,
+					Value:    0,
+					HasValue: false,
 					Parent:   0,
 					Children: []int{6, 7, 8},
 					ChunkPos: 1,
@@ -242,7 +264,8 @@ var doTests = []struct {
 				6: {
 					Index:    6,
 					Chunk:    "ATCH",
-					Mark:     5,
+					Value:    4,
+					HasValue: true,
 					Parent:   5,
 					Children: []int{},
 					ChunkPos: 18,
@@ -250,7 +273,8 @@ var doTests = []struct {
 				7: {
 					Index:    7,
 					Chunk:    "OST",
-					Mark:     6,
+					Value:    5,
+					HasValue: true,
 					Parent:   5,
 					Children: []int{},
 					ChunkPos: 29,
@@ -258,7 +282,8 @@ var doTests = []struct {
 				8: {
 					Index:    8,
 					Chunk:    "UT",
-					Mark:     7,
+					Value:    6,
+					HasValue: true,
 					Parent:   5,
 					Children: []int{},
 					ChunkPos: 32,
@@ -266,7 +291,8 @@ var doTests = []struct {
 				9: {
 					Index:    9,
 					Chunk:    "TRACE",
-					Mark:     8,
+					Value:    7,
+					HasValue: true,
 					Parent:   0,
 					Children: []int{},
 					ChunkPos: 13,
@@ -296,6 +322,9 @@ func guilty(a, b A) string {
 
 	case a.Cml != b.Cml:
 		return "Cml"
+
+	case a.Vm != b.Vm:
+		return "Vm"
 
 	case !reflect.DeepEqual(a.Ca, b.Ca):
 		for k, v := range a.Ca {

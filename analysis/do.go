@@ -24,6 +24,7 @@ func Do(t radixt.Tree) A {
 	parents := make(map[int]int)
 	chunks := []string{}
 	cml := 0
+	vm := uint(0)
 	ca := make(map[int]int)
 
 	for i, n := range nodes {
@@ -39,6 +40,10 @@ func Do(t radixt.Tree) A {
 
 		if cml < len(n.Chunk) {
 			cml = len(n.Chunk)
+		}
+
+		if vm < n.Value {
+			vm = n.Value
 		}
 	}
 
@@ -60,7 +65,7 @@ func Do(t radixt.Tree) A {
 		n[index] = nodes[i]
 	}
 
-	return A{C: c, Cml: cml, N: n, Nt: nt, Ca: ca}
+	return A{C: c, Cml: cml, Vm: vm, N: n, Nt: nt, Ca: ca}
 }
 
 func chunk(t radixt.Tree, n int) string {
@@ -92,10 +97,12 @@ func nodes(t radixt.Tree) ([]N, map[int]int) {
 		n := queue[0]
 		queue = queue[1:]
 
+		v, has := t.Value(n)
 		r := N{
 			Index:    n,
 			Chunk:    chunk(t, n),
-			Mark:     t.Mark(n),
+			Value:    v,
+			HasValue: has,
 			Children: []int{},
 		}
 

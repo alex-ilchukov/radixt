@@ -63,26 +63,35 @@ func TestTreeRoot(t *testing.T) {
 	}
 }
 
-var treeMarkTests = []struct {
-	tree   tree
-	n      int
-	result uint
+var treeValueTests = []struct {
+	tree    tree
+	n       int
+	result1 uint
+	result2 bool
 }{
-	{tree: Tree, n: -2, result: 0},
-	{tree: Tree, n: -1, result: 0},
-	{tree: Tree, n: 0, result: 0},
-	{tree: Tree, n: 1, result: 0},
-	{tree: Tree, n: 100, result: 0},
+	{tree: Tree, n: -2, result1: 0, result2: false},
+	{tree: Tree, n: -1, result1: 0, result2: false},
+	{tree: Tree, n: 0, result1: 0, result2: false},
+	{tree: Tree, n: 1, result1: 0, result2: false},
+	{tree: Tree, n: 100, result1: 0, result2: false},
 }
 
-const testTreeMarkError = "Tree Mark Test %d: got %d for mark of node %d " +
-	"(should be %d)"
+const testTreeValueError = "Tree Value Test %d: got %d and %t for value of " +
+	"node %d (should be %d and %t)"
 
-func TestTreeMark(t *testing.T) {
-	for i, tt := range treeMarkTests {
-		result := tt.tree.Mark(tt.n)
-		if result != tt.result {
-			t.Errorf(testTreeMarkError, i, result, tt.n, tt.result)
+func TestTreeValue(t *testing.T) {
+	for i, tt := range treeValueTests {
+		result1, result2 := tt.tree.Value(tt.n)
+		if result1 != tt.result1 || result2 != tt.result2 {
+			t.Errorf(
+				testTreeValueError,
+				i,
+				result1,
+				result2,
+				tt.n,
+				tt.result1,
+				tt.result2,
+			)
 		}
 	}
 }
