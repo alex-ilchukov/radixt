@@ -9,8 +9,8 @@ type N struct {
 	// Chunk is chunk of the node.
 	Chunk string
 
-	// Mark is mark of the node.
-	Mark uint
+	// Value is value of the node.
+	Value uint
 
 	// Parent is index of parent of the node, or non-node index if the node
 	// is root.
