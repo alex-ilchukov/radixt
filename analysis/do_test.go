@@ -51,7 +51,7 @@ var doTests = []struct {
 			Vm:  0,
 			N:   map[int]N{},
 			Nt:  map[int]int{},
-			Ca:  map[int]int{},
+			Ca:  map[uint]uint{},
 		},
 	},
 	{
@@ -62,7 +62,7 @@ var doTests = []struct {
 			Vm:  0,
 			N:   map[int]N{},
 			Nt:  map[int]int{},
-			Ca:  map[int]int{},
+			Ca:  map[uint]uint{},
 		},
 	},
 	{
@@ -73,7 +73,7 @@ var doTests = []struct {
 			Vm:  0,
 			N:   map[int]N{},
 			Nt:  map[int]int{},
-			Ca:  map[int]int{},
+			Ca:  map[uint]uint{},
 		},
 	},
 	{
@@ -197,7 +197,7 @@ var doTests = []struct {
 				9:  6,
 				10: 7,
 			},
-			Ca: map[int]int{0: 6, 1: 1, 2: 3, 3: 1},
+			Ca: map[uint]uint{0: 6, 1: 1, 2: 3, 3: 1},
 		},
 	},
 	{
@@ -310,7 +310,7 @@ var doTests = []struct {
 				8: 9,
 				9: 6,
 			},
-			Ca: map[int]int{0: 8, 3: 1, 6: 1},
+			Ca: map[uint]uint{0: 8, 3: 1, 6: 1},
 		},
 	},
 }
