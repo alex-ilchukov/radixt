@@ -36,6 +36,9 @@ type A struct {
 	// Cml is the maximum over chunk lengths of all nodes.
 	Cml uint
 
+	// Cma is the maximum over children amounts of all nodes.
+	Cma uint
+
 	// Vm is the maximum over values of all nodes.
 	Vm uint
 
