@@ -36,7 +36,7 @@ type A struct {
 	// Cml is the maximum over chunk lengths of all nodes.
 	Cml int
 
-	// Vm is maximum over values of all nodes.
+	// Vm is the maximum over values of all nodes.
 	Vm uint
 
 	// N is map from all node indices to node data in form of [N] structs.
