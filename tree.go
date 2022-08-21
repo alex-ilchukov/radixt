@@ -35,8 +35,8 @@ type Tree interface {
 	// returns boolean true.
 	EachChild(n int, e func(int) bool)
 
-	// ByteAt should return default byte value and boolean false, if npos
-	// is outside of chunk of the node n, or byte of the chunk at npos and
-	// boolean true otherwise.
-	ByteAt(n int, npos uint) (byte, bool)
+	// ByteAt should return byte b at npos of chunk of node n with boolean
+	// true flag, if the tree has the node and npos is within the chunk, or
+	// default byte value and boolean false otherwise.
+	ByteAt(n int, npos uint) (b byte, within bool)
 }
