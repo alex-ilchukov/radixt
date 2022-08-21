@@ -179,8 +179,7 @@ func (t *tree) addChild(n int, chunk string, value uint) {
 }
 
 // New creates a new generic tree, inserting the provided strings, and returns
-// a pointer on the tree. Node values are indicies of the strings, incremented
-// by one.
+// a pointer on the tree. Node values are indices of the strings.
 func New(strings ...string) *tree {
 	t := new(tree)
 

@@ -10,6 +10,7 @@
 //     (Size() - 1) numbers; other numbers are non-node indices.
 //
 // The package also provides factory method to create an instance from the
-// provided slice of strings. As the tree struct is not exported outside, the
-// implementation assumes that instance is never nil.
+// provided slice of strings, interpretting string positions in the slice as
+// values in the resulting tree. As the tree struct is not exported outside,
+// the implementation assumes that instance is never nil.
 package generic
