@@ -16,6 +16,9 @@ type N struct {
 	// or default unsigned integer otherwise.
 	Value uint
 
+	// Root is boolean flag, which indicates if the node is root or not.
+	Root bool
+
 	// Parent is index of parent of the node, or non-node index if the node
 	// is root.
 	Parent int
