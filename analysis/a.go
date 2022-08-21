@@ -19,8 +19,8 @@ type N struct {
 	// Root is boolean flag, which indicates if the node is root or not.
 	Root bool
 
-	// Parent is index of parent of the node, or non-node index if the node
-	// is root.
+	// Parent is index of parent of the node, if the node is not root (see
+	// [Root] flag), or default integer value otherwise.
 	Parent int
 
 	// Children is slice of indices of children of the node. Always is
