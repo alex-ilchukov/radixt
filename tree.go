@@ -18,7 +18,7 @@ package radixt
 // values.
 type Tree interface {
 	// Size should return amount of nodes in the tree.
-	Size() int
+	Size() uint
 
 	// Has should return if the tree has node n or not.
 	Has(n int) bool

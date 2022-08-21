@@ -19,7 +19,7 @@ var (
 
 var treeSizeTests = []struct {
 	tree   *tree
-	result int
+	result uint
 }{
 	{tree: empty, result: 0},
 	{tree: atree, result: 11},

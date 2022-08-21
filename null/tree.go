@@ -5,7 +5,7 @@ import "github.com/alex-ilchukov/radixt"
 type tree struct{}
 
 // Size always returns zero.
-func (tree) Size() int {
+func (tree) Size() uint {
 	return 0
 }
 

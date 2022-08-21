@@ -25,7 +25,7 @@ type N struct {
 	Children []int
 
 	// ChunkPos is position of chunk in the [A.P] string.
-	ChunkPos int
+	ChunkPos uint
 }
 
 // A struct represents result data of analysis of radix tree.
@@ -34,7 +34,7 @@ type A struct {
 	C string
 
 	// Cml is the maximum over chunk lengths of all nodes.
-	Cml int
+	Cml uint
 
 	// Vm is the maximum over values of all nodes.
 	Vm uint
@@ -49,5 +49,5 @@ type A struct {
 
 	// Ca is map from amounts of children to amount of nodes with those
 	// children.
-	Ca map[int]int
+	Ca map[uint]uint
 }

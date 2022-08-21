@@ -23,9 +23,9 @@ func Do(t radixt.Tree) A {
 	indices := make([]int, len(nodes))
 	parents := make(map[int]int)
 	chunks := []string{}
-	cml := 0
+	cml := uint(0)
 	vm := uint(0)
-	ca := make(map[int]int)
+	ca := make(map[uint]uint)
 
 	for i, n := range nodes {
 		index := n.Index
@@ -35,11 +35,12 @@ func Do(t radixt.Tree) A {
 			parents[c] = index
 		}
 
-		ca[len(n.Children)] += 1
+		ca[uint(len(n.Children))] += 1
 		chunks = append(chunks, n.Chunk)
 
-		if cml < len(n.Chunk) {
-			cml = len(n.Chunk)
+		cl := uint(len(n.Chunk))
+		if cml < cl {
+			cml = cl
 		}
 
 		if vm < n.Value {
@@ -60,7 +61,7 @@ func Do(t radixt.Tree) A {
 			nodes[i].Parent = nonnode
 		}
 
-		nodes[i].ChunkPos = strings.Index(c, nodes[i].Chunk)
+		nodes[i].ChunkPos = uint(strings.Index(c, nodes[i].Chunk))
 
 		n[index] = nodes[i]
 	}
