@@ -9,7 +9,11 @@ type N struct {
 	// Chunk is chunk of the node.
 	Chunk string
 
-	// Value is value of the node.
+	// HasValue reflects the fact if the node has value or not.
+	HasValue bool
+
+	// Value is value of the node, if the node has value (see [HasValue]),
+	// or default unsigned integer otherwise.
 	Value uint
 
 	// Parent is index of parent of the node, or non-node index if the node
