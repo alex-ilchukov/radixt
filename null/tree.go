@@ -30,8 +30,8 @@ func (tree) EachChild(int, func(int) bool) {
 }
 
 // ByteAt always returns 0 and boolean false.
-func (tree) ByteAt(int, uint) (byte, bool) {
-	return 0, false
+func (tree) ByteAt(int, uint) (b byte, within bool) {
+	return
 }
 
 // Tree is the only accessible instance of the implementation.
