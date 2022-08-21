@@ -26,6 +26,11 @@ type Tree interface {
 	// non-node index otherwise.
 	Root() int
 
+	// Value should return value v of node n with boolean true flag, if the
+	// tree has the node and the node has value, or default unsigned
+	// integer with boolean false otherwise.
+	Value(n int) (v uint, has bool)
+
 	// EachChild should call func e for every child of the node n, until e
 	// returns boolean true.
 	EachChild(n int, e func(int) bool)
