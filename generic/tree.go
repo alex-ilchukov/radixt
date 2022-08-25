@@ -197,4 +197,30 @@ func New(strings ...string) *tree {
 	return t
 }
 
+// SV represents a couple of string key S and unsigned integer value V to be
+// contained in a tree
+type SV struct {
+	S string
+	V uint
+}
+
+// NewFromSV creates a new generic tree, inserting strings with values from the
+// provided sv slice, and returns a pointer on the tree.
+func NewFromSV(sv ...SV) *tree {
+	t := new(tree)
+
+	if len(sv) == 0 {
+		return t
+	}
+
+	t.noValue = uint(len(sv))
+	t.nodes = []node{{chunk: sv[0].S, value: sv[0].V}}
+
+	for _, e := range sv[1:] {
+		t.insert(e.S, e.V)
+	}
+
+	return t
+}
+
 var _ radixt.Tree = (*tree)(nil)

@@ -50,7 +50,8 @@ type A struct {
 
 	// Nt is map from all node indices to new indices, which would allow to
 	// represent all slices of [N.Children] as two numbers: start index and
-	// amount of children.
+	// amount of children. New indices always form a sequence 0, 1, 2, 3, …
+	// having zero as root.
 	Nt map[int]int
 
 	// Ca is map from amounts of children to amount of nodes with those
