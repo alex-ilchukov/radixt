@@ -46,7 +46,7 @@ type A struct {
 	Vm uint
 
 	// N is map from all node indices to node data in form of [N] structs.
-	N map[int]N
+	N map[uint]N
 
 	// Nt is map from all node indices to new indices, which would allow to
 	// represent all slices of [N.Children] as two numbers: start index and
