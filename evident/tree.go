@@ -23,24 +23,10 @@ func (t Tree) Size() uint {
 	return size
 }
 
-// Has returns if the tree has node n or not.
-func (t Tree) Has(n int) bool {
-	return 0 <= n && uint(n) < t.Size()
-}
-
-// Root returns -1 for empty tree and 0 otherwise.
-func (t Tree) Root() int {
-	if len(t) > 0 {
-		return 0
-	}
-
-	return -1
-}
-
 // Value returns value v of node n with boolean true flag, if the tree has the
 // node and the node has value, or default unsigned integer with boolean false
 // otherwise.
-func (t Tree) Value(n int) (v uint, has bool) {
+func (t Tree) Value(n uint) (v uint, has bool) {
 	key := t.key(n)
 	if key == "" {
 		return
@@ -63,7 +49,7 @@ func (t Tree) Value(n int) (v uint, has bool) {
 // EachChild calls func e for every child of node n, if the tree has the node,
 // until the func returns boolean true. The order of going over the children is
 // fixed for every node, but may not coincide with any natural order.
-func (t Tree) EachChild(n int, e func(int) bool) {
+func (t Tree) EachChild(n uint, e func(uint) bool) {
 	for c, l := t.childrenRange(n); c <= l; c++ {
 		if e(c) {
 			return
@@ -74,7 +60,7 @@ func (t Tree) EachChild(n int, e func(int) bool) {
 // ByteAt returns default byte value and boolean false, if npos is outside of
 // chunk of the node n, or byte of the chunk at npos and boolean true
 // otherwise.
-func (t Tree) ByteAt(n int, npos uint) (b byte, within bool) {
+func (t Tree) ByteAt(n, npos uint) (b byte, within bool) {
 	key := t.key(n)
 	if key == "" {
 		return
@@ -104,8 +90,8 @@ func (t Tree) keys() []string {
 	return result
 }
 
-func (t Tree) grind(n int) (a Tree, m int, q *queue) {
-	if t == nil || n < 0 {
+func (t Tree) grind(n uint) (a Tree, m uint, q *queue) {
+	if t == nil {
 		return
 	}
 
@@ -113,7 +99,7 @@ func (t Tree) grind(n int) (a Tree, m int, q *queue) {
 	m = n
 	for q.populated() {
 		a = q.pop()
-		l := len(a)
+		l := uint(len(a))
 		if m < l {
 			return
 		}
@@ -126,7 +112,7 @@ func (t Tree) grind(n int) (a Tree, m int, q *queue) {
 	return
 }
 
-func (t Tree) key(n int) string {
+func (t Tree) key(n uint) string {
 	a, m, _ := t.grind(n)
 	if a == nil {
 		return ""
@@ -135,26 +121,26 @@ func (t Tree) key(n int) string {
 	return a.keys()[m]
 }
 
-func (t Tree) childrenRange(n int) (int, int) {
+func (t Tree) childrenRange(n uint) (uint, uint) {
 	a, m, q := t.grind(n)
 	if a == nil {
-		return 0, -1
+		return 1, 0
 	}
 
 	keys := a.keys()
 	key := keys[m]
 	if a[key] == nil {
-		return 0, -1
+		return 1, 0
 	}
 
-	f := n + len(a) - m
+	f := n + uint(len(a)) - m
 	for _, c := range q.a {
-		f += len(c)
+		f += uint(len(c))
 	}
 
 	for _, k := range keys[:m] {
-		f += len(a[k])
+		f += uint(len(a[k]))
 	}
 
-	return f, f + len(a[key]) - 1
+	return f, f + uint(len(a[key])) - 1
 }

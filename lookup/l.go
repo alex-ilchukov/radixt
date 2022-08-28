@@ -8,7 +8,7 @@ import (
 // L contains information on state of the lookup process.
 type L struct {
 	t    radixt.Tree
-	n    int
+	n    uint
 	npos uint
 	stop bool
 }
@@ -29,9 +29,9 @@ func New(t radixt.Tree) *L {
 
 // Reset resets the lookup state.
 func (l *L) Reset() {
-	l.n = l.t.Root()
+	l.n = 0
 	l.npos = 0
-	l.stop = false
+	l.stop = l.t.Size() == 0
 }
 
 // Feed takes byte b and returns if the byte is found in radix tree accordingly
@@ -55,7 +55,7 @@ func (l *L) Feed(b byte) bool {
 	}
 
 	l.stop = true
-	t.EachChild(n, func(c int) bool {
+	t.EachChild(n, func(c uint) bool {
 		byteAt, _ := t.ByteAt(c, 0)
 		if byteAt == b {
 			l.n = c
@@ -98,6 +98,6 @@ func (l *L) Tree() radixt.Tree {
 }
 
 // Node returns index of current tree node.
-func (l *L) Node() int {
+func (l *L) Node() uint {
 	return l.n
 }

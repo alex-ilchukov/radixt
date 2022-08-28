@@ -47,8 +47,8 @@ var doTests = []struct {
 			Cml: 0,
 			Cma: 0,
 			Vm:  0,
-			N:   map[int]N{},
-			Nt:  map[int]int{},
+			N:   map[uint]N{},
+			Nt:  map[uint]uint{},
 			Ca:  map[uint]uint{},
 		},
 	},
@@ -59,8 +59,8 @@ var doTests = []struct {
 			Cml: 0,
 			Cma: 0,
 			Vm:  0,
-			N:   map[int]N{},
-			Nt:  map[int]int{},
+			N:   map[uint]N{},
+			Nt:  map[uint]uint{},
 			Ca:  map[uint]uint{},
 		},
 	},
@@ -71,8 +71,8 @@ var doTests = []struct {
 			Cml: 0,
 			Cma: 0,
 			Vm:  0,
-			N:   map[int]N{},
-			Nt:  map[int]int{},
+			N:   map[uint]N{},
+			Nt:  map[uint]uint{},
 			Ca:  map[uint]uint{},
 		},
 	},
@@ -84,7 +84,7 @@ var doTests = []struct {
 			Cml: 11,
 			Cma: 3,
 			Vm:  7,
-			N: map[int]N{
+			N: map[uint]N{
 				0: {
 					Index:    0,
 					Chunk:    "",
@@ -92,7 +92,7 @@ var doTests = []struct {
 					HasValue: false,
 					Root:     true,
 					Parent:   0,
-					Children: []int{6, 7},
+					Children: []uint{6, 7},
 					ChunkPos: 0,
 				},
 				1: {
@@ -102,7 +102,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   3,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 45,
 				},
 				2: {
@@ -112,7 +112,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   3,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 35,
 				},
 				3: {
@@ -122,7 +122,7 @@ var doTests = []struct {
 					HasValue: false,
 					Root:     false,
 					Parent:   4,
-					Children: []int{1, 2},
+					Children: []uint{1, 2},
 					ChunkPos: 1,
 				},
 				4: {
@@ -132,7 +132,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   6,
-					Children: []int{3},
+					Children: []uint{3},
 					ChunkPos: 49,
 				},
 				5: {
@@ -142,7 +142,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   6,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 11,
 				},
 				6: {
@@ -152,7 +152,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   0,
-					Children: []int{4, 5},
+					Children: []uint{4, 5},
 					ChunkPos: 41,
 				},
 				7: {
@@ -162,7 +162,7 @@ var doTests = []struct {
 					HasValue: false,
 					Root:     false,
 					Parent:   0,
-					Children: []int{8, 9, 10},
+					Children: []uint{8, 9, 10},
 					ChunkPos: 21,
 				},
 				8: {
@@ -172,7 +172,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   7,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 45,
 				},
 				9: {
@@ -182,7 +182,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   7,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 29,
 				},
 				10: {
@@ -192,11 +192,11 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   7,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 0,
 				},
 			},
-			Nt: map[int]int{
+			Nt: map[uint]uint{
 				0:  0,
 				1:  9,
 				2:  10,
@@ -219,7 +219,7 @@ var doTests = []struct {
 			Cml: 7,
 			Cma: 6,
 			Vm:  7,
-			N: map[int]N{
+			N: map[uint]N{
 				0: {
 					Index:    0,
 					Chunk:    "",
@@ -227,7 +227,7 @@ var doTests = []struct {
 					HasValue: false,
 					Root:     true,
 					Parent:   0,
-					Children: []int{1, 2, 3, 4, 5, 9},
+					Children: []uint{1, 2, 3, 4, 5, 9},
 					ChunkPos: 0,
 				},
 				1: {
@@ -237,7 +237,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   0,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 7,
 				},
 				2: {
@@ -247,7 +247,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   0,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 26,
 				},
 				3: {
@@ -257,7 +257,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   0,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 22,
 				},
 				4: {
@@ -267,7 +267,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   0,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 0,
 				},
 				5: {
@@ -277,7 +277,7 @@ var doTests = []struct {
 					HasValue: false,
 					Root:     false,
 					Parent:   0,
-					Children: []int{6, 7, 8},
+					Children: []uint{6, 7, 8},
 					ChunkPos: 1,
 				},
 				6: {
@@ -287,7 +287,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   5,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 18,
 				},
 				7: {
@@ -297,7 +297,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   5,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 29,
 				},
 				8: {
@@ -307,7 +307,7 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   5,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 32,
 				},
 				9: {
@@ -317,11 +317,11 @@ var doTests = []struct {
 					HasValue: true,
 					Root:     false,
 					Parent:   0,
-					Children: []int{},
+					Children: []uint{},
 					ChunkPos: 13,
 				},
 			},
-			Nt: map[int]int{
+			Nt: map[uint]uint{
 				0: 0,
 				1: 1,
 				2: 2,

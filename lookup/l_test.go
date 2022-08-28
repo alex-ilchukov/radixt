@@ -30,14 +30,15 @@ var (
 var newTests = []struct {
 	t     radixt.Tree
 	lt    radixt.Tree
-	ln    int
+	ln    uint
 	lnpos uint
+	lstop bool
 }{
-	{t: nil, lt: null.Tree, ln: -1, lnpos: 0},
-	{t: null.Tree, lt: null.Tree, ln: -1, lnpos: 0},
-	{t: empty, lt: empty, ln: -1, lnpos: 0},
-	{t: atree, lt: atree, ln: 0, lnpos: 0},
-	{t: withBlank, lt: withBlank, ln: 0, lnpos: 0},
+	{t: nil, lt: null.Tree, ln: 0, lnpos: 0, lstop: true},
+	{t: null.Tree, lt: null.Tree, ln: 0, lnpos: 0, lstop: true},
+	{t: empty, lt: empty, ln: 0, lnpos: 0, lstop: true},
+	{t: atree, lt: atree, ln: 0, lnpos: 0, lstop: false},
+	{t: withBlank, lt: withBlank, ln: 0, lnpos: 0, lstop: false},
 }
 
 const testNewError = "Test New %d: for tree %v got %v (should be %v)"
@@ -46,7 +47,10 @@ func TestNew(t *testing.T) {
 	for i, tt := range newTests {
 		l := New(tt.t)
 
-		if l.t != tt.lt || l.n != tt.ln || l.npos != tt.lnpos {
+		if l.t != tt.lt ||
+			l.n != tt.ln ||
+			l.npos != tt.lnpos ||
+			l.stop != tt.lstop {
 			t.Errorf(testNewError, i, tt.t, l, tt)
 		}
 	}
@@ -55,33 +59,65 @@ func TestNew(t *testing.T) {
 var lResetTests = []struct {
 	tree  radixt.Tree
 	input string
-	ln    int
+	ln    uint
 	lnpos uint
+	lstop bool
 }{
-	{tree: nil, input: "", ln: -1, lnpos: 0},
-	{tree: nil, input: "content-type", ln: -1, lnpos: 0},
-	{tree: empty, input: "", ln: -1, lnpos: 0},
-	{tree: empty, input: "content-type", ln: -1, lnpos: 0},
-	{tree: atree, input: "authorization", ln: 0, lnpos: 0},
-	{tree: atree, input: "content-type", ln: 0, lnpos: 0},
-	{tree: atree, input: "content-length", ln: 0, lnpos: 0},
-	{tree: atree, input: "content-disposition", ln: 0, lnpos: 0},
-	{tree: atree, input: "content-typ", ln: 0, lnpos: 0},
-	{tree: atree, input: "content-", ln: 0, lnpos: 0},
-	{tree: atree, input: "auth", ln: 0, lnpos: 0},
-	{tree: atree, input: "", ln: 0, lnpos: 0},
-	{tree: withBlank, input: "authorization", ln: 0, lnpos: 0},
-	{tree: withBlank, input: "content-type", ln: 0, lnpos: 0},
-	{tree: withBlank, input: "content-length", ln: 0, lnpos: 0},
-	{tree: withBlank, input: "content-disposition", ln: 0, lnpos: 0},
-	{tree: withBlank, input: "content-typ", ln: 0, lnpos: 0},
-	{tree: withBlank, input: "content-", ln: 0, lnpos: 0},
-	{tree: withBlank, input: "auth", ln: 0, lnpos: 0},
-	{tree: withBlank, input: "", ln: 0, lnpos: 0},
+	{tree: nil, input: "", ln: 0, lnpos: 0, lstop: true},
+	{tree: nil, input: "content-type", ln: 0, lnpos: 0, lstop: true},
+	{tree: empty, input: "", ln: 0, lnpos: 0, lstop: true},
+	{tree: empty, input: "content-type", ln: 0, lnpos: 0, lstop: true},
+	{tree: atree, input: "authorization", ln: 0, lnpos: 0, lstop: false},
+	{tree: atree, input: "content-type", ln: 0, lnpos: 0, lstop: false},
+	{tree: atree, input: "content-length", ln: 0, lnpos: 0, lstop: false},
+	{
+		tree: atree,
+		input: "content-disposition",
+		ln: 0,
+		lnpos: 0,
+		lstop: false,
+	},
+	{tree: atree, input: "content-typ", ln: 0, lnpos: 0, lstop: false},
+	{tree: atree, input: "content-", ln: 0, lnpos: 0, lstop: false},
+	{tree: atree, input: "auth", ln: 0, lnpos: 0, lstop: false},
+	{tree: atree, input: "", ln: 0, lnpos: 0, lstop: false},
+
+	{
+		tree: withBlank,
+		input: "authorization",
+		ln: 0,
+		lnpos: 0,
+		lstop: false,
+	},
+	{
+		tree: withBlank,
+		input: "content-type",
+		ln: 0,
+		lnpos: 0,
+		lstop: false,
+	},
+	{
+		tree: withBlank,
+		input: "content-length",
+		ln: 0,
+		lnpos: 0,
+		lstop: false,
+	},
+	{
+		tree: withBlank,
+		input: "content-disposition",
+		ln: 0,
+		lnpos: 0,
+		lstop: false,
+	},
+	{tree: withBlank, input: "content-typ", ln: 0, lnpos: 0, lstop: false},
+	{tree: withBlank, input: "content-", ln: 0, lnpos: 0, lstop: false},
+	{tree: withBlank, input: "auth", ln: 0, lnpos: 0, lstop: false},
+	{tree: withBlank, input: "", ln: 0, lnpos: 0, lstop: false},
 }
 
-const testLResetError = "Test L Reset %d: got l.n = %d, l.npos = %d (should " +
-	"be %d and %d)"
+const testLResetError = "Test L Reset %d: got l.n = %d, l.npos = %d, " +
+	"l.stop = %t (should be %d, %d and %t)"
 
 func TestLReset(t *testing.T) {
 	for i, tt := range lResetTests {
@@ -94,14 +130,16 @@ func TestLReset(t *testing.T) {
 		}
 
 		l.Reset()
-		if l.n != tt.ln || l.npos != tt.lnpos {
+		if l.n != tt.ln || l.npos != tt.lnpos || l.stop != tt.lstop {
 			t.Errorf(
 				testLResetError,
 				i,
 				l.n,
 				l.npos,
+				l.stop,
 				tt.ln,
 				tt.lnpos,
+				tt.lstop,
 			)
 		}
 	}
@@ -257,12 +295,12 @@ func TestLTree(t *testing.T) {
 var lNodeTests = []struct {
 	tree   radixt.Tree
 	input  string
-	result int
+	result uint
 }{
-	{tree: nil, input: "", result: -1},
-	{tree: nil, input: "content-type", result: -1},
-	{tree: empty, input: "", result: -1},
-	{tree: empty, input: "content-type", result: -1},
+	{tree: nil, input: "", result: 0},
+	{tree: nil, input: "content-type", result: 0},
+	{tree: empty, input: "", result: 0},
+	{tree: empty, input: "content-type", result: 0},
 	{tree: atree, input: "authorization", result: 1},
 	{tree: atree, input: "content-type", result: 3},
 	{tree: atree, input: "content-length", result: 4},

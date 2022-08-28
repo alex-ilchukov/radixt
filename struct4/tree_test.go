@@ -40,75 +40,15 @@ func TestTreeSize(t *testing.T) {
 	}
 }
 
-var treeHasTests = []struct {
-	tree   *tree
-	n      int
-	result bool
-}{
-	{tree: empty, n: -2, result: false},
-	{tree: empty, n: -1, result: false},
-	{tree: empty, n: 0, result: false},
-	{tree: empty, n: 1, result: false},
-	{tree: empty, n: 100, result: false},
-	{tree: atree, n: -2, result: false},
-	{tree: atree, n: -1, result: false},
-	{tree: atree, n: 0, result: true},
-	{tree: atree, n: 1, result: true},
-	{tree: atree, n: 2, result: true},
-	{tree: atree, n: 3, result: true},
-	{tree: atree, n: 4, result: true},
-	{tree: atree, n: 5, result: true},
-	{tree: atree, n: 6, result: true},
-	{tree: atree, n: 7, result: true},
-	{tree: atree, n: 8, result: true},
-	{tree: atree, n: 9, result: true},
-	{tree: atree, n: 10, result: true},
-	{tree: atree, n: 100, result: false},
-}
-
-const testTreeHasError = "Tree Has Test %d: got %t for if the tree has node " +
-	"node %d (should be %t)"
-
-func TestTreeHas(t *testing.T) {
-	for i, tt := range treeHasTests {
-		result := tt.tree.Has(tt.n)
-		if result != tt.result {
-			t.Errorf(testTreeHasError, i, result, tt.n, tt.result)
-		}
-	}
-}
-
-var treeRootTests = []struct {
-	tree   *tree
-	result int
-}{
-	{tree: empty, result: -1},
-	{tree: atree, result: 0},
-}
-
-const testTreeRootError = "Tree Root Test %d: got %d for root of the tree " +
-	"(should be %d)"
-
-func TestTreeRoot(t *testing.T) {
-	for i, tt := range treeRootTests {
-		result := tt.tree.Root()
-		if result != tt.result {
-			t.Errorf(testTreeRootError, i, result, tt.result)
-		}
-	}
-}
-
 var treeValueTests = []struct {
 	tree    *tree
-	n       int
+	n       uint
 	result1 uint
 	result2 bool
 }{
-	{tree: empty, n: -2, result1: 0, result2: false},
 	{tree: empty, n: 0, result1: 0, result2: false},
 	{tree: empty, n: 1, result1: 0, result2: false},
 	{tree: empty, n: 100, result1: 0, result2: false},
-	{tree: atree, n: -2, result1: 0, result2: false},
 	{tree: atree, n: 0, result1: 0, result2: false},
 	{tree: atree, n: 1, result1: 4, result2: true},
 	{tree: atree, n: 2, result1: 0, result2: false},
@@ -145,16 +85,12 @@ func TestTreeValue(t *testing.T) {
 
 var treeEachChildTests = []struct {
 	tree *tree
-	n    int
-	sum  int
+	n    uint
+	sum  uint
 }{
-	{tree: empty, n: -2, sum: 0},
-	{tree: empty, n: -1, sum: 0},
 	{tree: empty, n: 0, sum: 0},
 	{tree: empty, n: 1, sum: 0},
 	{tree: empty, n: 100, sum: 0},
-	{tree: atree, n: -2, sum: 0},
-	{tree: atree, n: -1, sum: 0},
 	{tree: atree, n: 0, sum: 3},
 	{tree: atree, n: 1, sum: 7},
 	{tree: atree, n: 2, sum: 11},
@@ -174,10 +110,10 @@ const testTreeEachChildError = "Tree Each Child Test %d: got %d for sum of " +
 
 func TestTreeEachChild(t *testing.T) {
 	for i, tt := range treeEachChildTests {
-		sum := 0
+		sum := uint(0)
 		counter := 0
 
-		e := func(c int) bool {
+		e := func(c uint) bool {
 			counter++
 			if counter <= 2 {
 				sum += c
@@ -195,15 +131,11 @@ func TestTreeEachChild(t *testing.T) {
 
 var treeByteAtTests = []struct {
 	tree    *tree
-	n       int
+	n       uint
 	npos    uint
 	result1 byte
 	result2 bool
 }{
-	{tree: empty, n: -2, npos: 0, result1: 0, result2: false},
-	{tree: empty, n: -2, npos: 1, result1: 0, result2: false},
-	{tree: empty, n: -1, npos: 0, result1: 0, result2: false},
-	{tree: empty, n: -1, npos: 1, result1: 0, result2: false},
 	{tree: empty, n: 0, npos: 0, result1: 0, result2: false},
 	{tree: empty, n: 0, npos: 1, result1: 0, result2: false},
 	{tree: empty, n: 1, npos: 0, result1: 0, result2: false},
@@ -212,10 +144,6 @@ var treeByteAtTests = []struct {
 	{tree: empty, n: 6, npos: 1, result1: 0, result2: false},
 	{tree: empty, n: 100, npos: 0, result1: 0, result2: false},
 	{tree: empty, n: 100, npos: 1, result1: 0, result2: false},
-	{tree: atree, n: -2, npos: 0, result1: 0, result2: false},
-	{tree: atree, n: -2, npos: 1, result1: 0, result2: false},
-	{tree: atree, n: -1, npos: 0, result1: 0, result2: false},
-	{tree: atree, n: -1, npos: 1, result1: 0, result2: false},
 	{tree: atree, n: 0, npos: 0, result1: 0, result2: false},
 	{tree: atree, n: 0, npos: 1, result1: 0, result2: false},
 	{tree: atree, n: 1, npos: 0, result1: 97, result2: true},

@@ -4,7 +4,7 @@ package analysis
 // the data is return values of Node* methods in [radixt.Tree] interface.
 type N struct {
 	// Index is index of the node in the tree.
-	Index int
+	Index uint
 
 	// Chunk is chunk of the node.
 	Chunk string
@@ -21,11 +21,11 @@ type N struct {
 
 	// Parent is index of parent of the node, if the node is not root (see
 	// [Root] flag), or default integer value otherwise.
-	Parent int
+	Parent uint
 
 	// Children is slice of indices of children of the node. Always is
 	// sorted by ascending of the indices.
-	Children []int
+	Children []uint
 
 	// ChunkPos is position of chunk in the [A.P] string.
 	ChunkPos uint
@@ -46,13 +46,13 @@ type A struct {
 	Vm uint
 
 	// N is map from all node indices to node data in form of [N] structs.
-	N map[int]N
+	N map[uint]N
 
 	// Nt is map from all node indices to new indices, which would allow to
 	// represent all slices of [N.Children] as two numbers: start index and
 	// amount of children. New indices always form a sequence 0, 1, 2, 3, …
 	// having zero as root.
-	Nt map[int]int
+	Nt map[uint]uint
 
 	// Ca is map from amounts of children to amount of nodes with those
 	// children.

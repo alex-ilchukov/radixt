@@ -9,28 +9,18 @@ func (tree) Size() uint {
 	return 0
 }
 
-// Has always returns boolean false.
-func (tree) Has(int) bool {
-	return false
-}
-
-// Root always returns -1.
-func (tree) Root() int {
-	return -1
-}
-
 // Value always returns 0 and boolean false.
-func (tree) Value(int) (v uint, has bool) {
+func (tree) Value(uint) (v uint, has bool) {
 	return
 }
 
 // EachChild does nothing.
-func (tree) EachChild(int, func(int) bool) {
+func (tree) EachChild(uint, func(uint) bool) {
 	return
 }
 
 // ByteAt always returns 0 and boolean false.
-func (tree) ByteAt(int, uint) (b byte, within bool) {
+func (tree) ByteAt(uint, uint) (b byte, within bool) {
 	return
 }
 
