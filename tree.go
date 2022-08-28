@@ -28,7 +28,7 @@ type Tree interface {
 
 	// EachChild should call func e for every child of the node n, until e
 	// returns boolean true.
-	EachChild(n int, e func(int) bool)
+	EachChild(n uint, e func(uint) bool)
 
 	// ByteAt should return byte b at npos of chunk of node n with boolean
 	// true flag, if the tree has the node and npos is within the chunk, or
