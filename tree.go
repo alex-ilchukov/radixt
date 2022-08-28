@@ -24,7 +24,7 @@ type Tree interface {
 	// Value should return value v of node n with boolean true flag, if the
 	// tree has the node and the node has value, or default unsigned
 	// integer with boolean false otherwise.
-	Value(n int) (v uint, has bool)
+	Value(n uint) (v uint, has bool)
 
 	// EachChild should call func e for every child of the node n, until e
 	// returns boolean true.
@@ -33,5 +33,5 @@ type Tree interface {
 	// ByteAt should return byte b at npos of chunk of node n with boolean
 	// true flag, if the tree has the node and npos is within the chunk, or
 	// default byte value and boolean false otherwise.
-	ByteAt(n int, npos uint) (b byte, within bool)
+	ByteAt(n uint, npos uint) (b byte, within bool)
 }
