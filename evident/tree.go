@@ -60,7 +60,7 @@ func (t Tree) EachChild(n uint, e func(uint) bool) {
 // ByteAt returns default byte value and boolean false, if npos is outside of
 // chunk of the node n, or byte of the chunk at npos and boolean true
 // otherwise.
-func (t Tree) ByteAt(n uint, npos uint) (b byte, within bool) {
+func (t Tree) ByteAt(n, npos uint) (b byte, within bool) {
 	key := t.key(n)
 	if key == "" {
 		return
