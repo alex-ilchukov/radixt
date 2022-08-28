@@ -20,57 +20,12 @@ func TestTreeSize(t *testing.T) {
 	}
 }
 
-var treeHasTests = []struct {
-	tree   tree
-	n      int
-	result bool
-}{
-	{tree: Tree, n: -2, result: false},
-	{tree: Tree, n: -1, result: false},
-	{tree: Tree, n: 0, result: false},
-	{tree: Tree, n: 1, result: false},
-	{tree: Tree, n: 100, result: false},
-}
-
-const testTreeHasError = "Tree Has Test %d: got %t for if the tree has node " +
-	"node %d (should be %t)"
-
-func TestTreeHas(t *testing.T) {
-	for i, tt := range treeHasTests {
-		result := tt.tree.Has(tt.n)
-		if result != tt.result {
-			t.Errorf(testTreeHasError, i, result, tt.n, tt.result)
-		}
-	}
-}
-
-var treeRootTests = []struct {
-	tree   tree
-	result int
-}{
-	{tree: Tree, result: -1},
-}
-
-const testTreeRootError = "Tree Root Test %d: got %d for root of the tree " +
-	"(should be %d)"
-
-func TestTreeRoot(t *testing.T) {
-	for i, tt := range treeRootTests {
-		result := tt.tree.Root()
-		if result != tt.result {
-			t.Errorf(testTreeRootError, i, result, tt.result)
-		}
-	}
-}
-
 var treeValueTests = []struct {
 	tree    tree
-	n       int
+	n       uint
 	result1 uint
 	result2 bool
 }{
-	{tree: Tree, n: -2, result1: 0, result2: false},
-	{tree: Tree, n: -1, result1: 0, result2: false},
 	{tree: Tree, n: 0, result1: 0, result2: false},
 	{tree: Tree, n: 1, result1: 0, result2: false},
 	{tree: Tree, n: 100, result1: 0, result2: false},
@@ -98,10 +53,8 @@ func TestTreeValue(t *testing.T) {
 
 var treeEachChildTests = []struct {
 	tree tree
-	n    int
+	n    uint
 }{
-	{tree: Tree, n: -2},
-	{tree: Tree, n: -1},
 	{tree: Tree, n: 0},
 	{tree: Tree, n: 1},
 	{tree: Tree, n: 100},
@@ -113,7 +66,7 @@ const testTreeEachChildError = "Tree Each Child Test %d: iterator func got " +
 func TestEachChild(t *testing.T) {
 	for i, tt := range treeEachChildTests {
 		called := false
-		e := func(int) bool {
+		e := func(uint) bool {
 			called = true
 			return false
 		}
@@ -126,15 +79,11 @@ func TestEachChild(t *testing.T) {
 
 var treeByteAtTests = []struct {
 	tree    tree
-	n       int
+	n       uint
 	npos    uint
 	result1 byte
 	result2 bool
 }{
-	{tree: Tree, n: -2, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: -2, npos: 1, result1: 0, result2: false},
-	{tree: Tree, n: -1, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: -1, npos: 1, result1: 0, result2: false},
 	{tree: Tree, n: 0, npos: 0, result1: 0, result2: false},
 	{tree: Tree, n: 0, npos: 1, result1: 0, result2: false},
 	{tree: Tree, n: 1, npos: 0, result1: 0, result2: false},
