@@ -9,13 +9,14 @@ package radixt
 //  2. Nodes of a tree are named by unique indices. In the documentation below
 //     the indices (named by n parameter) are identified with nodes, that is,
 //     instead of "node with index n" just "node n" expression is used.
-//  3. First bytes of non-empty children prefixes should be unique for every
+//  3. Node indices of non-empty tree go from zero to (tree size - 1) number.
+//  4. Non-empty tree always rocks zero as its root.
+//  5. First bytes of non-empty children prefixes should be unique for every
 //     node.
-//  4. Empty chunk is allowed only for root nodes of the trees.
+//  6. Empty chunk is allowed only for root nodes of the trees.
 //
-// The interface does not put any limitations on order of node indices, leaving
-// that detail to implementations. It also does not put any limitations on
-// values.
+// The interface does not put any limitations on values besides its domain of
+// unsigned integers.
 type Tree interface {
 	// Size should return amount of nodes in the tree.
 	Size() uint
