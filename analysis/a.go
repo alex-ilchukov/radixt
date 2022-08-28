@@ -25,7 +25,7 @@ type N struct {
 
 	// Children is slice of indices of children of the node. Always is
 	// sorted by ascending of the indices.
-	Children []int
+	Children []uint
 
 	// ChunkPos is position of chunk in the [A.P] string.
 	ChunkPos uint
