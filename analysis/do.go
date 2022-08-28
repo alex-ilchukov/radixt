@@ -19,8 +19,8 @@ func Do(t radixt.Tree) A {
 	}
 
 	nodes, nt := nodes(t)
-	indices := make([]int, len(nodes))
-	parents := make(map[int]int)
+	indices := make([]uint, len(nodes))
+	parents := make(map[uint]uint)
 	chunks := []string{}
 	cml := uint(0)
 	cma := uint(0)
@@ -54,7 +54,7 @@ func Do(t radixt.Tree) A {
 	}
 
 	c := cramChunks(chunks)
-	n := make(map[int]N)
+	n := make(map[uint]N)
 
 	for i := range nodes {
 		index := nodes[i].Index
@@ -73,7 +73,7 @@ func Do(t radixt.Tree) A {
 	return A{C: c, Cml: cml, Cma: cma, Vm: vm, N: n, Nt: nt, Ca: ca}
 }
 
-func chunk(t radixt.Tree, n int) string {
+func chunk(t radixt.Tree, n uint) string {
 	buf := []byte{}
 	npos := uint(0)
 	for {
@@ -89,13 +89,12 @@ func chunk(t radixt.Tree, n int) string {
 	return string(buf)
 }
 
-func nodes(t radixt.Tree) ([]N, map[int]int) {
+func nodes(t radixt.Tree) ([]N, map[uint]uint) {
 	nodes := []N{}
-	nt := map[int]int{}
-	queue := []int{}
-	root := t.Root()
-	if t.Has(root) {
-		queue = append(queue, root)
+	nt := map[uint]uint{}
+	queue := []uint{}
+	if t.Size() > 0 {
+		queue = append(queue, 0)
 	}
 
 	for len(queue) > 0 {
@@ -108,18 +107,20 @@ func nodes(t radixt.Tree) ([]N, map[int]int) {
 			Chunk:    chunk(t, n),
 			Value:    v,
 			HasValue: has,
-			Children: []int{},
+			Children: []uint{},
 		}
 
-		t.EachChild(n, func(c int) bool {
+		t.EachChild(n, func(c uint) bool {
 			r.Children = append(r.Children, c)
 			queue = append(queue, c)
 			return false
 		})
 
-		sort.Ints(r.Children)
+		sort.SliceStable(r.Children, func(i, j int) bool {
+			return r.Children[i] < r.Children[j]
+		})
 		nodes = append(nodes, r)
-		nt[n] = len(nt)
+		nt[n] = uint(len(nt))
 	}
 
 	return nodes, nt
