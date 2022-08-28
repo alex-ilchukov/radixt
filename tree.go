@@ -20,13 +20,6 @@ type Tree interface {
 	// Size should return amount of nodes in the tree.
 	Size() uint
 
-	// Has should return if the tree has node n or not.
-	Has(n int) bool
-
-	// Root should return index of root node if the tree is not empty, or
-	// non-node index otherwise.
-	Root() int
-
 	// Value should return value v of node n with boolean true flag, if the
 	// tree has the node and the node has value, or default unsigned
 	// integer with boolean false otherwise.
