@@ -33,5 +33,5 @@ type Tree interface {
 	// ByteAt should return byte b at npos of chunk of node n with boolean
 	// true flag, if the tree has the node and npos is within the chunk, or
 	// default byte value and boolean false otherwise.
-	ByteAt(n uint, npos uint) (b byte, within bool)
+	ByteAt(n, npos uint) (b byte, within bool)
 }
