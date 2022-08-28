@@ -5,7 +5,7 @@ import "github.com/alex-ilchukov/radixt"
 type node struct {
 	chunk    string
 	value    uint
-	children []int
+	children []uint
 }
 
 type tree struct {
@@ -18,25 +18,11 @@ func (t *tree) Size() uint {
 	return uint(len(t.nodes))
 }
 
-// Has returns if the tree has node n or not.
-func (t *tree) Has(n int) bool {
-	return 0 <= n && n < len(t.nodes)
-}
-
-// Root returns -1 for empty tree and 0 otherwise.
-func (t *tree) Root() int {
-	if t.Size() > 0 {
-		return 0
-	}
-
-	return -1
-}
-
 // Value returns value v of node n with boolean true flag, if the tree has the
 // node and the node has value, or default unsigned integer with boolean false
 // otherwise.
-func (t *tree) Value(n int) (v uint, has bool) {
-	if !t.Has(n) {
+func (t *tree) Value(n uint) (v uint, has bool) {
+	if n >= t.Size() {
 		return
 	}
 
@@ -53,8 +39,8 @@ func (t *tree) Value(n int) (v uint, has bool) {
 // EachChild calls func e for every child of node n, if the tree has the node,
 // until the func returns boolean true. The order of going over the children is
 // fixed for every node, but may not coincide with any natural order.
-func (t *tree) EachChild(n int, e func(int) bool) {
-	if !t.Has(n) {
+func (t *tree) EachChild(n uint, e func(uint) bool) {
+	if n >= t.Size() {
 		return
 	}
 
@@ -68,31 +54,31 @@ func (t *tree) EachChild(n int, e func(int) bool) {
 // ByteAt returns default byte value and boolean false, if npos is outside of
 // chunk of the node n, or byte of the chunk at npos and boolean true
 // otherwise.
-func (t *tree) ByteAt(n int, npos uint) (b byte, within bool) {
-	if t.Has(n) {
-		return t.byteAt(n, npos)
+func (t *tree) ByteAt(n, npos uint) (b byte, within bool) {
+	if n >= t.Size() {
+		return
 	}
 
-	return
+	return t.byteAt(n, npos)
 }
 
-func (t *tree) value(n int) uint {
+func (t *tree) value(n uint) uint {
 	return t.nodes[n].value
 }
 
-func (t *tree) chunk(n int) string {
+func (t *tree) chunk(n uint) string {
 	return t.nodes[n].chunk
 }
 
-func (t *tree) children(n int) []int {
+func (t *tree) children(n uint) []uint {
 	return t.nodes[n].children
 }
 
-func (t *tree) end(n int, npos uint) bool {
+func (t *tree) end(n, npos uint) bool {
 	return uint(len(t.chunk(n))) <= npos
 }
 
-func (t *tree) byteAt(n int, npos uint) (b byte, within bool) {
+func (t *tree) byteAt(n, npos uint) (b byte, within bool) {
 	chunk := t.chunk(n)
 	if uint(len(chunk)) <= npos {
 		return
@@ -104,34 +90,35 @@ func (t *tree) byteAt(n int, npos uint) (b byte, within bool) {
 	return
 }
 
-func (t *tree) transit(n int, npos uint, b byte) int {
+func (t *tree) transit(n, npos uint, b byte) (found bool, m uint) {
 	byteAt, within := t.byteAt(n, npos)
 	if within {
-		if byteAt == b {
-			return n
-		}
+		found = byteAt == b
+		m = n
 
-		return -1
+		return
 	}
 
 	for _, c := range t.children(n) {
 		byteAt, _ = t.byteAt(c, 0)
-		if byteAt == b {
-			return c
+		found = byteAt == b
+		if found {
+			m = c
+			return
 		}
 	}
 
-	return -1
+	return
 }
 
-func (t *tree) find(s string) (found bool, n, pos int, npos uint) {
-	l := len(s)
+func (t *tree) find(s string) (found bool, n, pos, npos uint) {
+	l := uint(len(s))
 	for ; pos < l; pos++ {
-		m := t.transit(n, npos, s[pos])
-		switch m {
-		case -1:
+		f, m := t.transit(n, npos, s[pos])
+		switch {
+		case !f:
 			return
-		case n:
+		case m == n:
 			npos++
 		default:
 			npos = 1
@@ -165,17 +152,17 @@ func (t *tree) insert(s string, value uint) {
 	}
 }
 
-func (t *tree) splitNode(n int, npos uint, value uint) {
+func (t *tree) splitNode(n, npos, value uint) {
 	no := t.nodes[n]
 	chunk := no.chunk
 	no.chunk = chunk[npos:]
 	t.nodes = append(t.nodes, no)
-	t.nodes[n] = node{chunk[:npos], value, []int{len(t.nodes) - 1}}
+	t.nodes[n] = node{chunk[:npos], value, []uint{uint(len(t.nodes)-1)}}
 }
 
-func (t *tree) addChild(n int, chunk string, value uint) {
+func (t *tree) addChild(n uint, chunk string, value uint) {
 	t.nodes = append(t.nodes, node{chunk, value, nil})
-	t.nodes[n].children = append(t.nodes[n].children, len(t.nodes)-1)
+	t.nodes[n].children = append(t.nodes[n].children, uint(len(t.nodes)-1))
 }
 
 // New creates a new generic tree, inserting the provided strings, and returns
