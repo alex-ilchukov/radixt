@@ -11,9 +11,9 @@ package radixt
 //     instead of "node with index n" just "node n" expression is used.
 //  3. Node indices of non-empty tree go from zero to (tree size - 1) number.
 //  4. Non-empty tree always rocks zero as its root.
-//  5. First bytes of non-empty children prefixes should be unique for every
-//     node.
-//  6. Empty chunk is allowed only for root nodes of the trees.
+//  5. Empty chunk is allowed only for root nodes of the trees (so any child
+//     node must have non-empty chunk).
+//  6. First bytes of children chunks should be unique over every parent node.
 //
 // The interface does not put any limitations on values besides its domain of
 // unsigned integers.
