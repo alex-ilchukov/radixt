@@ -4,7 +4,7 @@ package analysis
 // the data is return values of Node* methods in [radixt.Tree] interface.
 type N struct {
 	// Index is index of the node in the tree.
-	Index int
+	Index uint
 
 	// Chunk is chunk of the node.
 	Chunk string
@@ -21,7 +21,7 @@ type N struct {
 
 	// Parent is index of parent of the node, if the node is not root (see
 	// [Root] flag), or default integer value otherwise.
-	Parent int
+	Parent uint
 
 	// Children is slice of indices of children of the node. Always is
 	// sorted by ascending of the indices.
