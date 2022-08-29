@@ -46,15 +46,33 @@ func (t Tree) Value(n uint) (v uint, has bool) {
 	return
 }
 
-// EachChild calls func e for every child of node n, if the tree has the node,
-// until the func returns boolean true. The order of going over the children is
-// fixed for every node, but may not coincide with any natural order.
-func (t Tree) EachChild(n uint, e func(uint) bool) {
-	for c, l := t.childrenRange(n); c <= l; c++ {
-		if e(c) {
-			return
-		}
+// ChildrenRange returns first and last indices of children of node n, if the
+// tree has the node and the node has children, or 1 and 0 otherwise.
+func (t Tree) ChildrenRange(n uint) (f uint, l uint) {
+	f = 1
+	a, m, q := t.grind(n)
+	if a == nil {
+		return
 	}
+
+	keys := a.keys()
+	key := keys[m]
+	if a[key] == nil {
+		return
+	}
+
+	f = n + uint(len(a)) - m
+	for _, c := range q.a {
+		f += uint(len(c))
+	}
+
+	for _, k := range keys[:m] {
+		f += uint(len(a[k]))
+	}
+
+	l = f + uint(len(a[key])) - 1
+
+	return
 }
 
 // ByteAt returns default byte value and boolean false, if npos is outside of
@@ -119,28 +137,4 @@ func (t Tree) key(n uint) string {
 	}
 
 	return a.keys()[m]
-}
-
-func (t Tree) childrenRange(n uint) (uint, uint) {
-	a, m, q := t.grind(n)
-	if a == nil {
-		return 1, 0
-	}
-
-	keys := a.keys()
-	key := keys[m]
-	if a[key] == nil {
-		return 1, 0
-	}
-
-	f := n + uint(len(a)) - m
-	for _, c := range q.a {
-		f += uint(len(c))
-	}
-
-	for _, k := range keys[:m] {
-		f += uint(len(a[k]))
-	}
-
-	return f, f + uint(len(a[key])) - 1
 }
