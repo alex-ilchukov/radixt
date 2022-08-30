@@ -76,22 +76,6 @@ func Do(t radixt.Tree) A {
 	return A{C: c, Cml: cml, Cma: cma, Vm: vm, N: n, Ca: ca}
 }
 
-func chunk(t radixt.Tree, n uint) string {
-	buf := []byte{}
-	npos := uint(0)
-	for {
-		b, within := t.ByteAt(n, npos)
-		if !within {
-			break
-		}
-
-		buf = append(buf, b)
-		npos++
-	}
-
-	return string(buf)
-}
-
 func nodes(t radixt.Tree) []N {
 	size := t.Size()
 	nodes := make([]N, size, size)
@@ -101,7 +85,7 @@ func nodes(t radixt.Tree) []N {
 		f, l := t.ChildrenRange(n)
 		nodes[n] = N{
 			Index:         n,
-			Chunk:         chunk(t, n),
+			Chunk:         t.Chunk(n),
 			Value:         v,
 			HasValue:      has,
 			ChildrenFirst: f,

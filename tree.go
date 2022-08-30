@@ -29,13 +29,12 @@ type Tree interface {
 	// integer with boolean false otherwise.
 	Value(n uint) (v uint, has bool)
 
+	// Chunk should return chunk of node n, if the tree has the node, or
+	// empty string otherwise.
+	Chunk(n uint) string
+
 	// ChildrenRange should return first and last indices of children of
 	// node n, if the tree has the node and the node has children, or 1 and
 	// 0 otherwise.
 	ChildrenRange(n uint) (f, l uint)
-
-	// ByteAt should return byte b at npos of chunk of node n with boolean
-	// true flag, if the tree has the node and npos is within the chunk, or
-	// default byte value and boolean false otherwise.
-	ByteAt(n, npos uint) (b byte, within bool)
 }

@@ -28,17 +28,17 @@ var (
 )
 
 var newTests = []struct {
-	t     radixt.Tree
-	lt    radixt.Tree
-	ln    uint
-	lnpos uint
-	lstop bool
+	t      radixt.Tree
+	lt     radixt.Tree
+	ln     uint
+	lchunk string
+	lstop  bool
 }{
-	{t: nil, lt: null.Tree, ln: 0, lnpos: 0, lstop: true},
-	{t: null.Tree, lt: null.Tree, ln: 0, lnpos: 0, lstop: true},
-	{t: empty, lt: empty, ln: 0, lnpos: 0, lstop: true},
-	{t: atree, lt: atree, ln: 0, lnpos: 0, lstop: false},
-	{t: withBlank, lt: withBlank, ln: 0, lnpos: 0, lstop: false},
+	{t: nil, lt: null.Tree, ln: 0, lchunk: "", lstop: true},
+	{t: null.Tree, lt: null.Tree, ln: 0, lchunk: "", lstop: true},
+	{t: empty, lt: empty, ln: 0, lchunk: "", lstop: true},
+	{t: atree, lt: atree, ln: 0, lchunk: "", lstop: false},
+	{t: withBlank, lt: withBlank, ln: 0, lchunk: "", lstop: false},
 }
 
 const testNewError = "Test New %d: for tree %v got %v (should be %v)"
@@ -49,7 +49,7 @@ func TestNew(t *testing.T) {
 
 		if l.t != tt.lt ||
 			l.n != tt.ln ||
-			l.npos != tt.lnpos ||
+			l.chunk != tt.lchunk ||
 			l.stop != tt.lstop {
 			t.Errorf(testNewError, i, tt.t, l, tt)
 		}
@@ -57,67 +57,79 @@ func TestNew(t *testing.T) {
 }
 
 var lResetTests = []struct {
-	tree  radixt.Tree
-	input string
-	ln    uint
-	lnpos uint
-	lstop bool
+	tree   radixt.Tree
+	input  string
+	ln     uint
+	lchunk string
+	lstop  bool
 }{
-	{tree: nil, input: "", ln: 0, lnpos: 0, lstop: true},
-	{tree: nil, input: "content-type", ln: 0, lnpos: 0, lstop: true},
-	{tree: empty, input: "", ln: 0, lnpos: 0, lstop: true},
-	{tree: empty, input: "content-type", ln: 0, lnpos: 0, lstop: true},
-	{tree: atree, input: "authorization", ln: 0, lnpos: 0, lstop: false},
-	{tree: atree, input: "content-type", ln: 0, lnpos: 0, lstop: false},
-	{tree: atree, input: "content-length", ln: 0, lnpos: 0, lstop: false},
+	{tree: nil, input: "", ln: 0, lchunk: "", lstop: true},
+	{tree: nil, input: "content-type", ln: 0, lchunk: "", lstop: true},
+	{tree: empty, input: "", ln: 0, lchunk: "", lstop: true},
+	{tree: empty, input: "content-type", ln: 0, lchunk: "", lstop: true},
+	{tree: atree, input: "authorization", ln: 0, lchunk: "", lstop: false},
+	{tree: atree, input: "content-type", ln: 0, lchunk: "", lstop: false},
 	{
-		tree:  atree,
-		input: "content-disposition",
-		ln:    0,
-		lnpos: 0,
-		lstop: false,
+		tree:   atree,
+		input:  "content-length",
+		ln:     0,
+		lchunk: "",
+		lstop:  false,
 	},
-	{tree: atree, input: "content-typ", ln: 0, lnpos: 0, lstop: false},
-	{tree: atree, input: "content-", ln: 0, lnpos: 0, lstop: false},
-	{tree: atree, input: "auth", ln: 0, lnpos: 0, lstop: false},
-	{tree: atree, input: "", ln: 0, lnpos: 0, lstop: false},
+	{
+		tree:   atree,
+		input:  "content-disposition",
+		ln:     0,
+		lchunk: "",
+		lstop:  false,
+	},
+	{tree: atree, input: "content-typ", ln: 0, lchunk: "", lstop: false},
+	{tree: atree, input: "content-", ln: 0, lchunk: "", lstop: false},
+	{tree: atree, input: "auth", ln: 0, lchunk: "", lstop: false},
+	{tree: atree, input: "", ln: 0, lchunk: "", lstop: false},
 
 	{
-		tree:  withBlank,
-		input: "authorization",
-		ln:    0,
-		lnpos: 0,
-		lstop: false,
+		tree:   withBlank,
+		input:  "authorization",
+		ln:     0,
+		lchunk: "",
+		lstop:  false,
 	},
 	{
-		tree:  withBlank,
-		input: "content-type",
-		ln:    0,
-		lnpos: 0,
-		lstop: false,
+		tree:   withBlank,
+		input:  "content-type",
+		ln:     0,
+		lchunk: "",
+		lstop:  false,
 	},
 	{
-		tree:  withBlank,
-		input: "content-length",
-		ln:    0,
-		lnpos: 0,
-		lstop: false,
+		tree:   withBlank,
+		input:  "content-length",
+		ln:     0,
+		lchunk: "",
+		lstop:  false,
 	},
 	{
-		tree:  withBlank,
-		input: "content-disposition",
-		ln:    0,
-		lnpos: 0,
-		lstop: false,
+		tree:   withBlank,
+		input:  "content-disposition",
+		ln:     0,
+		lchunk: "",
+		lstop:  false,
 	},
-	{tree: withBlank, input: "content-typ", ln: 0, lnpos: 0, lstop: false},
-	{tree: withBlank, input: "content-", ln: 0, lnpos: 0, lstop: false},
-	{tree: withBlank, input: "auth", ln: 0, lnpos: 0, lstop: false},
-	{tree: withBlank, input: "", ln: 0, lnpos: 0, lstop: false},
+	{
+		tree:   withBlank,
+		input:  "content-typ",
+		ln:     0,
+		lchunk: "",
+		lstop:  false,
+	},
+	{tree: withBlank, input: "content-", ln: 0, lchunk: "", lstop: false},
+	{tree: withBlank, input: "auth", ln: 0, lchunk: "", lstop: false},
+	{tree: withBlank, input: "", ln: 0, lchunk: "", lstop: false},
 }
 
-const testLResetError = "Test L Reset %d: got l.n = %d, l.npos = %d, " +
-	"l.stop = %t (should be %d, %d and %t)"
+const testLResetError = "Test L Reset %d: got l.n = %d, l.npos = '%s', " +
+	"l.stop = %t (should be %d, '%s' and %t)"
 
 func TestLReset(t *testing.T) {
 	for i, tt := range lResetTests {
@@ -130,15 +142,15 @@ func TestLReset(t *testing.T) {
 		}
 
 		l.Reset()
-		if l.n != tt.ln || l.npos != tt.lnpos || l.stop != tt.lstop {
+		if l.n != tt.ln || l.chunk != tt.lchunk || l.stop != tt.lstop {
 			t.Errorf(
 				testLResetError,
 				i,
 				l.n,
-				l.npos,
+				l.chunk,
 				l.stop,
 				tt.ln,
-				tt.lnpos,
+				tt.lchunk,
 				tt.lstop,
 			)
 		}
