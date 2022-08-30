@@ -48,7 +48,7 @@ func (t Tree) Value(n uint) (v uint, has bool) {
 
 // ChildrenRange returns first and last indices of children of node n, if the
 // tree has the node and the node has children, or 1 and 0 otherwise.
-func (t Tree) ChildrenRange(n uint) (f uint, l uint) {
+func (t Tree) ChildrenRange(n uint) (f, l uint) {
 	f = 1
 	a, m, q := t.grind(n)
 	if a == nil {
