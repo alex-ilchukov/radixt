@@ -62,6 +62,23 @@ func (t *tree) EachChild(n uint, e func(uint) bool) {
 	}
 }
 
+// ChildrenRange returns first and last indices of children of node n, if the
+// tree has the node and the node has children, or 1 and 0 otherwise.
+func (t *tree) ChildrenRange(n uint) (uint, uint) {
+	if n >= t.Size() {
+		return 1, 0
+	}
+
+	node := t.nodes[n]
+	amount := node.body(t.lsChildrenAmount, t.rsChildrenAmount)
+	if amount == 0 {
+		return 1, 0
+	}
+
+	f := node.body(t.lsChildrenStart, t.rsChildrenStart)
+	return f, f + amount - 1
+}
+
 // ByteAt returns default byte value and boolean false, if npos is outside of
 // chunk of the node n, or byte of the chunk at npos and boolean true
 // otherwise.

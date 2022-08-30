@@ -63,28 +63,21 @@ func New(t radixt.Tree) (*tree, error) {
 		nodes:            nodes,
 	}
 
-	nt := a.Nt
 	for i, n := range a.N {
-		j := nt[i]
-
 		value := node(n.Value)
 		if n.HasValue {
 			value++
 		}
 
-		childrenStart := node(0)
-		childrenAmount := node(len(n.Children))
-		if childrenAmount > 0 {
-			childrenStart = node(nt[n.Children[0]])
-			for _, c := range n.Children[1:] {
-				s := node(nt[c])
-				if childrenStart > s {
-					childrenStart = s
-				}
-			}
+		f := n.ChildrenFirst
+		l := n.ChildrenLast
+		childrenStart := node(f)
+		childrenAmount := node(0)
+		if f <= l {
+			childrenAmount = node(l - f + 1)
 		}
 
-		nodes[j] = node(n.ChunkPos) |
+		nodes[i] = node(n.ChunkPos) |
 			value<<sValue |
 			childrenStart<<sChildrenStart |
 			childrenAmount<<sChildrenAmount |
