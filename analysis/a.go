@@ -23,6 +23,10 @@ type N struct {
 	// [Root] flag), or default integer value otherwise.
 	Parent uint
 
+	// ChildrenFirst is first (minimum) index of children nodes of the
+	// node, if the node has children, or 1 otherwise
+	ChildrenFirst uint
+
 	// ChunkPos is position of chunk in the [A.P] string.
 	ChunkPos uint
 }
