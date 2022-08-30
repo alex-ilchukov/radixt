@@ -27,6 +27,10 @@ type N struct {
 	// node, if the node has children, or 1 otherwise
 	ChildrenFirst uint
 
+	// ChildrenLast is last (maximum) index of children nodes of the node,
+	// if the node has children, or 0 otherwise
+	ChildrenLast uint
+
 	// ChunkPos is position of chunk in the [A.P] string.
 	ChunkPos uint
 }
