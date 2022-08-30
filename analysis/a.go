@@ -23,10 +23,6 @@ type N struct {
 	// [Root] flag), or default integer value otherwise.
 	Parent uint
 
-	// Children is slice of indices of children of the node. Always is
-	// sorted by ascending of the indices.
-	Children []uint
-
 	// ChunkPos is position of chunk in the [A.P] string.
 	ChunkPos uint
 }
