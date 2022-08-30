@@ -33,9 +33,4 @@ type Tree interface {
 	// node n, if the tree has the node and the node has children, or 1 and
 	// 0 otherwise.
 	ChildrenRange(n uint) (f, l uint)
-
-	// ByteAt should return byte b at npos of chunk of node n with boolean
-	// true flag, if the tree has the node and npos is within the chunk, or
-	// default byte value and boolean false otherwise.
-	ByteAt(n, npos uint) (b byte, within bool)
 }
