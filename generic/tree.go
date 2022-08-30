@@ -37,6 +37,16 @@ func (t *tree) Value(n uint) (v uint, has bool) {
 	return
 }
 
+// Chunk returns chunk of node n, if the tree has the node, or empty string
+// otherwise.
+func (t *tree) Chunk(n uint) string {
+	if n >= t.Size() {
+		return ""
+	}
+
+	return t.nodes[n].chunk
+}
+
 // ChildrenRange returns first and last indices of children of node n, if the
 // tree has the node and the node has children, or 1 and 0 otherwise.
 func (t *tree) ChildrenRange(n uint) (uint, uint) {
@@ -47,25 +57,6 @@ func (t *tree) ChildrenRange(n uint) (uint, uint) {
 	no := t.nodes[n]
 	f := no.cFirst
 	return f, f + uint(no.cAmount) - 1
-}
-
-// ByteAt returns default byte value and boolean false, if npos is outside of
-// chunk of the node n, or byte of the chunk at npos and boolean true
-// otherwise.
-func (t *tree) ByteAt(n, npos uint) (b byte, within bool) {
-	if n >= t.Size() {
-		return
-	}
-
-	chunk := t.nodes[n].chunk
-	if uint(len(chunk)) <= npos {
-		return
-	}
-
-	within = true
-	b = chunk[npos]
-
-	return
 }
 
 var _ radixt.Tree = (*tree)(nil)
