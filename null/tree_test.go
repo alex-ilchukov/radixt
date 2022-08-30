@@ -51,28 +51,34 @@ func TestTreeValue(t *testing.T) {
 	}
 }
 
-var treeEachChildTests = []struct {
-	tree tree
-	n    uint
+var treeChildrenRangeTests = []struct {
+	tree    tree
+	n       uint
+	result1 uint
+	result2 uint
 }{
-	{tree: Tree, n: 0},
-	{tree: Tree, n: 1},
-	{tree: Tree, n: 100},
+	{tree: Tree, n: 0, result1: 1, result2: 0},
+	{tree: Tree, n: 1, result1: 1, result2: 0},
+	{tree: Tree, n: 100, result1: 1, result2: 0},
 }
 
-const testTreeEachChildError = "Tree Each Child Test %d: iterator func got " +
-	"called on node %d (shouldn't get called)"
+const testTreeChildrenRangeError = "Tree Children Range Test %d: got %d " +
+	"and %d for first and last indices of children of node %d (should " +
+	"be %d and %d)"
 
-func TestEachChild(t *testing.T) {
-	for i, tt := range treeEachChildTests {
-		called := false
-		e := func(uint) bool {
-			called = true
-			return false
-		}
-		tt.tree.EachChild(tt.n, e)
-		if called {
-			t.Errorf(testTreeEachChildError, i, tt.n)
+func TestTreeChildrenRange(t *testing.T) {
+	for i, tt := range treeChildrenRangeTests {
+		result1, result2 := tt.tree.ChildrenRange(tt.n)
+		if result1 != tt.result1 || result2 != tt.result2 {
+			t.Errorf(
+				testTreeChildrenRangeError,
+				i,
+				result1,
+				result2,
+				tt.n,
+				tt.result1,
+				tt.result2,
+			)
 		}
 	}
 }

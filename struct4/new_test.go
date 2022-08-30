@@ -25,27 +25,27 @@ var (
 	)
 
 	borderValues = generic.NewFromSV(
-		generic.SV{"GET", math.MaxUint16 - 1},
-		generic.SV{"POST", math.MaxUint16 - 1},
-		generic.SV{"PATCH", math.MaxUint16 - 1},
-		generic.SV{"DELETE", math.MaxUint16 - 1},
-		generic.SV{"PUT", math.MaxUint16 - 1},
-		generic.SV{"OPTIONS", math.MaxUint16 - 1},
-		generic.SV{"CONNECT", math.MaxUint16 - 1},
-		generic.SV{"HEAD", math.MaxUint16 - 1},
-		generic.SV{"TRACE", math.MaxUint16 - 1},
+		generic.SV{S: "GET", V: math.MaxUint16 - 1},
+		generic.SV{S: "POST", V: math.MaxUint16 - 1},
+		generic.SV{S: "PATCH", V: math.MaxUint16 - 1},
+		generic.SV{S: "DELETE", V: math.MaxUint16 - 1},
+		generic.SV{S: "PUT", V: math.MaxUint16 - 1},
+		generic.SV{S: "OPTIONS", V: math.MaxUint16 - 1},
+		generic.SV{S: "CONNECT", V: math.MaxUint16 - 1},
+		generic.SV{S: "HEAD", V: math.MaxUint16 - 1},
+		generic.SV{S: "TRACE", V: math.MaxUint16 - 1},
 	)
 
 	largeValues = generic.NewFromSV(
-		generic.SV{"GET", math.MaxUint16},
-		generic.SV{"POST", math.MaxUint16},
-		generic.SV{"PATCH", math.MaxUint16},
-		generic.SV{"DELETE", math.MaxUint16},
-		generic.SV{"PUT", math.MaxUint16},
-		generic.SV{"OPTIONS", math.MaxUint16},
-		generic.SV{"CONNECT", math.MaxUint16},
-		generic.SV{"HEAD", math.MaxUint16},
-		generic.SV{"TRACE", math.MaxUint16},
+		generic.SV{S: "GET", V: math.MaxUint16},
+		generic.SV{S: "POST", V: math.MaxUint16},
+		generic.SV{S: "PATCH", V: math.MaxUint16},
+		generic.SV{S: "DELETE", V: math.MaxUint16},
+		generic.SV{S: "PUT", V: math.MaxUint16},
+		generic.SV{S: "OPTIONS", V: math.MaxUint16},
+		generic.SV{S: "CONNECT", V: math.MaxUint16},
+		generic.SV{S: "HEAD", V: math.MaxUint16},
+		generic.SV{S: "TRACE", V: math.MaxUint16},
 	)
 )
 

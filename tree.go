@@ -9,11 +9,14 @@ package radixt
 //  2. Nodes of a tree are named by unique indices. In the documentation below
 //     the indices (named by n parameter) are identified with nodes, that is,
 //     instead of "node with index n" just "node n" expression is used.
-//  3. Node indices of non-empty tree go from zero to (tree size - 1) number.
+//  3. Node indices of non-empty tree go from zero to (tree size - 1) number in
+//     sequential order: 0, 1, ….
 //  4. Non-empty tree always rocks zero as its root.
-//  5. Empty chunk is allowed only for root nodes of the trees (so any child
+//  5. Children indices go in sequential order for any parent node: f, (f + 1),
+//     (f + 2), ….
+//  6. Empty chunk is allowed only for root nodes of the trees (so any child
 //     node must have non-empty chunk).
-//  6. First bytes of children chunks should be unique over every parent node.
+//  7. First bytes of children chunks should be unique over every parent node.
 //
 // The interface does not put any limitations on values besides its domain of
 // unsigned integers.
@@ -26,9 +29,10 @@ type Tree interface {
 	// integer with boolean false otherwise.
 	Value(n uint) (v uint, has bool)
 
-	// EachChild should call func e for every child of the node n, until e
-	// returns boolean true.
-	EachChild(n uint, e func(uint) bool)
+	// ChildrenRange should return first and last indices of children of
+	// node n, if the tree has the node and the node has children, or 1 and
+	// 0 otherwise.
+	ChildrenRange(n uint) (f, l uint)
 
 	// ByteAt should return byte b at npos of chunk of node n with boolean
 	// true flag, if the tree has the node and npos is within the chunk, or

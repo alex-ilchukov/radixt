@@ -24,27 +24,27 @@ var (
 	)
 
 	borderValues = generic.NewFromSV(
-		generic.SV{"GET", 0xFFFFFFFFFFFC},
-		generic.SV{"POST", 0xFFFFFFFFFFFC},
-		generic.SV{"PATCH", 0xFFFFFFFFFFFC},
-		generic.SV{"DELETE", 0xFFFFFFFFFFFC},
-		generic.SV{"PUT", 0xFFFFFFFFFFFC},
-		generic.SV{"OPTIONS", 0xFFFFFFFFFFFC},
-		generic.SV{"CONNECT", 0xFFFFFFFFFFFC},
-		generic.SV{"HEAD", 0xFFFFFFFFFFFC},
-		generic.SV{"TRACE", 0xFFFFFFFFFFFC},
+		generic.SV{S: "GET", V: 0xFFFFFFFFFFFC},
+		generic.SV{S: "POST", V: 0xFFFFFFFFFFFC},
+		generic.SV{S: "PATCH", V: 0xFFFFFFFFFFFC},
+		generic.SV{S: "DELETE", V: 0xFFFFFFFFFFFC},
+		generic.SV{S: "PUT", V: 0xFFFFFFFFFFFC},
+		generic.SV{S: "OPTIONS", V: 0xFFFFFFFFFFFC},
+		generic.SV{S: "CONNECT", V: 0xFFFFFFFFFFFC},
+		generic.SV{S: "HEAD", V: 0xFFFFFFFFFFFC},
+		generic.SV{S: "TRACE", V: 0xFFFFFFFFFFFC},
 	)
 
 	largeValues = generic.NewFromSV(
-		generic.SV{"GET", 0xFFFFFFFFFFFF},
-		generic.SV{"POST", 0xFFFFFFFFFFFF},
-		generic.SV{"PATCH", 0xFFFFFFFFFFFF},
-		generic.SV{"DELETE", 0xFFFFFFFFFFFF},
-		generic.SV{"PUT", 0xFFFFFFFFFFFF},
-		generic.SV{"OPTIONS", 0xFFFFFFFFFFFF},
-		generic.SV{"CONNECT", 0xFFFFFFFFFFFF},
-		generic.SV{"HEAD", 0xFFFFFFFFFFFF},
-		generic.SV{"TRACE", 0xFFFFFFFFFFFF},
+		generic.SV{S: "GET", V: 0xFFFFFFFFFFFF},
+		generic.SV{S: "POST", V: 0xFFFFFFFFFFFF},
+		generic.SV{S: "PATCH", V: 0xFFFFFFFFFFFF},
+		generic.SV{S: "DELETE", V: 0xFFFFFFFFFFFF},
+		generic.SV{S: "PUT", V: 0xFFFFFFFFFFFF},
+		generic.SV{S: "OPTIONS", V: 0xFFFFFFFFFFFF},
+		generic.SV{S: "CONNECT", V: 0xFFFFFFFFFFFF},
+		generic.SV{S: "HEAD", V: 0xFFFFFFFFFFFF},
+		generic.SV{S: "TRACE", V: 0xFFFFFFFFFFFF},
 	)
 )
 

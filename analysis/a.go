@@ -23,9 +23,13 @@ type N struct {
 	// [Root] flag), or default integer value otherwise.
 	Parent uint
 
-	// Children is slice of indices of children of the node. Always is
-	// sorted by ascending of the indices.
-	Children []uint
+	// ChildrenFirst is first (minimum) index of children nodes of the
+	// node, if the node has children, or 1 otherwise
+	ChildrenFirst uint
+
+	// ChildrenLast is last (maximum) index of children nodes of the node,
+	// if the node has children, or 0 otherwise
+	ChildrenLast uint
 
 	// ChunkPos is position of chunk in the [A.P] string.
 	ChunkPos uint
@@ -47,12 +51,6 @@ type A struct {
 
 	// N is map from all node indices to node data in form of [N] structs.
 	N map[uint]N
-
-	// Nt is map from all node indices to new indices, which would allow to
-	// represent all slices of [N.Children] as two numbers: start index and
-	// amount of children. New indices always form a sequence 0, 1, 2, 3, …
-	// having zero as root.
-	Nt map[uint]uint
 
 	// Ca is map from amounts of children to amount of nodes with those
 	// children.
