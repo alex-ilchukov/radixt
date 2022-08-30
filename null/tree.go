@@ -14,9 +14,9 @@ func (tree) Value(uint) (v uint, has bool) {
 	return
 }
 
-// EachChild does nothing.
-func (tree) EachChild(uint, func(uint) bool) {
-	return
+// ChildrenRange always returns 1 and 0.
+func (tree) ChildrenRange(uint) (uint, uint) {
+	return 1, 0
 }
 
 // ByteAt always returns 0 and boolean false.
