@@ -54,20 +54,17 @@ func (l *L) Feed(b byte) bool {
 		return false
 	}
 
-	l.stop = true
-	t.EachChild(n, func(c uint) bool {
+	for c, f := t.ChildrenRange(n); c <= f; c++ {
 		byteAt, _ := t.ByteAt(c, 0)
 		if byteAt == b {
 			l.n = c
-			l.stop = false
 			l.npos = 1
 			return true
 		}
+	}
 
-		return false
-	})
-
-	return !l.stop
+	l.stop = true
+	return false
 }
 
 // Found returns if the lookup state points to result string with value in the
