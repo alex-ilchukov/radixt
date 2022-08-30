@@ -51,6 +51,34 @@ func TestTreeValue(t *testing.T) {
 	}
 }
 
+var treeChunkTests = []struct {
+	tree   tree
+	n      uint
+	result string
+}{
+	{tree: Tree, n: 0, result: ""},
+	{tree: Tree, n: 1, result: ""},
+	{tree: Tree, n: 100, result: ""},
+}
+
+const testTreeChunkError = "Tree Chunk Test %d: got '%s' for chunk of node " +
+	"%d (should be '%s')"
+
+func TestTreeChunk(t *testing.T) {
+	for i, tt := range treeChunkTests {
+		result := tt.tree.Chunk(tt.n)
+		if result != tt.result {
+			t.Errorf(
+				testTreeChunkError,
+				i,
+				result,
+				tt.n,
+				tt.result,
+			)
+		}
+	}
+}
+
 var treeChildrenRangeTests = []struct {
 	tree    tree
 	n       uint
@@ -75,44 +103,6 @@ func TestTreeChildrenRange(t *testing.T) {
 				i,
 				result1,
 				result2,
-				tt.n,
-				tt.result1,
-				tt.result2,
-			)
-		}
-	}
-}
-
-var treeByteAtTests = []struct {
-	tree    tree
-	n       uint
-	npos    uint
-	result1 byte
-	result2 bool
-}{
-	{tree: Tree, n: 0, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: 0, npos: 1, result1: 0, result2: false},
-	{tree: Tree, n: 1, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: 1, npos: 1, result1: 0, result2: false},
-	{tree: Tree, n: 6, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: 6, npos: 1, result1: 0, result2: false},
-	{tree: Tree, n: 100, npos: 0, result1: 0, result2: false},
-	{tree: Tree, n: 100, npos: 1, result1: 0, result2: false},
-}
-
-const testTreeByteAtError = "Tree ByteAt Test %d: got %d and %t for byte at " +
-	"position %d of chunk of node %d (should be %d and %t)"
-
-func TestTreeByteAt(t *testing.T) {
-	for i, tt := range treeByteAtTests {
-		result1, result2 := tt.tree.ByteAt(tt.n, tt.npos)
-		if result1 != tt.result1 || result2 != tt.result2 {
-			t.Errorf(
-				testTreeByteAtError,
-				i,
-				result1,
-				result2,
-				tt.npos,
 				tt.n,
 				tt.result1,
 				tt.result2,
