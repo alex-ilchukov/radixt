@@ -86,6 +86,54 @@ func (t Tree) ChildrenRange(n uint) (f, l uint) {
 	return
 }
 
+// Eq returns true, if the provided tree o has the same structure, node chunks,
+// and node values as the original tree t. It supposes that empty and nil trees
+// are equal. It doesn't have any defence against cycles and humbly supposes
+// that all trees processed are _trees_.
+func (t Tree) Eq(o Tree) bool {
+	if len(t) == 0 && len(o) == 0 {
+		return true
+	}
+
+	type se struct {
+		tv Tree
+		ov Tree
+	}
+
+	s := []se{{tv: t, ov: o}}
+	for len(s) > 0 {
+		l := len(s) - 1
+		e := s[l]
+		s = s[:l]
+		tv := e.tv
+		ov := e.ov
+
+		if len(tv) != len(ov) {
+			return false
+		}
+
+		for k, v := range tv {
+			u, has := ov[k]
+			if !has {
+				return false
+			}
+
+			bv := v != nil
+			bu := u != nil
+
+			if bv != bu {
+				return false
+			}
+
+			if bv && bu {
+				s = append(s, se{tv: v, ov: u})
+			}
+		}
+	}
+
+	return true
+}
+
 func (t Tree) keys() []string {
 	result := make([]string, len(t), len(t))
 	i := 0
