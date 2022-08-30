@@ -49,7 +49,7 @@ func (t *tree) Chunk(n uint) string {
 	node := t.nodes[n]
 	l := node.tail(t.sChunkLen)
 	pos := node.head(t.sChunkPos)
-	return t.chunks[pos:pos+l]
+	return t.chunks[pos : pos+l]
 }
 
 // ChildrenRange returns first and last indices of children of node n, if the
