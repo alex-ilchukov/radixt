@@ -118,8 +118,8 @@ func (t Tree) Eq(o Tree) bool {
 				return false
 			}
 
-			bv := v != nil
-			bu := u != nil
+			bv := len(u) > 0
+			bu := len(v) > 0
 
 			if bv != bu {
 				return false
