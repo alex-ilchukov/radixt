@@ -284,6 +284,27 @@ var treeEqTests = []struct {
 		},
 		result: false, // additional node under "ty|0"
 	},
+	{
+		t: atree,
+		o: Tree{
+			"|": {
+				"content-|": {
+					"length|6":      nil,
+					"disposition|7": nil,
+				},
+				"auth|4": {
+					"or|2": {
+						"i|": {
+							"ty|0":     nil,
+							"zation|1": nil,
+						},
+					},
+					"entication|3": nil,
+				},
+			},
+		},
+		result: false, // "type|5" node is absent
+	},
 }
 
 const testTreeEqError = "Tree Eq Test %d: got that %v.Eq(%v) = %t (should " +
