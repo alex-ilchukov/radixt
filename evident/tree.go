@@ -75,22 +75,15 @@ func (t Tree) ChildrenRange(n uint) (f, l uint) {
 	return
 }
 
-// ByteAt returns default byte value and boolean false, if npos is outside of
-// chunk of the node n, or byte of the chunk at npos and boolean true
+// Chunk returns chunk of node n, if the tree has the node, or empty string
 // otherwise.
-func (t Tree) ByteAt(n, npos uint) (b byte, within bool) {
+func (t Tree) Chunk(n uint) string {
 	key := t.key(n)
 	if key == "" {
-		return
+		return ""
 	}
 
-	chunk := extractChunk(key)
-	if npos < uint(len(chunk)) {
-		b = chunk[npos]
-		within = true
-	}
-
-	return
+	return extractChunk(key)
 }
 
 func (t Tree) keys() []string {
