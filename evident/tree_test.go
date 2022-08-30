@@ -6,20 +6,20 @@ var (
 	empty = Tree{}
 
 	atree = Tree{
-		"|": {                                           // 0
-			"auth|4": {                              //  1
-				"entication|3": nil,             //   3
-				"or|2": {                        //   4
-					"i|": {                  //    8
-						"ty|0": nil,     //     9
-						"zation|1": nil, //     10
-					},
-				},
-			},
-			"content-|": {                           //  2
-				"disposition|7": nil,            //   5
-				"length|6": nil,                 //   6
-				"type|5": nil,                   //   7
+		"|": { //                                           0
+			"auth|4": { //                               1
+				"entication|3": nil, //              .3
+				"or|2": { //                         .4
+					"i|": { //                   ..8
+						"ty|0":     nil, //  .. 9
+						"zation|1": nil, //  .. 10
+					}, //                        ..
+				}, //                                ..
+			}, //                                        ..
+			"content-|": { //                            2.
+				"disposition|7": nil, //              5
+				"length|6":      nil, //              6
+				"type|5":        nil, //              7
 			},
 		},
 	}
@@ -176,6 +176,151 @@ func TestTreeChildrenRange(t *testing.T) {
 				tt.n,
 				tt.result1,
 				tt.result2,
+			)
+		}
+	}
+}
+
+var treeEqTests = []struct {
+	t      Tree
+	o      Tree
+	result bool
+}{
+	{t: nil, o: nil, result: true},
+	{t: nil, o: empty, result: true},
+	{t: empty, o: empty, result: true},
+	{t: empty, o: nil, result: true},
+	{t: empty, o: atree, result: false},
+	{t: atree, o: empty, result: false},
+	{t: atree, o: atree, result: true},
+	{
+		t: atree,
+		o: Tree{
+			"|": {
+				"content-|": {
+					"length|6":      nil,
+					"disposition|7": nil,
+					"type|5":        nil,
+				},
+				"auth|4": {
+					"or|2": {
+						"i|": {
+							"ty|0":     nil,
+							"zation|1": nil,
+						},
+					},
+					"entication|3": nil,
+				},
+			},
+		},
+		result: true, // exactly the same tree but different node order
+	},
+	{
+		t: atree,
+		o: Tree{
+			"|": {
+				"auth|4": {
+					"entication|3": nil,
+					"or|2": {
+						"i|": {
+							"ty|0":     nil,
+							"zation|2": nil,
+						},
+					},
+				},
+				"content-|": {
+					"disposition|7": nil,
+					"length|6":      nil,
+					"type|5":        nil,
+				},
+			},
+		},
+		result: false, // "zation" has value 2 instead of 1
+	},
+	{
+		t: atree,
+		o: Tree{
+			"|": {
+				"auth|4": {
+					"entication|3": nil,
+					"or|2": {
+						"i|": {
+							"ty|0":     nil,
+							"zation|1": nil,
+						},
+					},
+				},
+				"content-|": {
+					"disposition|7": nil,
+					"length|6":      nil,
+					"type|5":        nil,
+					"rage|":         nil,
+				},
+			},
+		},
+		result: false, // additional node under "content-|"
+	},
+	{
+		t: atree,
+		o: Tree{
+			"|": {
+				"content-|": {
+					"length|6":      nil,
+					"disposition|7": nil,
+					"type|5":        nil,
+				},
+				"auth|4": {
+					"or|2": {
+						"i|": {
+							"ty|0": {
+								"ty|": nil,
+							},
+							"zation|1": nil,
+						},
+					},
+					"entication|3": nil,
+				},
+			},
+		},
+		result: false, // additional node under "ty|0"
+	},
+	{
+		t: atree,
+		o: Tree{
+			"|": {
+				"content-|": {
+					"length|6":      nil,
+					"disposition|7": nil,
+				},
+				"auth|4": {
+					"or|2": {
+						"i|": {
+							"ty|0":     nil,
+							"zation|1": nil,
+						},
+					},
+					"entication|3": nil,
+				},
+			},
+		},
+		result: false, // "type|5" node is absent
+	},
+}
+
+const testTreeEqError = "Tree Eq Test %d: got that %v.Eq(%v) = %t (should " +
+	"be %t)"
+
+func TestTreeEq(t *testing.T) {
+	for i, tt := range treeEqTests {
+		result := tt.t.Eq(tt.o)
+		if result != tt.result {
+			t.Errorf(
+				testTreeEqError,
+				i,
+				tt.t,
+				tt.o,
+				result,
+				tt.result,
 			)
 		}
 	}
