@@ -48,3 +48,21 @@ func extractChunk(key string) string {
 
 	return key[:i]
 }
+
+func newKey(chunk string, value uint, hasValue bool) string {
+	const maxValueLen = 20 // len(strconv.FormatUint(math.MaxUint64, 10))
+	chunkLen := len(chunk)
+	totalLen := chunkLen + 1
+	if hasValue {
+		totalLen += maxValueLen
+	}
+
+	key := make([]byte, chunkLen + 1, totalLen)
+	copy(key, chunk)
+	key[chunkLen] = delim
+	if hasValue {
+		key = strconv.AppendUint(key, uint64(value), 10)
+	}
+
+	return string(key)
+}
