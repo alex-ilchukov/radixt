@@ -1,11 +1,15 @@
-package evident
+package evident_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/alex-ilchukov/radixt/evident"
+)
 
 var (
-	empty = Tree{}
+	empty = evident.Tree{}
 
-	atree = Tree{
+	atree = evident.Tree{
 		"|": { //                                           0
 			"auth|4": { //                               1
 				"entication|3": nil, //              .3
@@ -26,7 +30,7 @@ var (
 )
 
 var treeSizeTests = []struct {
-	tree   Tree
+	tree   evident.Tree
 	result uint
 }{
 	{tree: nil, result: 0},
@@ -46,7 +50,7 @@ func TestTreeSize(t *testing.T) {
 }
 
 var treeValueTests = []struct {
-	tree    Tree
+	tree    evident.Tree
 	n       uint
 	result1 uint
 	result2 bool
@@ -92,7 +96,7 @@ func TestTreeValue(t *testing.T) {
 }
 
 var treeChunkTests = []struct {
-	tree   Tree
+	tree   evident.Tree
 	n      uint
 	result string
 }{
@@ -135,7 +139,7 @@ func TestTreeChunk(t *testing.T) {
 }
 
 var treeChildrenRangeTests = []struct {
-	tree    Tree
+	tree    evident.Tree
 	n       uint
 	result1 uint
 	result2 uint
@@ -182,8 +186,8 @@ func TestTreeChildrenRange(t *testing.T) {
 }
 
 var treeEqTests = []struct {
-	t      Tree
-	o      Tree
+	t      evident.Tree
+	o      evident.Tree
 	result bool
 }{
 	{t: nil, o: nil, result: true},
@@ -195,7 +199,7 @@ var treeEqTests = []struct {
 	{t: atree, o: atree, result: true},
 	{
 		t: atree,
-		o: Tree{
+		o: evident.Tree{
 			"|": {
 				"content-|": {
 					"length|6":      nil,
@@ -217,7 +221,7 @@ var treeEqTests = []struct {
 	},
 	{
 		t: atree,
-		o: Tree{
+		o: evident.Tree{
 			"|": {
 				"auth|4": {
 					"entication|3": nil,
@@ -239,7 +243,7 @@ var treeEqTests = []struct {
 	},
 	{
 		t: atree,
-		o: Tree{
+		o: evident.Tree{
 			"|": {
 				"auth|4": {
 					"entication|3": nil,
@@ -262,7 +266,7 @@ var treeEqTests = []struct {
 	},
 	{
 		t: atree,
-		o: Tree{
+		o: evident.Tree{
 			"|": {
 				"content-|": {
 					"length|6":      nil,
@@ -286,7 +290,7 @@ var treeEqTests = []struct {
 	},
 	{
 		t: atree,
-		o: Tree{
+		o: evident.Tree{
 			"|": {
 				"content-|": {
 					"length|6":      nil,
