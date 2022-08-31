@@ -2,7 +2,6 @@ package evident
 
 import (
 	"sort"
-	"strconv"
 
 	"github.com/alex-ilchukov/radixt"
 )
@@ -34,18 +33,7 @@ func (t Tree) Value(n uint) (v uint, has bool) {
 		return
 	}
 
-	value := extractValue(key)
-	if value != "" {
-		v64, err := strconv.ParseUint(value, 0, 0)
-		if err != nil {
-			panic(err)
-		}
-
-		v = uint(v64)
-		has = true
-	}
-
-	return
+	return extractValue(key)
 }
 
 // Chunk returns chunk of node n, if the tree has the node, or empty string
