@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	empty = generic.New()
+	newEmpty = generic.New()
 
-	atree = generic.New(
+	newATree = generic.New(
 		"authority",
 		"authorization",
 		"author",
@@ -22,7 +22,7 @@ var (
 		"content-disposition",
 	)
 
-	etree = evident.Tree{
+	newETree = evident.Tree{
 		"|": {
 			"auth|4": {
 				"entication|3": nil,
@@ -47,11 +47,11 @@ var newTests = []struct {
 	result evident.Tree
 }{
 	{t: nil, result: nil},
-	{t: empty, result: nil},
+	{t: newEmpty, result: nil},
 	{t: evident.Tree(nil), result: nil},
 	{t: evident.Tree{}, result: evident.Tree{}},
-	{t: atree, result: etree},
-	{t: etree, result: etree},
+	{t: newATree, result: newETree},
+	{t: newETree, result: newETree},
 }
 
 const testNewError = "New Test %d: got that New(%v) is\n\n%v\n\nwhich is " +
