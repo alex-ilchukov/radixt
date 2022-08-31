@@ -14,8 +14,6 @@ func mustFindDelim(key string) int {
 	}
 
 	panic(noDelimError)
-
-	return -1
 }
 
 func extractValue(key string) (v uint, has bool) {
