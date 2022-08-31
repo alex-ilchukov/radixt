@@ -1,11 +1,39 @@
-package evident
+package evident_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/evident"
+	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/null"
+)
 
 var (
-	empty = Tree{}
+	empty = evident.Tree{}
 
-	atree = Tree{
+	atree = generic.New(
+		"authority",
+		"authorization",
+		"author",
+		"authentication",
+		"auth",
+		"content-type",
+		"content-length",
+		"content-disposition",
+	)
+
+	btree = generic.New(
+		"authority",
+		"authorization",
+		"author",
+		"authentication",
+		"content-type",
+		"content-length",
+		"content-disposition",
+	)
+
+	etree = evident.Tree{
 		"|": { //                                           0
 			"auth|4": { //                               1
 				"entication|3": nil, //              .3
@@ -26,12 +54,12 @@ var (
 )
 
 var treeSizeTests = []struct {
-	tree   Tree
+	tree   evident.Tree
 	result uint
 }{
 	{tree: nil, result: 0},
 	{tree: empty, result: 0},
-	{tree: atree, result: 11},
+	{tree: etree, result: 11},
 }
 
 const testTreeSizeError = "Tree Size Test %d: got %d for size (should be %d)"
@@ -46,7 +74,7 @@ func TestTreeSize(t *testing.T) {
 }
 
 var treeValueTests = []struct {
-	tree    Tree
+	tree    evident.Tree
 	n       uint
 	result1 uint
 	result2 bool
@@ -57,18 +85,18 @@ var treeValueTests = []struct {
 	{tree: empty, n: 0, result1: 0, result2: false},
 	{tree: empty, n: 1, result1: 0, result2: false},
 	{tree: empty, n: 100, result1: 0, result2: false},
-	{tree: atree, n: 0, result1: 0, result2: false},
-	{tree: atree, n: 1, result1: 4, result2: true},
-	{tree: atree, n: 2, result1: 0, result2: false},
-	{tree: atree, n: 3, result1: 3, result2: true},
-	{tree: atree, n: 4, result1: 2, result2: true},
-	{tree: atree, n: 5, result1: 7, result2: true},
-	{tree: atree, n: 6, result1: 6, result2: true},
-	{tree: atree, n: 7, result1: 5, result2: true},
-	{tree: atree, n: 8, result1: 0, result2: false},
-	{tree: atree, n: 9, result1: 0, result2: true},
-	{tree: atree, n: 10, result1: 1, result2: true},
-	{tree: atree, n: 100, result1: 0, result2: false},
+	{tree: etree, n: 0, result1: 0, result2: false},
+	{tree: etree, n: 1, result1: 4, result2: true},
+	{tree: etree, n: 2, result1: 0, result2: false},
+	{tree: etree, n: 3, result1: 3, result2: true},
+	{tree: etree, n: 4, result1: 2, result2: true},
+	{tree: etree, n: 5, result1: 7, result2: true},
+	{tree: etree, n: 6, result1: 6, result2: true},
+	{tree: etree, n: 7, result1: 5, result2: true},
+	{tree: etree, n: 8, result1: 0, result2: false},
+	{tree: etree, n: 9, result1: 0, result2: true},
+	{tree: etree, n: 10, result1: 1, result2: true},
+	{tree: etree, n: 100, result1: 0, result2: false},
 }
 
 const testTreeValueError = "Tree Value Test %d: got %d and %t for value of " +
@@ -92,7 +120,7 @@ func TestTreeValue(t *testing.T) {
 }
 
 var treeChunkTests = []struct {
-	tree   Tree
+	tree   evident.Tree
 	n      uint
 	result string
 }{
@@ -102,18 +130,18 @@ var treeChunkTests = []struct {
 	{tree: empty, n: 0, result: ""},
 	{tree: empty, n: 1, result: ""},
 	{tree: empty, n: 100, result: ""},
-	{tree: atree, n: 0, result: ""},
-	{tree: atree, n: 1, result: "auth"},
-	{tree: atree, n: 2, result: "content-"},
-	{tree: atree, n: 3, result: "entication"},
-	{tree: atree, n: 4, result: "or"},
-	{tree: atree, n: 5, result: "disposition"},
-	{tree: atree, n: 6, result: "length"},
-	{tree: atree, n: 7, result: "type"},
-	{tree: atree, n: 8, result: "i"},
-	{tree: atree, n: 9, result: "ty"},
-	{tree: atree, n: 10, result: "zation"},
-	{tree: atree, n: 100, result: ""},
+	{tree: etree, n: 0, result: ""},
+	{tree: etree, n: 1, result: "auth"},
+	{tree: etree, n: 2, result: "content-"},
+	{tree: etree, n: 3, result: "entication"},
+	{tree: etree, n: 4, result: "or"},
+	{tree: etree, n: 5, result: "disposition"},
+	{tree: etree, n: 6, result: "length"},
+	{tree: etree, n: 7, result: "type"},
+	{tree: etree, n: 8, result: "i"},
+	{tree: etree, n: 9, result: "ty"},
+	{tree: etree, n: 10, result: "zation"},
+	{tree: etree, n: 100, result: ""},
 }
 
 const testTreeChunkError = "Tree Chunk Test %d: got '%s' for chunk of node " +
@@ -135,7 +163,7 @@ func TestTreeChunk(t *testing.T) {
 }
 
 var treeChildrenRangeTests = []struct {
-	tree    Tree
+	tree    evident.Tree
 	n       uint
 	result1 uint
 	result2 uint
@@ -146,18 +174,18 @@ var treeChildrenRangeTests = []struct {
 	{tree: empty, n: 0, result1: 1, result2: 0},
 	{tree: empty, n: 1, result1: 1, result2: 0},
 	{tree: empty, n: 100, result1: 1, result2: 0},
-	{tree: atree, n: 0, result1: 1, result2: 2},
-	{tree: atree, n: 1, result1: 3, result2: 4},
-	{tree: atree, n: 2, result1: 5, result2: 7},
-	{tree: atree, n: 3, result1: 1, result2: 0},
-	{tree: atree, n: 4, result1: 8, result2: 8},
-	{tree: atree, n: 5, result1: 1, result2: 0},
-	{tree: atree, n: 6, result1: 1, result2: 0},
-	{tree: atree, n: 7, result1: 1, result2: 0},
-	{tree: atree, n: 8, result1: 9, result2: 10},
-	{tree: atree, n: 9, result1: 1, result2: 0},
-	{tree: atree, n: 10, result1: 1, result2: 0},
-	{tree: atree, n: 100, result1: 1, result2: 0},
+	{tree: etree, n: 0, result1: 1, result2: 2},
+	{tree: etree, n: 1, result1: 3, result2: 4},
+	{tree: etree, n: 2, result1: 5, result2: 7},
+	{tree: etree, n: 3, result1: 1, result2: 0},
+	{tree: etree, n: 4, result1: 8, result2: 8},
+	{tree: etree, n: 5, result1: 1, result2: 0},
+	{tree: etree, n: 6, result1: 1, result2: 0},
+	{tree: etree, n: 7, result1: 1, result2: 0},
+	{tree: etree, n: 8, result1: 9, result2: 10},
+	{tree: etree, n: 9, result1: 1, result2: 0},
+	{tree: etree, n: 10, result1: 1, result2: 0},
+	{tree: etree, n: 100, result1: 1, result2: 0},
 }
 
 const testTreeChildrenRangeError = "Tree Children Range Test %d: got %d " +
@@ -182,20 +210,22 @@ func TestTreeChildrenRange(t *testing.T) {
 }
 
 var treeEqTests = []struct {
-	t      Tree
-	o      Tree
+	t      evident.Tree
+	u      radixt.Tree
 	result bool
 }{
-	{t: nil, o: nil, result: true},
-	{t: nil, o: empty, result: true},
-	{t: empty, o: empty, result: true},
-	{t: empty, o: nil, result: true},
-	{t: empty, o: atree, result: false},
-	{t: atree, o: empty, result: false},
-	{t: atree, o: atree, result: true},
+	{t: nil, u: nil, result: true},
+	{t: nil, u: empty, result: true},
+	{t: empty, u: empty, result: true},
+	{t: empty, u: nil, result: true},
+	{t: nil, u: null.Tree, result: true},
+	{t: empty, u: null.Tree, result: true},
+	{t: empty, u: etree, result: false},
+	{t: etree, u: empty, result: false},
+	{t: etree, u: etree, result: true},
 	{
-		t: atree,
-		o: Tree{
+		t: etree,
+		u: evident.Tree{
 			"|": {
 				"content-|": {
 					"length|6":      nil,
@@ -216,8 +246,8 @@ var treeEqTests = []struct {
 		result: true, // exactly the same tree but different node order
 	},
 	{
-		t: atree,
-		o: Tree{
+		t: etree,
+		u: evident.Tree{
 			"|": {
 				"auth|4": {
 					"entication|3": nil,
@@ -238,8 +268,8 @@ var treeEqTests = []struct {
 		result: false, // "zation" has value 2 instead of 1
 	},
 	{
-		t: atree,
-		o: Tree{
+		t: etree,
+		u: evident.Tree{
 			"|": {
 				"auth|4": {
 					"entication|3": nil,
@@ -261,8 +291,8 @@ var treeEqTests = []struct {
 		result: false, // additional node under "content-|"
 	},
 	{
-		t: atree,
-		o: Tree{
+		t: etree,
+		u: evident.Tree{
 			"|": {
 				"content-|": {
 					"length|6":      nil,
@@ -285,8 +315,8 @@ var treeEqTests = []struct {
 		result: false, // additional node under "ty|0"
 	},
 	{
-		t: atree,
-		o: Tree{
+		t: etree,
+		u: evident.Tree{
 			"|": {
 				"content-|": {
 					"length|6":      nil,
@@ -305,6 +335,8 @@ var treeEqTests = []struct {
 		},
 		result: false, // "type|5" node is absent
 	},
+	{t: etree, u: atree, result: true},
+	{t: etree, u: btree, result: false},
 }
 
 const testTreeEqError = "Tree Eq Test %d: got that %v.Eq(%v) = %t (should " +
@@ -312,13 +344,13 @@ const testTreeEqError = "Tree Eq Test %d: got that %v.Eq(%v) = %t (should " +
 
 func TestTreeEq(t *testing.T) {
 	for i, tt := range treeEqTests {
-		result := tt.t.Eq(tt.o)
+		result := tt.t.Eq(tt.u)
 		if result != tt.result {
 			t.Errorf(
 				testTreeEqError,
 				i,
 				tt.t,
-				tt.o,
+				tt.u,
 				result,
 				tt.result,
 			)
