@@ -76,7 +76,7 @@ func (t Tree) ChildrenRange(n uint) (f, l uint) {
 	return
 }
 
-// Eq returns true, if the provided tree o has the same structure, node chunks,
+// Eq returns true, if the provided tree u has the same structure, node chunks,
 // and node values as the original tree t. It supposes that empty and nil trees
 // are equal. It doesn't have any defence against cycles and humbly supposes
 // that all trees processed are _trees_.
