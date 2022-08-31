@@ -3,6 +3,8 @@ package evident
 import (
 	"sort"
 	"strconv"
+
+	"github.com/alex-ilchukov/radixt"
 )
 
 // Tree is an implementation of [radixt.Tree] interface, based on maps.
@@ -179,3 +181,5 @@ func (t Tree) key(n uint) string {
 
 	return a.keys()[m]
 }
+
+var _ radixt.Tree = Tree(nil)
