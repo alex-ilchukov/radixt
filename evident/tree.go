@@ -80,7 +80,8 @@ func (t Tree) ChildrenRange(n uint) (f, l uint) {
 // and node values as the original tree t. It supposes that empty and nil trees
 // are equal. It doesn't have any defence against cycles and humbly supposes
 // that all trees processed are _trees_.
-func (t Tree) Eq(o Tree) bool {
+func (t Tree) Eq(u radixt.Tree) bool {
+	o := New(u)
 	if len(t) == 0 && len(o) == 0 {
 		return true
 	}
