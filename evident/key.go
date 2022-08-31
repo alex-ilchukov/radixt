@@ -57,7 +57,7 @@ func newKey(chunk string, value uint, hasValue bool) string {
 		totalLen += maxValueLen
 	}
 
-	key := make([]byte, chunkLen + 1, totalLen)
+	key := make([]byte, chunkLen+1, totalLen)
 	copy(key, chunk)
 	key[chunkLen] = delim
 	if hasValue {
