@@ -14,9 +14,10 @@ package radixt
 //  4. Non-empty tree always rocks zero as its root.
 //  5. Children indices go in sequential order for any parent node: f, (f + 1),
 //     (f + 2), ….
-//  6. Empty chunk is allowed only for root nodes of the trees (so any child
+//  6. Any child's index is always strictly greater than index of its parent.
+//  7. Empty chunk is allowed only for root nodes of the trees (so any child
 //     node must have non-empty chunk).
-//  7. First bytes of children chunks should be unique over every parent node.
+//  8. First bytes of children chunks should be unique over every parent node.
 //
 // The interface does not put any limitations on values besides its domain of
 // unsigned integers.
