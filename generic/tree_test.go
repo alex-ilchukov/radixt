@@ -1,11 +1,16 @@
-package generic
+package generic_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/generic"
+)
 
 var (
-	empty = New()
+	empty = generic.New()
 
-	atree = New(
+	atree = generic.New(
 		"authority",
 		"authorization",
 		"author",
@@ -18,7 +23,7 @@ var (
 )
 
 var treeSizeTests = []struct {
-	tree   *tree
+	tree   radixt.Tree
 	result uint
 }{
 	{tree: empty, result: 0},
@@ -37,7 +42,7 @@ func TestTreeSize(t *testing.T) {
 }
 
 var treeValueTests = []struct {
-	tree    *tree
+	tree    radixt.Tree
 	n       uint
 	result1 uint
 	result2 bool
@@ -80,7 +85,7 @@ func TestTreeValue(t *testing.T) {
 }
 
 var treeChunkTests = []struct {
-	tree   *tree
+	tree   radixt.Tree
 	n      uint
 	result string
 }{
@@ -120,7 +125,7 @@ func TestTreeChunk(t *testing.T) {
 }
 
 var treeChildrenRangeTests = []struct {
-	tree    *tree
+	tree    radixt.Tree
 	n       uint
 	result1 uint
 	result2 uint
