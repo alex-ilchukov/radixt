@@ -1,12 +1,18 @@
-package null
+package null_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/null"
+)
+
 
 var treeSizeTests = []struct {
-	tree   tree
+	tree   radixt.Tree
 	result uint
 }{
-	{tree: Tree, result: 0},
+	{tree: null.Tree, result: 0},
 }
 
 const testTreeSizeError = "Tree Size Test %d: got %d for size (should be %d)"
@@ -21,14 +27,14 @@ func TestTreeSize(t *testing.T) {
 }
 
 var treeValueTests = []struct {
-	tree    tree
+	tree    radixt.Tree
 	n       uint
 	result1 uint
 	result2 bool
 }{
-	{tree: Tree, n: 0, result1: 0, result2: false},
-	{tree: Tree, n: 1, result1: 0, result2: false},
-	{tree: Tree, n: 100, result1: 0, result2: false},
+	{tree: null.Tree, n: 0, result1: 0, result2: false},
+	{tree: null.Tree, n: 1, result1: 0, result2: false},
+	{tree: null.Tree, n: 100, result1: 0, result2: false},
 }
 
 const testTreeValueError = "Tree Value Test %d: got %d and %t for value of " +
@@ -52,13 +58,13 @@ func TestTreeValue(t *testing.T) {
 }
 
 var treeChunkTests = []struct {
-	tree   tree
+	tree   radixt.Tree
 	n      uint
 	result string
 }{
-	{tree: Tree, n: 0, result: ""},
-	{tree: Tree, n: 1, result: ""},
-	{tree: Tree, n: 100, result: ""},
+	{tree: null.Tree, n: 0, result: ""},
+	{tree: null.Tree, n: 1, result: ""},
+	{tree: null.Tree, n: 100, result: ""},
 }
 
 const testTreeChunkError = "Tree Chunk Test %d: got '%s' for chunk of node " +
@@ -80,14 +86,14 @@ func TestTreeChunk(t *testing.T) {
 }
 
 var treeChildrenRangeTests = []struct {
-	tree    tree
+	tree    radixt.Tree
 	n       uint
 	result1 uint
 	result2 uint
 }{
-	{tree: Tree, n: 0, result1: 1, result2: 0},
-	{tree: Tree, n: 1, result1: 1, result2: 0},
-	{tree: Tree, n: 100, result1: 1, result2: 0},
+	{tree: null.Tree, n: 0, result1: 1, result2: 0},
+	{tree: null.Tree, n: 1, result1: 1, result2: 0},
+	{tree: null.Tree, n: 100, result1: 1, result2: 0},
 }
 
 const testTreeChildrenRangeError = "Tree Children Range Test %d: got %d " +
