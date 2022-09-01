@@ -1,4 +1,4 @@
-package struct8
+package struct8_test
 
 import (
 	"testing"
@@ -6,6 +6,7 @@ import (
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/null"
+	"github.com/alex-ilchukov/radixt/struct8"
 )
 
 var (
@@ -57,7 +58,7 @@ var newErrorTests = []struct {
 	{tree: null.Tree, result2: nil},
 	{tree: regularValues, result2: nil},
 	{tree: borderValues, result2: nil},
-	{tree: largeValues, result2: ErrorOverflow},
+	{tree: largeValues, result2: struct8.ErrorOverflow},
 }
 
 const testNewErrorError = "Test New Error %d: got \"%s\" error " +
@@ -65,7 +66,7 @@ const testNewErrorError = "Test New Error %d: got \"%s\" error " +
 
 func TestNewError(t *testing.T) {
 	for i, tt := range newErrorTests {
-		_, result2 := New(tt.tree)
+		_, result2 := struct8.New(tt.tree)
 		if result2 != tt.result2 {
 			t.Errorf(testNewErrorError, i, result2, tt.result2)
 		}
