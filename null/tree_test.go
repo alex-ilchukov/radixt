@@ -7,7 +7,6 @@ import (
 	"github.com/alex-ilchukov/radixt/null"
 )
 
-
 var treeSizeTests = []struct {
 	tree   radixt.Tree
 	result uint
