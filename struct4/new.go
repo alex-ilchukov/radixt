@@ -21,7 +21,16 @@ func New(t radixt.Tree) (*tree, error) {
 	lenChunkPos := bits.Len(uint(len(a.C)))
 	// Zero is NoValue, so (a.Vm + 1) values would be in use
 	lenValue := bits.Len(a.Vm + 1)
-	lenChildrenStart := bits.Len(uint(len(a.N)))
+
+	// Zero is for empty and one-node trees. Any other trees have at least
+	// one parent node and, as a corollary, have a.Dcfpm > 0. Indeed, any
+	// child's index (including the minimal, the first one) is strictly
+	// greater than its parent index, so the difference is always positive.
+	lenChildrenStart := 0
+	if a.Dcfpm > 0 {
+		lenChildrenStart = bits.Len(a.Dcfpm - 1)
+	}
+
 	lenChildrenAmount := bits.Len(a.Cma)
 	lenChunkLen := bits.Len(a.Cml)
 
@@ -71,9 +80,10 @@ func New(t radixt.Tree) (*tree, error) {
 
 		f := n.ChildrenFirst
 		l := n.ChildrenLast
-		childrenStart := node(f)
+		childrenStart := node(0)
 		childrenAmount := node(0)
 		if f <= l {
+			childrenStart = node(f - n.Index - 1)
 			childrenAmount = node(l - f + 1)
 		}
 
