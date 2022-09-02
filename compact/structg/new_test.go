@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/compact/structg"
 	"github.com/alex-ilchukov/radixt/evident"
 	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/null"
-	"github.com/alex-ilchukov/radixt/structg"
 )
 
 const (
