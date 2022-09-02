@@ -65,7 +65,7 @@ func (t *tree) ChildrenRange(n uint) (uint, uint) {
 		return 1, 0
 	}
 
-	f := node.body(t.lsChildrenStart, t.rsChildrenStart)
+	f := node.body(t.lsChildrenStart, t.rsChildrenStart) + n + 1
 	return f, f + amount - 1
 }
 

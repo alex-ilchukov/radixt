@@ -1,7 +1,6 @@
 package struct4_test
 
 import (
-	"math"
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
@@ -26,28 +25,32 @@ var (
 		"TRACE",
 	)
 
+	border uint = 0x1_FF_FF - 1
+
 	borderValues = generic.NewFromSV(
-		generic.SV{S: "GET", V: math.MaxUint16 - 1},
-		generic.SV{S: "POST", V: math.MaxUint16 - 1},
-		generic.SV{S: "PATCH", V: math.MaxUint16 - 1},
-		generic.SV{S: "DELETE", V: math.MaxUint16 - 1},
-		generic.SV{S: "PUT", V: math.MaxUint16 - 1},
-		generic.SV{S: "OPTIONS", V: math.MaxUint16 - 1},
-		generic.SV{S: "CONNECT", V: math.MaxUint16 - 1},
-		generic.SV{S: "HEAD", V: math.MaxUint16 - 1},
-		generic.SV{S: "TRACE", V: math.MaxUint16 - 1},
+		generic.SV{S: "GET", V: border},
+		generic.SV{S: "POST", V: border},
+		generic.SV{S: "PATCH", V: border},
+		generic.SV{S: "DELETE", V: border},
+		generic.SV{S: "PUT", V: border},
+		generic.SV{S: "OPTIONS", V: border},
+		generic.SV{S: "CONNECT", V: border},
+		generic.SV{S: "HEAD", V: border},
+		generic.SV{S: "TRACE", V: border},
 	)
 
+	large uint = border + 1
+
 	largeValues = generic.NewFromSV(
-		generic.SV{S: "GET", V: math.MaxUint16},
-		generic.SV{S: "POST", V: math.MaxUint16},
-		generic.SV{S: "PATCH", V: math.MaxUint16},
-		generic.SV{S: "DELETE", V: math.MaxUint16},
-		generic.SV{S: "PUT", V: math.MaxUint16},
-		generic.SV{S: "OPTIONS", V: math.MaxUint16},
-		generic.SV{S: "CONNECT", V: math.MaxUint16},
-		generic.SV{S: "HEAD", V: math.MaxUint16},
-		generic.SV{S: "TRACE", V: math.MaxUint16},
+		generic.SV{S: "GET", V: large},
+		generic.SV{S: "POST", V: large},
+		generic.SV{S: "PATCH", V: large},
+		generic.SV{S: "DELETE", V: large},
+		generic.SV{S: "PUT", V: large},
+		generic.SV{S: "OPTIONS", V: large},
+		generic.SV{S: "CONNECT", V: large},
+		generic.SV{S: "HEAD", V: large},
+		generic.SV{S: "TRACE", V: large},
 	)
 )
 

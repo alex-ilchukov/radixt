@@ -43,34 +43,37 @@ var doTests = []struct {
 	{
 		tree: nil,
 		result: A{
-			C:   "",
-			Cml: 0,
-			Cma: 0,
-			Vm:  0,
-			N:   map[uint]N{},
-			Ca:  map[uint]uint{},
+			C:     "",
+			Cml:   0,
+			Cma:   0,
+			Dcfpm: 0,
+			Vm:    0,
+			N:     map[uint]N{},
+			Ca:    map[uint]uint{},
 		},
 	},
 	{
 		tree: null.Tree,
 		result: A{
-			C:   "",
-			Cml: 0,
-			Cma: 0,
-			Vm:  0,
-			N:   map[uint]N{},
-			Ca:  map[uint]uint{},
+			C:     "",
+			Cml:   0,
+			Cma:   0,
+			Dcfpm: 0,
+			Vm:    0,
+			N:     map[uint]N{},
+			Ca:    map[uint]uint{},
 		},
 	},
 	{
 		tree: empty,
 		result: A{
-			C:   "",
-			Cml: 0,
-			Cma: 0,
-			Vm:  0,
-			N:   map[uint]N{},
-			Ca:  map[uint]uint{},
+			C:     "",
+			Cml:   0,
+			Cma:   0,
+			Dcfpm: 0,
+			Vm:    0,
+			N:     map[uint]N{},
+			Ca:    map[uint]uint{},
 		},
 	},
 	{
@@ -78,9 +81,10 @@ var doTests = []struct {
 		result: A{
 			C: "dispositionenticationcontent-lengthzationauth" +
 				"typeor",
-			Cml: 11,
-			Cma: 3,
-			Vm:  7,
+			Cml:   11,
+			Cma:   3,
+			Dcfpm: 5,
+			Vm:    7,
 			N: map[uint]N{
 				0: {
 					Index:         0,
@@ -210,10 +214,11 @@ var doTests = []struct {
 	{
 		tree: methods,
 		result: A{
-			C:   "OPTIONSDELETETRACEATCHHEADGETOSTUT",
-			Cml: 7,
-			Cma: 6,
-			Vm:  7,
+			C:     "OPTIONSDELETETRACEATCHHEADGETOSTUT",
+			Cml:   7,
+			Cma:   6,
+			Dcfpm: 2,
+			Vm:    7,
 			N: map[uint]N{
 				0: {
 					Index:         0,
@@ -341,6 +346,9 @@ func guilty(a, b A) string {
 
 	case a.Cma != b.Cma:
 		return "Cma"
+
+	case a.Dcfpm != b.Dcfpm:
+		return "Dcfpm"
 
 	case a.Vm != b.Vm:
 		return "Vm"

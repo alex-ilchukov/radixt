@@ -24,6 +24,7 @@ func Do(t radixt.Tree) A {
 	chunks := []string{}
 	cml := uint(0)
 	cma := uint(0)
+	dcfpm := uint(0)
 	vm := uint(0)
 	ca := make(map[uint]uint)
 
@@ -36,11 +37,16 @@ func Do(t radixt.Tree) A {
 		}
 
 		cl := uint(0)
+		dcfp := uint(0)
 		if n.ChildrenFirst <= n.ChildrenLast {
 			cl = n.ChildrenLast - n.ChildrenFirst + 1
+			dcfp = n.ChildrenFirst - n.Index
 		}
 		if cma < cl {
 			cma = cl
+		}
+		if dcfpm < dcfp {
+			dcfpm = dcfp
 		}
 
 		ca[cl] += 1
@@ -73,7 +79,7 @@ func Do(t radixt.Tree) A {
 		n[index] = nodes[i]
 	}
 
-	return A{C: c, Cml: cml, Cma: cma, Vm: vm, N: n, Ca: ca}
+	return A{C: c, Cml: cml, Cma: cma, Dcfpm: dcfpm, Vm: vm, N: n, Ca: ca}
 }
 
 func nodes(t radixt.Tree) []N {
