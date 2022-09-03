@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/compact"
 	"github.com/alex-ilchukov/radixt/compact/structg"
 	"github.com/alex-ilchukov/radixt/evident"
 	"github.com/alex-ilchukov/radixt/generic"
@@ -90,7 +91,7 @@ var newError32Tests = []struct {
 	{tree: null.Tree, result2: nil},
 	{tree: regularValues, result2: nil},
 	{tree: borderValues32, result2: nil},
-	{tree: largeValues32, result2: structg.ErrorOverflow},
+	{tree: largeValues32, result2: compact.ErrorOverflow},
 }
 
 const testNewError32Error = "Test New[uint32] Error %d: got \"%s\" error " +
@@ -153,7 +154,7 @@ var newError64Tests = []struct {
 	{tree: null.Tree, result2: nil},
 	{tree: regularValues, result2: nil},
 	{tree: borderValues64, result2: nil},
-	{tree: largeValues64, result2: structg.ErrorOverflow},
+	{tree: largeValues64, result2: compact.ErrorOverflow},
 }
 
 const testNewError64Error = "Test New[uint64] Error %d: got \"%s\" error " +

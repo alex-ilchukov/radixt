@@ -1,18 +1,15 @@
 package structg
 
-import "github.com/alex-ilchukov/radixt"
+import (
+	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/compact/internal/header"
+	"github.com/alex-ilchukov/radixt/compact/internal/node"
+)
 
-type tree[N node] struct {
-	sChunkPos        byte
-	lsValue          byte
-	rsValue          byte
-	lsChildrenStart  byte
-	rsChildrenStart  byte
-	lsChildrenAmount byte
-	rsChildrenAmount byte
-	sChunkLen        byte
-	chunks           string
-	nodes            []N
+type tree[N node.N] struct {
+	h      header.H[N]
+	chunks string
+	nodes  []N
 }
 
 // Size returns amount of nodes in the tree.
@@ -24,17 +21,9 @@ func (t *tree[_]) Size() uint {
 // node and the node has value, or default unsigned integer with boolean false
 // otherwise.
 func (t *tree[_]) Value(n uint) (v uint, has bool) {
-	if n >= t.Size() {
-		return
+	if n < t.Size() {
+		v, has = t.h.Value(t.nodes[n])
 	}
-
-	v = body(t.nodes[n], t.lsValue, t.rsValue)
-	if v == 0 {
-		return
-	}
-
-	v -= 1
-	has = true
 
 	return
 }
@@ -47,8 +36,8 @@ func (t *tree[_]) Chunk(n uint) string {
 	}
 
 	node := t.nodes[n]
-	l := tail(node, t.sChunkLen)
-	pos := head(node, t.sChunkPos)
+	l := t.h.ChunkLen(node)
+	pos := t.h.ChunkPos(node)
 	return t.chunks[pos : pos+l]
 }
 
@@ -59,14 +48,7 @@ func (t *tree[_]) ChildrenRange(n uint) (uint, uint) {
 		return 1, 0
 	}
 
-	node := t.nodes[n]
-	amount := body(node, t.lsChildrenAmount, t.rsChildrenAmount)
-	if amount == 0 {
-		return 1, 0
-	}
-
-	f := body(node, t.lsChildrenStart, t.rsChildrenStart) + n + 1
-	return f, f + amount - 1
+	return t.h.ChildrenRange(n, t.nodes[n])
 }
 
 var (
