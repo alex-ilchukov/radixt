@@ -36,7 +36,7 @@ import "github.com/alex-ilchukov/radixt/compact/internal/node"
 //  | — - via node.Tail(n, H.sChunkLen).
 //  \ — /
 //    ------------------------------------------------------------------------
-type H struct {
+type H[N node.N] struct {
 	sChunkPos        byte
 	lsValue          byte
 	rsValue          byte
@@ -49,7 +49,7 @@ type H struct {
 
 // Value returns value v of node n with boolean true flag, if the node has
 // value, or default unsigned integer with boolean false otherwise.
-func (h H) Value[N node.N](n N) (v uint, has bool) {
+func (h H[N]) Value(n N) (v uint, has bool) {
 	v = node.Body(n, h.lsValue, h.rsValue)
 	if v == 0 {
 		return
@@ -63,18 +63,18 @@ func (h H) Value[N node.N](n N) (v uint, has bool) {
 
 // ChunkPos returns position of chunk of node n in the string of all chunks
 // concatenated.
-func (h H) ChunkPos[N node.N](n N) uint {
+func (h H[N]) ChunkPos(n N) uint {
 	return node.Head(n, h.sChunkPos)
 }
 
 // ChunkLen returns length of chunk of node n.
-func (h H) ChunkLen[N node.N](n N) uint {
+func (h H[N]) ChunkLen(n N) uint {
 	return node.Tail(n, h.sChunkLen)
 }
 
 // ChildrenRange returns first and last indices of children of node n with
 // index i, if the node has children, or 1 and 0 otherwise.
-func (h H) ChildrenRange[N node.N](i uint, n N) (uint, uint) {
+func (h H[N]) ChildrenRange(i uint, n N) (uint, uint) {
 	amount := node.Body(n, h.lsChildrenAmount, h.rsChildrenAmount)
 	if amount == 0 {
 		return 1, 0
