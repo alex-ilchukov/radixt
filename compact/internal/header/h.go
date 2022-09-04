@@ -18,10 +18,21 @@ type H interface {
 	A8b | ~string
 }
 
-// Value returns value v of node n with boolean true flag, if the node has
-// value, or default unsigned integer with boolean false otherwise.
-func (h H[N]) Value(n N) (v uint, has bool) {
-	v = node.Body(n, h.lsValue, h.rsValue)
+func body[N node.N, Header H](n N, h Header, i int) uint {
+	return node.Body(n, h[2*i+1], h[2*i+2])
+}
+
+const (
+	bodyValue = iota
+	bodyStart
+	bodyAmount
+)
+
+// Value takes node n with header h and returns value v of the node with
+// boolean true flag, if the node has value, or default unsigned integer with
+// boolean false otherwise.
+func Value[N node.N, Header H](n N, h Header) (v uint, has bool) {
+	v = body(n, h, bodyValue)
 	if v == 0 {
 		return
 	}
@@ -43,14 +54,15 @@ func (h H[N]) ChunkLen(n N) uint {
 	return node.Tail(n, h.sChunkLen)
 }
 
-// ChildrenRange returns first and last indices of children of node n with
-// index i, if the node has children, or 1 and 0 otherwise.
-func (h H[N]) ChildrenRange(i uint, n N) (uint, uint) {
-	amount := node.Body(n, h.lsChildrenAmount, h.rsChildrenAmount)
+// ChildrenRange takes node n with its index i and header h, and returns first
+// and last indices of children of the node, if the node has children, or 1 and
+// 0 otherwise.
+func ChildrenRange[N node.N, Header H](i uint, n N, h Header) (uint, uint) {
+	amount := body(n, h, bodyAmount)
 	if amount == 0 {
 		return 1, 0
 	}
 
-	f := node.Body(n, h.lsChildrenStart, h.rsChildrenStart) + i + 1
+	f := body(n, h, bodyStart) + i + 1
 	return f, f + amount  - 1
 }
