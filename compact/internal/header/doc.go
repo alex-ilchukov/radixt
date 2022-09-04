@@ -5,11 +5,11 @@
 // The package assumes, that the nodes are bit strings, where the following
 // data is packed to:
 //
-//  * chunk's position in string of chunks combined;
-//  * chunk's length;
-//  * value;
-//  * index of first child;
-//  * amount of children.
+//   - chunk's position in string of chunks combined;
+//   - chunk's length;
+//   - value;
+//   - index of first child;
+//   - amount of children.
 //
 // Some data is packed as is, other one is mogrified. So, the bit string
 // divided into five continious regions accordingly to names of functions in

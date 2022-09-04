@@ -5,11 +5,11 @@ import "github.com/alex-ilchukov/radixt/compact/internal/node"
 // Routines, working with headers, assume the following order of node's fields
 // in node bit string:
 //
-//  * head — chunk's position;
-//  * body 1 — value (mogrified);
-//  * body 2 — index of first child (mogrified);
-//  * body 3 — amount of children;
-//  * tail — chunk's length.
+//   - head — chunk's position;
+//   - body 1 — value (mogrified);
+//   - body 2 — index of first child (mogrified);
+//   - body 3 — amount of children;
+//   - tail — chunk's length.
 const (
 	fieldChunkPos = iota
 	fieldValue
@@ -19,7 +19,7 @@ const (
 	fieldsAmount
 )
 
-const hlen = 2 + (fieldsAmount - 2) * 2
+const hlen = 2 + (fieldsAmount-2)*2
 
 // A8b represents a header in a compact implementation with all the bytes
 // required for extraction of node's fields.
@@ -75,5 +75,5 @@ func ChildrenRange[N node.N, Header H](i uint, n N, h Header) (uint, uint) {
 	}
 
 	f := body(n, h, fieldChildrenStart) + i + 1
-	return f, f + amount  - 1
+	return f, f + amount - 1
 }

@@ -25,8 +25,8 @@ type fieldShifts [fieldsAmount]byte
 //     bits length of node;
 //  2. [compact.ErrorOverflow] if node fields can not be fit into node value.
 func Calc[N node.N](lenNode int, a analysis.A) (
-	h   A8b,
-	nf  NodeFactory[N],
+	h A8b,
+	nf NodeFactory[N],
 	err error,
 ) {
 	if node.BitsLen[N]() < lenNode {
@@ -73,9 +73,9 @@ func fillLens(a analysis.A) (lens fieldLens) {
 func fillHeader(lenNode int, lens fieldLens) (h A8b) {
 	h[0] = byte(lenNode - lens[0])
 	ls := h[0]
-	for i := 1; i < fieldsAmount - 1; i++ {
+	for i := 1; i < fieldsAmount-1; i++ {
 		ls -= byte(lens[i])
-		h[2*i-1] = ls // left shift
+		h[2*i-1] = ls                    // left shift
 		h[2*i] = byte(lenNode - lens[i]) // right shift
 	}
 	h[hlen-1] = byte(lenNode) - ls
@@ -108,7 +108,7 @@ func createNodeFactory[N node.N](lens fieldLens) NodeFactory[N] {
 
 func fillShifts(lens fieldLens) (s fieldShifts) {
 	for i := 1; i < fieldsAmount; i++ {
-		s[i] = s[i - 1] + byte(lens[i - 1])
+		s[i] = s[i-1] + byte(lens[i-1])
 	}
 
 	return
@@ -116,7 +116,7 @@ func fillShifts(lens fieldLens) (s fieldShifts) {
 
 func placeFields(f fields, s fieldShifts) (result uint) {
 	for i := 0; i < fieldsAmount; i++ {
-		result |= f[i]<<s[i]
+		result |= f[i] << s[i]
 	}
 
 	return

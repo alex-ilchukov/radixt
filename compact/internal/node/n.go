@@ -27,7 +27,7 @@ func Head[T N](n T, s byte) uint {
 
 // Body returns the bits of n, which are in the following range:
 //
-//  [rs - ls, BitsLen[T]() - ls - 1]
+//	[rs - ls, BitsLen[T]() - ls - 1]
 //
 // (here bits are numbered from lowest 0 to highest (BitsLen[T] - 1)). The bits
 // are returned in form of unsigned integer. If ls is more or equal to
