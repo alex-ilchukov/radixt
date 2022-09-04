@@ -6,40 +6,14 @@ import "github.com/alex-ilchukov/radixt/compact/internal/node"
 // required for extraction of node's fields.
 type A8b [8]byte
 
-// H represents a header in a compact implementation of radix tree, which packs
-// its nodes into uint32 or uint64 (see [compact/internal/node.N]). It assumes,
-// that bits in the uintXX value represent the following unsigned intgers,
-// going from lowest at the top of the diagram to highest ones at the bottom:
+// H is type set of header types. Routines, working with H, assume the
+// following order of node's fields in node bit string:
 //
-//    ------------------------------------------------------------------------
-//  / — \
-//  | — - Position of node's chunk in the string of all chunks concatenated
-//  | — - (see [analytics.A.C] string) — the lowest bits, which have been
-//  | — - extracted via node.Head(n, H.sChunkPos).
-//  | — /
-//  | ------------------------------------------------------------------------
-//  | — \
-//  | — - Incremented node's value, if the node has value, or zero otherwise.
-//  | — - The value has been extracted via node.Body(n, H.lsValue, H.rsValue).
-//  | — /
-//  u ------------------------------------------------------------------------
-//  i — \
-//  n — - Decremented difference between minimal child's index and the node's
-//  t — - index (see [analytics.A.Dcfpm] value), if the node has children, or
-//  X — - zero otherwise. The value has been extracted via
-//  X — - node.Body(n, H.lsChildrenStart, H.rsChildrenStart).
-//  | — /
-//  | ------------------------------------------------------------------------
-//  | — \
-//  | — - Amount of children, which has been extracted via
-//  | — - node.Body(n, H.lsChildrenAmount, H.rsChildrenAmount).
-//  | — /
-//  | ------------------------------------------------------------------------
-//  | — \
-//  | — - Length of node's chunk — the highest bits, which have been extracted
-//  | — - via node.Tail(n, H.sChunkLen).
-//  \ — /
-//    ------------------------------------------------------------------------
+//  * head — chunk's position;
+//  * body 0 — value (mogrified);
+//  * body 1 — index of first child (mogrified);
+//  * body 2 — amount of children;
+//  * tail — chunk's length.
 type H interface {
 	A8b | ~string
 }
