@@ -8,6 +8,10 @@ import (
 	"github.com/alex-ilchukov/radixt/compact/internal/node"
 )
 
+// NodeFactory represents all factory functions, which take result of node
+// analysis and return node in form of type from [internal/node.N] type set.
+type NodeFactory[N node.N] func(n analysis.N) N
+
 // Calc takes maximum used bits length of node, which can be less or equal to
 // actual bits length of node, with result of tree analysis. It returns proper
 // filled h and s structures with nil err, if no error appearead. Otherwise
