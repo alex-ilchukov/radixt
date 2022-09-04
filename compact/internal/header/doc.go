@@ -13,7 +13,7 @@
 //
 // Some data is packed as is, other one is mogrified. So, the bit string
 // divided into five continious regions accordingly to names of functions in
-// [internal/node]: head, body 1, body 2, body 3, tail. As the head and the
+// [internal/node]: head, body 0, body 1, body 2, tail. As the head and the
 // tail would need a byte parameter each to extract, and the bodies would need
 // two bytes each, the total is eight bytes. That's the length of a header.
 package header
