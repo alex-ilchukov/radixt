@@ -12,35 +12,17 @@ import (
 // In case of an error, it returns nil for tree and the error.
 func New[N node.N](t radixt.Tree) (*tree[N], error) {
 	a := analysis.Do(t)
-	h, s, err := header.Calc[N](node.BitsLen[N](), a)
+	h, nf, err := header.Calc[N](node.BitsLen[N](), a)
 	if err != nil {
 		return nil, err
 	}
 
 	nodes := make([]N, len(a.N), len(a.N))
-	result := &tree[N]{h: h, chunks: a.C, nodes: nodes}
-
 	for i, n := range a.N {
-		value := N(n.Value)
-		if n.HasValue {
-			value++
-		}
-
-		f := n.ChildrenFirst
-		l := n.ChildrenLast
-		childrenStart := N(0)
-		childrenAmount := N(0)
-		if f <= l {
-			childrenStart = N(f - n.Index - 1)
-			childrenAmount = N(l - f + 1)
-		}
-
-		nodes[i] = N(n.ChunkPos)<<s.ChunkPos |
-			value<<s.Value |
-			childrenStart<<s.ChildrenStart |
-			childrenAmount<<s.ChildrenAmount |
-			N(len(n.Chunk))<<s.ChunkLen
+		nodes[i] = nf(n)
 	}
+
+	result := &tree[N]{h: h, chunks: a.C, nodes: nodes}
 
 	return result, nil
 }
