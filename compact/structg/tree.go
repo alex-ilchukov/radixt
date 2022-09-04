@@ -7,7 +7,7 @@ import (
 )
 
 type tree[N node.N] struct {
-	h      header.H[N]
+	h      header.A8b
 	chunks string
 	nodes  []N
 }
@@ -22,7 +22,7 @@ func (t *tree[_]) Size() uint {
 // otherwise.
 func (t *tree[_]) Value(n uint) (v uint, has bool) {
 	if n < t.Size() {
-		v, has = t.h.Value(t.nodes[n])
+		v, has = header.Value(t.nodes[n], t.h)
 	}
 
 	return
@@ -30,15 +30,13 @@ func (t *tree[_]) Value(n uint) (v uint, has bool) {
 
 // Chunk returns chunk of node n, if the tree has the node, or empty string
 // otherwise.
-func (t *tree[_]) Chunk(n uint) string {
-	if n >= t.Size() {
-		return ""
+func (t *tree[_]) Chunk(n uint) (c string) {
+	if n < t.Size() {
+		l, h := header.ChunkRange(t.nodes[n], t.h)
+		c = t.chunks[l:h]
 	}
 
-	node := t.nodes[n]
-	l := t.h.ChunkLen(node)
-	pos := t.h.ChunkPos(node)
-	return t.chunks[pos : pos+l]
+	return
 }
 
 // ChildrenRange returns first and last indices of children of node n, if the
@@ -48,7 +46,7 @@ func (t *tree[_]) ChildrenRange(n uint) (uint, uint) {
 		return 1, 0
 	}
 
-	return t.h.ChildrenRange(n, t.nodes[n])
+	return header.ChildrenRange(n, t.nodes[n], t.h)
 }
 
 var (
