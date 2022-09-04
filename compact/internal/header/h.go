@@ -2,31 +2,33 @@ package header
 
 import "github.com/alex-ilchukov/radixt/compact/internal/node"
 
-const hlen = 8
-
-// A8b represents a header in a compact implementation with all the bytes
-// required for extraction of node's fields.
-type A8b [hlen]byte
-
-// H is type set of header types. Routines, working with H, assume the
-// following order of node's fields in node bit string:
+// Routines, working with headers, assume the following order of node's fields
+// in node bit string:
 //
 //  * head — chunk's position;
 //  * body 1 — value (mogrified);
 //  * body 2 — index of first child (mogrified);
 //  * body 3 — amount of children;
 //  * tail — chunk's length.
-type H interface {
-	A8b | ~string
-}
-
 const (
 	fieldChunkPos = iota
 	fieldValue
 	fieldChildrenStart
 	fieldChildrenAmount
 	fieldChunkLen
+	fieldsAmount
 )
+
+const hlen = 2 + (fieldsAmount - 2) * 2
+
+// A8b represents a header in a compact implementation with all the bytes
+// required for extraction of node's fields.
+type A8b [hlen]byte
+
+// H is type set of header types.
+type H interface {
+	A8b | ~string
+}
 
 func head[N node.N, Header H](n N, h Header) uint {
 	return node.Head(n, h[0])
