@@ -40,15 +40,8 @@ type A8b [8]byte
 //  | — - via node.Tail(n, H.sChunkLen).
 //  \ — /
 //    ------------------------------------------------------------------------
-type H[N node.N] struct {
-	sChunkPos        byte
-	lsValue          byte
-	rsValue          byte
-	lsChildrenStart  byte
-	rsChildrenStart  byte
-	lsChildrenAmount byte
-	rsChildrenAmount byte
-	sChunkLen        byte
+type H interface {
+	A8b | ~string
 }
 
 // Value returns value v of node n with boolean true flag, if the node has
