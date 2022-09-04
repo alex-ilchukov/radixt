@@ -12,61 +12,110 @@ import (
 // analysis and return node in form of type from [internal/node.N] type set.
 type NodeFactory[N node.N] func(n analysis.N) N
 
+type fields [fieldsAmount]uint
+type fieldLens [fieldsAmount]int
+type fieldShifts [fieldsAmount]byte
+
 // Calc takes maximum used bits length of node, which can be less or equal to
 // actual bits length of node, with result of tree analysis. It returns proper
-// filled h and s structures with nil err, if no error appearead. Otherwise
-// returns the following error values:
+// filled h and node factory function nf with nil err, if no error appearead.
+// Otherwise returns the following error values:
 //
 //  1. [compact.ErrorInvalidLenNode] if provided lenNode is more than actual
 //     bits length of node;
 //  2. [compact.ErrorOverflow] if node fields can not be fit into node value.
-func Calc[N node.N](lenNode int, a analysis.A) (h H[N], s S, err error) {
+func Calc[N node.N](lenNode int, a analysis.A) (
+	h   A8b,
+	nf  NodeFactory[N],
+	err error,
+) {
 	if node.BitsLen[N]() < lenNode {
 		err = compact.ErrorInvalidLenNode
 		return
 	}
 
-	lenChunkPos := bits.Len(uint(len(a.C)))
+	lens := fillLens(a)
+	l := lenNode
+	for _, fieldLen := range lens {
+		l -= fieldLen
+	}
+
+	if l < 0 {
+		err = compact.ErrorOverflow
+		return
+	}
+
+	h = fillHeader(lenNode, lens)
+	nf = createNodeFactory[N](lens)
+
+	return
+}
+
+func fillLens(a analysis.A) (lens fieldLens) {
+	lens[fieldChunkPos] = bits.Len(uint(len(a.C)))
 	// Zero is NoValue, so (a.Vm + 1) values would be in use
-	lenValue := bits.Len(a.Vm + 1)
+	lens[fieldValue] = bits.Len(a.Vm + 1)
 
 	// Zero is for empty and one-node trees. Any other trees have at least
 	// one parent node and, as a corollary, have a.Dcfpm > 0. Indeed, any
 	// child's index (including the minimal, the first one) is strictly
 	// greater than its parent index, so the difference is always positive.
-	lenChildrenStart := 0
 	if a.Dcfpm > 0 {
-		lenChildrenStart = bits.Len(a.Dcfpm - 1)
+		lens[fieldChildrenStart] = bits.Len(a.Dcfpm - 1)
 	}
 
-	lenChildrenAmount := bits.Len(a.Cma)
-	lenChunkLen := bits.Len(a.Cml)
+	lens[fieldChildrenAmount] = bits.Len(a.Cma)
+	lens[fieldChunkLen] = bits.Len(a.Cml)
 
-	l := lenChunkPos + lenValue + lenChildrenStart + lenChildrenAmount +
-		lenChunkLen
+	return
+}
 
-	if l > lenNode {
-		err = compact.ErrorOverflow
-		return
+func fillHeader(lenNode int, lens fieldLens) (h A8b) {
+	h[0] = byte(lenNode - lens[0])
+	h[hlen-1] = byte(lenNode - lens[fieldsAmount-1])
+	for i := 1; i < fieldsAmount - 1; i++ {
+		h[2*i-1] = h[2*i-2] - byte(lens[i]) // left shift
+		h[2*i] = byte(lenNode - lens[i]) // right shift
 	}
 
-	s.ChunkPos = 0
-	h.sChunkPos = byte(lenNode - lenChunkPos)
+	return
+}
 
-	s.Value = byte(lenChunkPos)
-	h.lsValue = h.sChunkPos - byte(lenValue)
-	h.rsValue = byte(lenNode - lenValue)
+func createNodeFactory[N node.N](lens fieldLens) NodeFactory[N] {
+	s := fillShifts(lens)
+	return func(n analysis.N) N {
+		var f fields
 
-	s.ChildrenStart = s.Value + byte(lenValue)
-	h.lsChildrenStart = h.lsValue - byte(lenChildrenStart)
-	h.rsChildrenStart = byte(lenNode - lenChildrenStart)
+		f[fieldChunkPos] = n.ChunkPos
+		f[fieldChunkLen] = uint(len(n.Chunk))
 
-	s.ChildrenAmount = s.ChildrenStart + byte(lenChildrenStart)
-	h.lsChildrenAmount = h.lsChildrenStart - byte(lenChildrenAmount)
-	h.rsChildrenAmount = byte(lenNode - lenChildrenAmount)
+		if n.HasValue {
+			f[fieldValue] = n.Value + 1
+		}
 
-	s.ChunkLen = byte(lenNode - lenChunkLen)
-	h.sChunkLen = s.ChunkLen
+		a := n.ChildrenFirst
+		b := n.ChildrenLast
+		if a <= b {
+			f[fieldChildrenStart] = a - n.Index - 1
+			f[fieldChildrenAmount] = b - a + 1
+		}
+
+		return N(placeFields(f, s))
+	}
+}
+
+func fillShifts(lens fieldLens) (s fieldShifts) {
+	for i := 1; i < fieldsAmount; i++ {
+		s[i] = s[i - 1] + byte(lens[i - 1])
+	}
+
+	return
+}
+
+func placeFields(f fields, s fieldShifts) (result uint) {
+	for i := 0; i < fieldsAmount; i++ {
+		result |= f[i]<<s[i]
+	}
 
 	return
 }
