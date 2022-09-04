@@ -2,9 +2,11 @@ package header
 
 import "github.com/alex-ilchukov/radixt/compact/internal/node"
 
+const hlen = 8
+
 // A8b represents a header in a compact implementation with all the bytes
 // required for extraction of node's fields.
-type A8b [8]byte
+type A8b [hlen]byte
 
 // H is type set of header types. Routines, working with H, assume the
 // following order of node's fields in node bit string:
@@ -18,8 +20,16 @@ type H interface {
 	A8b | ~string
 }
 
+func head[N node.N, Header H](n N, h Header) uint {
+	return node.Head(n, h[0])
+}
+
 func body[N node.N, Header H](n N, h Header, i int) uint {
 	return node.Body(n, h[2*i+1], h[2*i+2])
+}
+
+func tail[N node.N, Header H](n N, h Header) uint {
+	return node.Tail(n, h[hlen-1])
 }
 
 const (
@@ -43,15 +53,12 @@ func Value[N node.N, Header H](n N, h Header) (v uint, has bool) {
 	return
 }
 
-// ChunkPos returns position of chunk of node n in the string of all chunks
-// concatenated.
-func (h H[N]) ChunkPos(n N) uint {
-	return node.Head(n, h.sChunkPos)
-}
-
-// ChunkLen returns length of chunk of node n.
-func (h H[N]) ChunkLen(n N) uint {
-	return node.Tail(n, h.sChunkLen)
+// ChunkRange takes node n with header h and returns low and high indices to
+// select the node's chunk from string of all chunks combined.
+func ChunkRange[N node.N, Header H](n N, h Header) (low, high uint) {
+	low = head(n, h)
+	high = low + tail(n, h)
+	return
 }
 
 // ChildrenRange takes node n with its index i and header h, and returns first
