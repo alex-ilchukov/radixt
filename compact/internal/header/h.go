@@ -2,6 +2,10 @@ package header
 
 import "github.com/alex-ilchukov/radixt/compact/internal/node"
 
+// A8b represents a header in a compact implementation with all the bytes
+// required for extraction of node's fields.
+type A8b [8]byte
+
 // H represents a header in a compact implementation of radix tree, which packs
 // its nodes into uint32 or uint64 (see [compact/internal/node.N]). It assumes,
 // that bits in the uintXX value represent the following unsigned intgers,
