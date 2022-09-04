@@ -72,11 +72,13 @@ func fillLens(a analysis.A) (lens fieldLens) {
 
 func fillHeader(lenNode int, lens fieldLens) (h A8b) {
 	h[0] = byte(lenNode - lens[0])
-	h[hlen-1] = byte(lenNode - lens[fieldsAmount-1])
+	ls := h[0]
 	for i := 1; i < fieldsAmount - 1; i++ {
-		h[2*i-1] = h[2*i-2] - byte(lens[i]) // left shift
+		ls -= byte(lens[i])
+		h[2*i-1] = ls // left shift
 		h[2*i] = byte(lenNode - lens[i]) // right shift
 	}
+	h[hlen-1] = byte(lenNode) - ls
 
 	return
 }
