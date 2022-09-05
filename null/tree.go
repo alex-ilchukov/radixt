@@ -19,9 +19,9 @@ func (tree) Chunk(uint) string {
 	return ""
 }
 
-// ChildrenRange always returns 1 and 0.
-func (tree) ChildrenRange(uint) (uint, uint) {
-	return 1, 0
+// ChildrenRange always returns default unsigned integer values.
+func (tree) ChildrenRange(uint) (low, high uint) {
+	return
 }
 
 // Tree is the only accessible instance of the implementation.
