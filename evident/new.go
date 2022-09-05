@@ -34,11 +34,11 @@ func New(t radixt.Tree) (result Tree) {
 		n := a.n
 		e := a.e
 
-		c, f := t.ChildrenRange(n)
+		c, limit := t.ChildrenRange(n)
 		child := Tree(nil)
-		if c <= f {
-			child = make(Tree, f-c+1)
-			for ; c <= f; c++ {
+		if c < limit {
+			child = make(Tree, limit - c)
+			for ; c < limit; c++ {
 				s = append(s, es{c, child})
 			}
 		}
