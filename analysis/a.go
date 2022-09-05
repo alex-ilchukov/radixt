@@ -51,9 +51,9 @@ type A struct {
 	// Cma is the maximum over children amounts of all nodes.
 	Cma uint
 
-	// Dcfpm is the maximum over differences between children's first
-	// indices and their parent indices
-	Dcfpm uint
+	// Dclpm is the maximum over differences between children's low indices
+	// and their parent indices.
+	Dclpm uint
 
 	// Vm is the maximum over values of all nodes.
 	Vm uint
