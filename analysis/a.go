@@ -28,9 +28,13 @@ type N struct {
 	// same meaning as in slice expression like slice[low : high].
 	ChildrenLow uint
 
-	// ChildrenLast is last (maximum) index of children nodes of the node,
-	// if the node has children, or 0 otherwise
-	ChildrenLast uint
+	// ChildrenLast is incremented last (maximum) index of children nodes
+	// of the node, if the node has children, or 0 otherwise. "High" here
+	// has the same meaning as in slice expression like slice[low : high].
+        //
+	// Remark: Amount of children of the node can be calculated as
+	// ChildrenHigh - [ChildrenLow].
+	ChildrenHigh uint
 
 	// ChunkPos is position of chunk in the [A.P] string.
 	ChunkPos uint
