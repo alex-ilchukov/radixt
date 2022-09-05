@@ -96,7 +96,7 @@ var treeChildrenRangeTests = []struct {
 }
 
 const testTreeChildrenRangeError = "Tree Children Range Test %d: got %d " +
-	"and %d for first and last indices of children of node %d (should " +
+	"and %d for low and high indices of children of node %d (should " +
 	"be %d and %d)"
 
 func TestTreeChildrenRange(t *testing.T) {

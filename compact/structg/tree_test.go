@@ -167,7 +167,7 @@ var tree32ChildrenRangeTests = []struct {
 }
 
 const testTree32ChildrenRangeError = "Tree[uint32] Children Range Test %d: " +
-	"got %d and %d for first and last indices of children of node %d " +
+	"got %d and %d for low and high indices of children of node %d " +
 	"(should be %d and %d)"
 
 func TestTree32ChildrenRange(t *testing.T) {
@@ -314,7 +314,7 @@ var tree64ChildrenRangeTests = []struct {
 }
 
 const testTree64ChildrenRangeError = "Tree[uint64] Children Range Test %d: " +
-	"got %d and %d for first and last indices of children of node %d " +
+	"got %d and %d for low and high indices of children of node %d " +
 	"(should be %d and %d)"
 
 func TestTree64ChildrenRange(t *testing.T) {
