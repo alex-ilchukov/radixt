@@ -37,7 +37,7 @@ func New(t radixt.Tree) (result Tree) {
 		c, limit := t.ChildrenRange(n)
 		child := Tree(nil)
 		if c < limit {
-			child = make(Tree, limit - c)
+			child = make(Tree, limit-c)
 			for ; c < limit; c++ {
 				s = append(s, es{c, child})
 			}
