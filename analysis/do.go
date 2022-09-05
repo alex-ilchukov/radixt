@@ -24,7 +24,7 @@ func Do(t radixt.Tree) A {
 	chunks := []string{}
 	cml := uint(0)
 	cma := uint(0)
-	dcfpm := uint(0)
+	dcplm := uint(0)
 	vm := uint(0)
 	ca := make(map[uint]uint)
 
@@ -32,21 +32,20 @@ func Do(t radixt.Tree) A {
 		index := n.Index
 		indices[i] = index
 
-		for c := n.ChildrenFirst; c <= n.ChildrenLast; c++ {
+		for c := n.ChildrenLow; c < n.ChildrenHigh; c++ {
 			parents[c] = index
 		}
 
-		cl := uint(0)
-		dcfp := uint(0)
-		if n.ChildrenFirst <= n.ChildrenLast {
-			cl = n.ChildrenLast - n.ChildrenFirst + 1
-			dcfp = n.ChildrenFirst - n.Index
-		}
+		cl := n.ChildrenHigh - n.ChildrenLow
 		if cma < cl {
 			cma = cl
 		}
-		if dcfpm < dcfp {
-			dcfpm = dcfp
+
+		if 0 < n.ChildrenHigh {
+			dcfp := n.ChildrenLow - n.Index
+			if dcplm < dcfp {
+				dcplm = dcfp
+			}
 		}
 
 		ca[cl] += 1
@@ -79,7 +78,7 @@ func Do(t radixt.Tree) A {
 		n[index] = nodes[i]
 	}
 
-	return A{C: c, Cml: cml, Cma: cma, Dcfpm: dcfpm, Vm: vm, N: n, Ca: ca}
+	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: n, Ca: ca}
 }
 
 func nodes(t radixt.Tree) []N {
@@ -88,14 +87,14 @@ func nodes(t radixt.Tree) []N {
 
 	for n := uint(0); n < size; n++ {
 		v, has := t.Value(n)
-		f, l := t.ChildrenRange(n)
+		low, high := t.ChildrenRange(n)
 		nodes[n] = N{
-			Index:         n,
-			Chunk:         t.Chunk(n),
-			Value:         v,
-			HasValue:      has,
-			ChildrenFirst: f,
-			ChildrenLast:  l,
+			Index:        n,
+			Chunk:        t.Chunk(n),
+			Value:        v,
+			HasValue:     has,
+			ChildrenLow:  low,
+			ChildrenHigh: high,
 		}
 	}
 
