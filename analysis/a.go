@@ -23,9 +23,10 @@ type N struct {
 	// [Root] flag), or default integer value otherwise.
 	Parent uint
 
-	// ChildrenFirst is first (minimum) index of children nodes of the
-	// node, if the node has children, or 1 otherwise
-	ChildrenFirst uint
+	// ChildrenLow is first (minimum) index of children nodes of the
+	// node, if the node has children, or 0 otherwise. "Low" here has the
+	// same meaning as in slice expression like slice[low : high].
+	ChildrenLow uint
 
 	// ChildrenLast is last (maximum) index of children nodes of the node,
 	// if the node has children, or 0 otherwise
