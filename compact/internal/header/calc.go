@@ -57,11 +57,11 @@ func fillLens(a analysis.A) (lens fieldLens) {
 	lens[fieldValue] = bits.Len(a.Vm + 1)
 
 	// Zero is for empty and one-node trees. Any other trees have at least
-	// one parent node and, as a corollary, have a.Dcfpm > 0. Indeed, any
+	// one parent node and, as a corollary, have a.Dclpm > 0. Indeed, any
 	// child's index (including the minimal, the first one) is strictly
 	// greater than its parent index, so the difference is always positive.
-	if a.Dcfpm > 0 {
-		lens[fieldChildrenStart] = bits.Len(a.Dcfpm - 1)
+	if a.Dclpm > 0 {
+		lens[fieldChildrenStart] = bits.Len(a.Dclpm - 1)
 	}
 
 	lens[fieldChildrenAmount] = bits.Len(a.Cma)
@@ -95,11 +95,9 @@ func createNodeFactory[N node.N](lens fieldLens) NodeFactory[N] {
 			f[fieldValue] = n.Value + 1
 		}
 
-		a := n.ChildrenFirst
-		b := n.ChildrenLast
-		if a <= b {
-			f[fieldChildrenStart] = a - n.Index - 1
-			f[fieldChildrenAmount] = b - a + 1
+		f[fieldChildrenAmount] = n.ChildrenHigh - n.ChildrenLow
+		if 0 < n.ChildrenHigh {
+			f[fieldChildrenStart] = n.ChildrenLow - n.Index - 1
 		}
 
 		return N(placeFields(f, s))
