@@ -47,16 +47,17 @@ func (t *tree) Chunk(n uint) string {
 	return t.nodes[n].chunk
 }
 
-// ChildrenRange returns first and last indices of children of node n, if the
-// tree has the node and the node has children, or 1 and 0 otherwise.
-func (t *tree) ChildrenRange(n uint) (uint, uint) {
-	if n >= t.Size() {
-		return 1, 0
+// ChildrenRange returns low and high indices of children of node n, if the
+// tree has the node and the node has children, or default unsigned integers
+// otherwise.
+func (t *tree) ChildrenRange(n uint) (low, high uint) {
+	if n < t.Size() {
+		node := t.nodes[n]
+		low = node.cFirst
+		high = low + uint(node.cAmount)
 	}
 
-	no := t.nodes[n]
-	f := no.cFirst
-	return f, f + uint(no.cAmount) - 1
+	return
 }
 
 var _ radixt.Tree = (*tree)(nil)
