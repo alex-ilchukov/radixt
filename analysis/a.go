@@ -23,13 +23,18 @@ type N struct {
 	// [Root] flag), or default integer value otherwise.
 	Parent uint
 
-	// ChildrenFirst is first (minimum) index of children nodes of the
-	// node, if the node has children, or 1 otherwise
-	ChildrenFirst uint
+	// ChildrenLow is first (minimum) index of children nodes of the
+	// node, if the node has children, or 0 otherwise. "Low" here has the
+	// same meaning as in slice expression like slice[low : high].
+	ChildrenLow uint
 
-	// ChildrenLast is last (maximum) index of children nodes of the node,
-	// if the node has children, or 0 otherwise
-	ChildrenLast uint
+	// ChildrenLast is incremented last (maximum) index of children nodes
+	// of the node, if the node has children, or 0 otherwise. "High" here
+	// has the same meaning as in slice expression like slice[low : high].
+	//
+	// Remark: Amount of children of the node can be calculated as
+	// ChildrenHigh - [ChildrenLow].
+	ChildrenHigh uint
 
 	// ChunkPos is position of chunk in the [A.P] string.
 	ChunkPos uint
@@ -46,9 +51,9 @@ type A struct {
 	// Cma is the maximum over children amounts of all nodes.
 	Cma uint
 
-	// Dcfpm is the maximum over differences between children's first
-	// indices and their parent indices
-	Dcfpm uint
+	// Dclpm is the maximum over differences between children's low indices
+	// and their parent indices.
+	Dclpm uint
 
 	// Vm is the maximum over values of all nodes.
 	Vm uint

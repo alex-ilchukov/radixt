@@ -168,28 +168,28 @@ var treeChildrenRangeTests = []struct {
 	result1 uint
 	result2 uint
 }{
-	{tree: nil, n: 0, result1: 1, result2: 0},
-	{tree: nil, n: 1, result1: 1, result2: 0},
-	{tree: nil, n: 100, result1: 1, result2: 0},
-	{tree: empty, n: 0, result1: 1, result2: 0},
-	{tree: empty, n: 1, result1: 1, result2: 0},
-	{tree: empty, n: 100, result1: 1, result2: 0},
-	{tree: etree, n: 0, result1: 1, result2: 2},
-	{tree: etree, n: 1, result1: 3, result2: 4},
-	{tree: etree, n: 2, result1: 5, result2: 7},
-	{tree: etree, n: 3, result1: 1, result2: 0},
-	{tree: etree, n: 4, result1: 8, result2: 8},
-	{tree: etree, n: 5, result1: 1, result2: 0},
-	{tree: etree, n: 6, result1: 1, result2: 0},
-	{tree: etree, n: 7, result1: 1, result2: 0},
-	{tree: etree, n: 8, result1: 9, result2: 10},
-	{tree: etree, n: 9, result1: 1, result2: 0},
-	{tree: etree, n: 10, result1: 1, result2: 0},
-	{tree: etree, n: 100, result1: 1, result2: 0},
+	{tree: nil, n: 0, result1: 0, result2: 0},
+	{tree: nil, n: 1, result1: 0, result2: 0},
+	{tree: nil, n: 100, result1: 0, result2: 0},
+	{tree: empty, n: 0, result1: 0, result2: 0},
+	{tree: empty, n: 1, result1: 0, result2: 0},
+	{tree: empty, n: 100, result1: 0, result2: 0},
+	{tree: etree, n: 0, result1: 1, result2: 3},
+	{tree: etree, n: 1, result1: 3, result2: 5},
+	{tree: etree, n: 2, result1: 5, result2: 8},
+	{tree: etree, n: 3, result1: 0, result2: 0},
+	{tree: etree, n: 4, result1: 8, result2: 9},
+	{tree: etree, n: 5, result1: 0, result2: 0},
+	{tree: etree, n: 6, result1: 0, result2: 0},
+	{tree: etree, n: 7, result1: 0, result2: 0},
+	{tree: etree, n: 8, result1: 9, result2: 11},
+	{tree: etree, n: 9, result1: 0, result2: 0},
+	{tree: etree, n: 10, result1: 0, result2: 0},
+	{tree: etree, n: 100, result1: 0, result2: 0},
 }
 
 const testTreeChildrenRangeError = "Tree Children Range Test %d: got %d " +
-	"and %d for first and last indices of children of node %d (should " +
+	"and %d for low and high indices of children of node %d (should " +
 	"be %d and %d)"
 
 func TestTreeChildrenRange(t *testing.T) {

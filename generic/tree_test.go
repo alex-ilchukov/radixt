@@ -130,25 +130,25 @@ var treeChildrenRangeTests = []struct {
 	result1 uint
 	result2 uint
 }{
-	{tree: empty, n: 0, result1: 1, result2: 0},
-	{tree: empty, n: 1, result1: 1, result2: 0},
-	{tree: empty, n: 100, result1: 1, result2: 0},
-	{tree: atree, n: 0, result1: 1, result2: 2},
-	{tree: atree, n: 1, result1: 3, result2: 4},
-	{tree: atree, n: 2, result1: 5, result2: 7},
-	{tree: atree, n: 3, result1: 8, result2: 8},
-	{tree: atree, n: 4, result1: 1, result2: 0},
-	{tree: atree, n: 5, result1: 1, result2: 0},
-	{tree: atree, n: 6, result1: 1, result2: 0},
-	{tree: atree, n: 7, result1: 1, result2: 0},
-	{tree: atree, n: 8, result1: 9, result2: 10},
-	{tree: atree, n: 9, result1: 1, result2: 0},
-	{tree: atree, n: 10, result1: 1, result2: 0},
-	{tree: atree, n: 100, result1: 1, result2: 0},
+	{tree: empty, n: 0, result1: 0, result2: 0},
+	{tree: empty, n: 1, result1: 0, result2: 0},
+	{tree: empty, n: 100, result1: 0, result2: 0},
+	{tree: atree, n: 0, result1: 1, result2: 3},
+	{tree: atree, n: 1, result1: 3, result2: 5},
+	{tree: atree, n: 2, result1: 5, result2: 8},
+	{tree: atree, n: 3, result1: 8, result2: 9},
+	{tree: atree, n: 4, result1: 0, result2: 0},
+	{tree: atree, n: 5, result1: 0, result2: 0},
+	{tree: atree, n: 6, result1: 0, result2: 0},
+	{tree: atree, n: 7, result1: 0, result2: 0},
+	{tree: atree, n: 8, result1: 9, result2: 11},
+	{tree: atree, n: 9, result1: 0, result2: 0},
+	{tree: atree, n: 10, result1: 0, result2: 0},
+	{tree: atree, n: 100, result1: 0, result2: 0},
 }
 
 const testTreeChildrenRangeError = "Tree Children Range Test %d: got %d " +
-	"and %d for first and last indices of children of node %d (should " +
+	"and %d for low and high indices of children of node %d (should " +
 	"be %d and %d)"
 
 func TestTreeChildrenRange(t *testing.T) {

@@ -47,10 +47,10 @@ func (t Tree) Chunk(n uint) string {
 	return extractChunk(key)
 }
 
-// ChildrenRange returns first and last indices of children of node n, if the
-// tree has the node and the node has children, or 1 and 0 otherwise.
-func (t Tree) ChildrenRange(n uint) (f, l uint) {
-	f = 1
+// ChildrenRange returns low and high indices of children of node n, if the
+// tree has the node and the node has children, or default unsigned integers
+// otherwise.
+func (t Tree) ChildrenRange(n uint) (low, high uint) {
 	a, m, q := t.grind(n)
 	if a == nil {
 		return
@@ -62,16 +62,16 @@ func (t Tree) ChildrenRange(n uint) (f, l uint) {
 		return
 	}
 
-	f = n + uint(len(a)) - m
+	low = n + uint(len(a)) - m
 	for _, c := range q.a {
-		f += uint(len(c))
+		low += uint(len(c))
 	}
 
 	for _, k := range keys[:m] {
-		f += uint(len(a[k]))
+		low += uint(len(a[k]))
 	}
 
-	l = f + uint(len(a[key])) - 1
+	high = low + uint(len(a[key]))
 
 	return
 }

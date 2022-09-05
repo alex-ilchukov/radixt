@@ -19,7 +19,7 @@ func grow(s *shrub) *tree {
 		im := imagoes[i]
 		children := im.children
 		cAmount := byte(len(children))
-		cFirst := uint(1)
+		cFirst := uint(0)
 		if cAmount > 0 {
 			// shrub.splitNode and shrub.addChild guarantee, that
 			// children slice has indices in ascending order, so
