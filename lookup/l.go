@@ -54,8 +54,8 @@ func (l *L) Feed(b byte) bool {
 	if l.chunk != "" {
 		l.try(b, l.n, l.chunk)
 	} else {
-		c, f := l.t.ChildrenRange(l.n)
-		for ; c <= f && l.try(b, c, l.t.Chunk(c)); c++ {
+		c, limit := l.t.ChildrenRange(l.n)
+		for ; c < limit && l.try(b, c, l.t.Chunk(c)); c++ {
 		}
 	}
 
