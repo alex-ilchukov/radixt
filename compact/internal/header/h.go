@@ -65,15 +65,15 @@ func ChunkRange[N node.N, Header H](n N, h Header) (low, high uint) {
 	return
 }
 
-// ChildrenRange takes node n with its index i and header h, and returns first
-// and last indices of children of the node, if the node has children, or 1 and
-// 0 otherwise.
-func ChildrenRange[N node.N, Header H](i uint, n N, h Header) (uint, uint) {
+// ChildrenRange takes node n with its index i and header h, and returns low
+// and high indices of children of the node, if the node has children, or
+// default unsigned integer values otherwise.
+func ChildrenRange[N node.N, Header H](i uint, n N, h Header) (lo, hi uint) {
 	amount := body(n, h, fieldChildrenAmount)
-	if amount == 0 {
-		return 1, 0
+	if amount > 0 {
+		lo = body(n, h, fieldChildrenStart) + i + 1
+		hi = lo + amount
 	}
 
-	f := body(n, h, fieldChildrenStart) + i + 1
-	return f, f + amount - 1
+	return
 }
