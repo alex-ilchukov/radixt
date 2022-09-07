@@ -45,7 +45,7 @@ func Calc[N node.N](lenNode int, a analysis.A) (
 		return
 	}
 
-	h = fillHeader(lenNode, lens)
+	h = fillHeader(node.BitsLen[N](), lens)
 	nf = createNodeFactory[N](lens)
 
 	return
