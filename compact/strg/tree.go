@@ -66,10 +66,6 @@ func (t Tree[N]) empty() bool {
 }
 
 func (t Tree[N]) nOffset() int {
-	if t.empty() {
-		panic("string is too short")
-	}
-
 	return int(t[hlen]) | int(t[hlen+1])<<8
 }
 
@@ -83,10 +79,6 @@ func (t Tree[N]) valid(n uint) (result bool, limit int) {
 }
 
 func (t Tree[N]) node(limit int) (result uint32) {
-	if len(t) < limit {
-		panic("string is too short")
-	}
-
 	i := limit - bytesLen[N]()
 	result = uint32(t[i]) | uint32(t[i+1])<<8 | uint32(t[i+2])<<16
 	if bytesLen[N]() == 4 {
