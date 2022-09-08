@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/compact/strg"
 	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/lookup"
 	"github.com/alex-ilchukov/radixt/null"
@@ -19,14 +20,17 @@ func feed(l *lookup.L, s string) {
 }
 
 func main() {
+	headers := generic.New(
+		"authorization",
+		"content-type",
+		"content-disposition",
+		"content-length",
+	)
 	trees := map[string]radixt.Tree{
-		"null": null.Tree,
-		"headers": generic.New(
-			"authorization",
-			"content-type",
-			"content-disposition",
-			"content-length",
-		),
+		"null":          null.Tree,
+		"headers":       headers,
+		"headers-strg3": strg.MustCreate[strg.N3](headers),
+		"headers-strg4": strg.MustCreate[strg.N4](headers),
 	}
 
 	strings := []string{"content-length", "authorization", "auth", "host"}

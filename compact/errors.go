@@ -14,3 +14,7 @@ var ErrorInvalidLenNode = errors.New(
 // radix trees to indicate, that analysis of the provided tree has shown there
 // is no possibility to fit node fields into tight bit string.
 var ErrorOverflow = errors.New("required fields would not fit into node")
+
+// ErrorChunksOverflow is used by [compact/strg] implementation to indicate,
+// that the chunks of the provided tree would not fit into the implementation.
+var ErrorChunksOverflow = errors.New("chunks would not fit")

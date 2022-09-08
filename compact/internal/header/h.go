@@ -19,11 +19,12 @@ const (
 	fieldsAmount
 )
 
-const hlen = 2 + (fieldsAmount-2)*2
+// Len is amount of bytes, required to form the header
+const Len = 2 + (fieldsAmount-2)*2
 
 // A8b represents a header in a compact implementation with all the bytes
 // required for extraction of node's fields.
-type A8b [hlen]byte
+type A8b [Len]byte
 
 // H is type set of header types.
 type H interface {
@@ -39,7 +40,7 @@ func body[N node.N, Header H](n N, h Header, i int) uint {
 }
 
 func tail[N node.N, Header H](n N, h Header) uint {
-	return node.Tail(n, h[hlen-1])
+	return node.Tail(n, h[Len-1])
 }
 
 // Value takes node n with header h and returns value v of the node with
