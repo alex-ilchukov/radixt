@@ -27,8 +27,8 @@ func main() {
 		"content-length",
 	)
 	trees := map[string]radixt.Tree{
-		"null": null.Tree,
-		"headers": headers,
+		"null":          null.Tree,
+		"headers":       headers,
 		"headers-strg3": strg.MustCreate[strg.N3](headers),
 		"headers-strg4": strg.MustCreate[strg.N4](headers),
 	}
