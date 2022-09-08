@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	blank3 = strg.Tree[strg.N3]("")
+	blank3    = strg.Tree[strg.N3]("")
 	tooshort3 = strg.Tree[strg.N3]("123")
-	empty3 = strg.MustCreate[strg.N3](nil)
+	empty3    = strg.MustCreate[strg.N3](nil)
 
 	atree3 = strg.MustCreate[strg.N3](
 		generic.New(
@@ -25,9 +25,9 @@ var (
 		),
 	)
 
-	blank4 = strg.Tree[strg.N4]("")
+	blank4    = strg.Tree[strg.N4]("")
 	tooshort4 = strg.Tree[strg.N4]("123")
-	empty4 = strg.MustCreate[strg.N4](nil)
+	empty4    = strg.MustCreate[strg.N4](nil)
 
 	atree4 = strg.MustCreate[strg.N4](
 		generic.New(

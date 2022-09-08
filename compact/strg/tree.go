@@ -10,8 +10,8 @@ import (
 type Tree[_ N] string
 
 const (
-	hlen = header.Len
-	olen = 2
+	hlen   = header.Len
+	olen   = 2
 	cstart = hlen + olen
 )
 
@@ -71,7 +71,7 @@ func (t Tree[N]) nOffset() int {
 
 func (t Tree[N]) valid(n uint) (result bool, limit int) {
 	if !t.empty() {
-		limit = t.nOffset() + int(n+1) * bytesLen[N]()
+		limit = t.nOffset() + int(n+1)*bytesLen[N]()
 		result = limit <= len(t)
 	}
 
@@ -82,7 +82,7 @@ func (t Tree[N]) node(limit int) (result uint32) {
 	i := limit - bytesLen[N]()
 	result = uint32(t[i]) | uint32(t[i+1])<<8 | uint32(t[i+2])<<16
 	if bytesLen[N]() == 4 {
-		result |= uint32(t[i+3])<<24
+		result |= uint32(t[i+3]) << 24
 	}
 
 	return
