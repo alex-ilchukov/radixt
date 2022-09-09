@@ -3,6 +3,7 @@ package strg_test
 import (
 	"testing"
 
+	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/strg"
 	"github.com/alex-ilchukov/radixt/generic"
 )
@@ -209,6 +210,36 @@ func TestTree3ChildrenRange(t *testing.T) {
 	}
 }
 
+var tree3HoardTests = []struct {
+	tree    strg.Tree[strg.N3]
+	result1 uint
+	result2 uint
+}{
+	{tree: blank3, result1: 0, result2: radixt.HoardExactly},
+	{tree: tooshort3, result1: 3, result2: radixt.HoardExactly},
+	{tree: empty3, result1: 10, result2: radixt.HoardExactly},
+	{tree: atree3, result1: 94, result2: radixt.HoardExactly},
+}
+
+const testTree3HoardError = "Tree3 Hoard Test %d: got %d and %d (should be " +
+	"%d and %d)"
+
+func TestTree3Hoard(t *testing.T) {
+	for i, tt := range tree3HoardTests {
+		result1, result2 := tt.tree.Hoard()
+		if result1 != tt.result1 || result2 != tt.result2 {
+			t.Errorf(
+				testTree3HoardError,
+				i,
+				result1,
+				result2,
+				tt.result1,
+				tt.result2,
+			)
+		}
+	}
+}
+
 var tree4SizeTests = []struct {
 	tree   strg.Tree[strg.N4]
 	result uint
@@ -368,6 +399,36 @@ func TestTree4ChildrenRange(t *testing.T) {
 				result1,
 				result2,
 				tt.n,
+				tt.result1,
+				tt.result2,
+			)
+		}
+	}
+}
+
+var tree4HoardTests = []struct {
+	tree    strg.Tree[strg.N4]
+	result1 uint
+	result2 uint
+}{
+	{tree: blank4, result1: 0, result2: radixt.HoardExactly},
+	{tree: tooshort4, result1: 3, result2: radixt.HoardExactly},
+	{tree: empty4, result1: 10, result2: radixt.HoardExactly},
+	{tree: atree4, result1: 105, result2: radixt.HoardExactly},
+}
+
+const testTree4HoardError = "Tree4 Hoard Test %d: got %d and %d (should be " +
+	"%d and %d)"
+
+func TestTree4Hoard(t *testing.T) {
+	for i, tt := range tree4HoardTests {
+		result1, result2 := tt.tree.Hoard()
+		if result1 != tt.result1 || result2 != tt.result2 {
+			t.Errorf(
+				testTree4HoardError,
+				i,
+				result1,
+				result2,
 				tt.result1,
 				tt.result2,
 			)
