@@ -357,3 +357,52 @@ func TestTreeEq(t *testing.T) {
 		}
 	}
 }
+
+var treeHoardTests = []struct {
+	tree    evident.Tree
+	result1 uint
+	result2 uint
+}{
+	{tree: nil, result1: 0, result2: radixt.HoardExactly},
+	{tree: empty, result1: 48, result2: radixt.HoardExactly},
+	{
+		tree: etree,
+		result1: 48 + 128 + // {"|": …}
+			16 + 1 + //    "|"
+			48 + 128 + //  {"auth|4": …, "content-|": …}
+			16 + 6 + //    "auth|4"
+			16 + 9 + //    "content-|"
+			48 + 128 + //  {"entication|3": …, "or|2": …}
+			16 + 12 + //   "entication|3"
+			16 + 4 + //    "or|2"
+			48 + 128 + //  {"disposition|7": …, "length|6": …, …}
+			16 + 13 + //   "disposition|7"
+			16 + 8 + //    "length|6"
+			16 + 6 + //    "type|5"
+			48 + 128 + //  {"i|": …}
+			16 + 2 + //    "i|"
+			48 + 128 + //  {"ty|0": …, "zation|1": …}
+			16 + 4 + //    "ty|0"
+			16 + 8, //     "zation|1"
+		result2: radixt.HoardAtLeast,
+	},
+}
+
+const testTreeHoardError = "Tree Hoard Test %d: got %d and %d (should be " +
+	"%d and %d)"
+
+func TestTreeHoard(t *testing.T) {
+	for i, tt := range treeHoardTests {
+		result1, result2 := tt.tree.Hoard()
+		if result1 != tt.result1 || result2 != tt.result2 {
+			t.Errorf(
+				testTreeHoardError,
+				i,
+				result1,
+				result2,
+				tt.result1,
+				tt.result2,
+			)
+		}
+	}
+}

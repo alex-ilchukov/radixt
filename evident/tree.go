@@ -124,6 +124,45 @@ func (t Tree) Eq(u radixt.Tree) bool {
 	return true
 }
 
+// Hoard returns amount of bytes, taken by the implementation t, with an
+// interpretation hint. It checks the following cases.
+//
+//  1. Nil tree. The result is zero and [radixt.HoardExactly].
+//  2. Empty tree. The result is amount of bytes, required for internal hmap
+//     struct instance with no buckets, and [radixt.HoardExactly].
+//  3. Non-empty tree. The result is an estimation with [radixt.HoardAtLeast]
+//     as interpretation hint.
+func (t Tree) Hoard() (uint, uint) {
+	if t == nil {
+		return 0, radixt.HoardExactly
+	}
+
+	if len(t) == 0 {
+		return 48, radixt.HoardExactly
+	}
+
+	amount := uint(0)
+	s := []Tree{t}
+	for len(s) > 0 {
+		l := len(s) - 1
+		a := s[l]
+		s = s[:l]
+		amount += 48 + // size of instance of hmap struct
+			128 // amount of bytes in at least one bucket of hmap
+
+		for k, c := range a {
+			if c != nil {
+				s = append(s, c)
+			}
+
+			amount += 16 + // size of string header
+				uint(len(k))
+		}
+	}
+
+	return amount, radixt.HoardAtLeast
+}
+
 func (t Tree) keys() []string {
 	result := make([]string, len(t), len(t))
 	i := 0
@@ -170,4 +209,7 @@ func (t Tree) key(n uint) string {
 	return a.keys()[m]
 }
 
-var _ radixt.Tree = Tree(nil)
+var (
+	_ radixt.Tree    = Tree(nil)
+	_ radixt.Hoarder = Tree(nil)
+)
