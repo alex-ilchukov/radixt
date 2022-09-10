@@ -187,6 +187,34 @@ func TestTree32ChildrenRange(t *testing.T) {
 	}
 }
 
+var tree32HoardTests = []struct {
+	tree    radixt.Hoarder
+	result1 uint
+	result2 uint
+}{
+	{tree: empty32, result1: 48, result2: radixt.HoardExactly},
+	{tree: atree32, result1: 143, result2: radixt.HoardExactly},
+}
+
+const testTree32HoardError = "Tree[uint32] Hoard Test %d: got %d and %d " +
+	"(should be %d and %d)"
+
+func TestTree32Hoard(t *testing.T) {
+	for i, tt := range tree32HoardTests {
+		result1, result2 := tt.tree.Hoard()
+		if result1 != tt.result1 || result2 != tt.result2 {
+			t.Errorf(
+				testTree32HoardError,
+				i,
+				result1,
+				result2,
+				tt.result1,
+				tt.result2,
+			)
+		}
+	}
+}
+
 var tree64SizeTests = []struct {
 	tree   radixt.Tree
 	result uint
@@ -327,6 +355,34 @@ func TestTree64ChildrenRange(t *testing.T) {
 				result1,
 				result2,
 				tt.n,
+				tt.result1,
+				tt.result2,
+			)
+		}
+	}
+}
+
+var tree64HoardTests = []struct {
+	tree    radixt.Hoarder
+	result1 uint
+	result2 uint
+}{
+	{tree: empty64, result1: 48, result2: radixt.HoardExactly},
+	{tree: atree64, result1: 187, result2: radixt.HoardExactly},
+}
+
+const testTree64HoardError = "Tree[uint64] Hoard Test %d: got %d and %d " +
+	"(should be %d and %d)"
+
+func TestTree64Hoard(t *testing.T) {
+	for i, tt := range tree64HoardTests {
+		result1, result2 := tt.tree.Hoard()
+		if result1 != tt.result1 || result2 != tt.result2 {
+			t.Errorf(
+				testTree64HoardError,
+				i,
+				result1,
+				result2,
 				tt.result1,
 				tt.result2,
 			)

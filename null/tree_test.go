@@ -115,3 +115,30 @@ func TestTreeChildrenRange(t *testing.T) {
 		}
 	}
 }
+
+var treeHoardTests = []struct {
+	tree    radixt.Hoarder
+	result1 uint
+	result2 uint
+}{
+	{tree: null.Tree, result1: 0, result2: radixt.HoardExactly},
+}
+
+const testTreeHoardError = "Tree Hoard Test %d: got %d and %d (should be %d" +
+	"and %d)"
+
+func TestTreeHoard(t *testing.T) {
+	for i, tt := range treeHoardTests {
+		result1, result2 := tt.tree.Hoard()
+		if result1 != tt.result1 || result2 != tt.result2 {
+			t.Errorf(
+				testTreeHoardError,
+				i,
+				result1,
+				result2,
+				tt.result1,
+				tt.result2,
+			)
+		}
+	}
+}

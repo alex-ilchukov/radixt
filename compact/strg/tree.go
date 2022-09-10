@@ -61,6 +61,12 @@ func (t Tree[N]) ChildrenRange(n uint) (low, high uint) {
 	return
 }
 
+// Hoard returns amount of bytes, taken by the implementation, with
+// [radixt.HoardExactly] as interpretation hint.
+func (t Tree[_]) Hoard() (uint, uint) {
+	return uint(len(t)), radixt.HoardExactly
+}
+
 func (t Tree[N]) empty() bool {
 	return len(t) < ProperLen
 }
@@ -89,6 +95,8 @@ func (t Tree[N]) node(limit int) (result uint32) {
 }
 
 var (
-	_ radixt.Tree = Tree[N3]("")
-	_ radixt.Tree = Tree[N4]("")
+	_ radixt.Tree    = Tree[N3]("")
+	_ radixt.Hoarder = Tree[N3]("")
+	_ radixt.Tree    = Tree[N4]("")
+	_ radixt.Hoarder = Tree[N4]("")
 )
