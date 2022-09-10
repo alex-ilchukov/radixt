@@ -24,8 +24,17 @@ func (tree) ChildrenRange(uint) (low, high uint) {
 	return
 }
 
+// Hoard always returns zero amount of bytes, taken by the implementation, with
+// [radixt.HoardExactly] as interpretation hint.
+func (tree) Hoard() (uint, uint) {
+	return 0, radixt.HoardExactly
+}
+
 // Tree is the only accessible instance of the implementation.
 var Tree tree
 
-// To check, if the implementation is compatible with the interface.
-var _ radixt.Tree = Tree
+// To check, if the implementation is compatible with the interfaces.
+var (
+	_ radixt.Tree    = Tree
+	_ radixt.Hoarder = Tree
+)
