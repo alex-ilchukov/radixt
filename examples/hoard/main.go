@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/strg"
@@ -12,7 +13,7 @@ import (
 	"github.com/alex-ilchukov/radixt/generic"
 )
 
-func createGenericTreeFromLines(path string) (t radixt.Tree, err error) {
+func loadLines(path string) (lines []string, err error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return
@@ -22,12 +23,45 @@ func createGenericTreeFromLines(path string) (t radixt.Tree, err error) {
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
 
-	var lines []string
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
 
-	t = generic.New(lines...)
+	return
+}
+
+func alloc() uint {
+	var stats runtime.MemStats
+	runtime.GC()
+	runtime.ReadMemStats(&stats)
+	return uint(stats.Alloc)
+}
+
+const amount = 300
+
+var maps [amount]map[string]uint
+
+func estimateMapHoard(lines []string) (hoard uint) {
+	for i := 0; i < amount; i++ {
+		maps[i] = nil
+	}
+
+	before := alloc()
+	for i := 0; i < amount; i++ {
+		m := make(map[string]uint)
+		for j := 0; j < len(lines); j++ {
+			m[lines[j]] = uint(j)
+		}
+
+		maps[i] = m
+	}
+
+	after := alloc()
+	hoard = uint((float64(after) - float64(before)) / float64(amount))
+
+	for j := 0; j < len(lines); j++ {
+		hoard += 16 + uint(len(lines[j]))
+	}
 
 	return
 }
@@ -127,12 +161,18 @@ func main() {
 	}
 
 	for name, path := range paths {
-		t, err := createGenericTreeFromLines(path)
+		lines, err := loadLines(path)
 		if err != nil {
 			printGenericErr(path, err)
 		}
 
-		processGeneric(name, t)
-		fmt.Println()
+		processGeneric(name, generic.New(lines...))
+
+		fmt.Printf(
+			"\tA map from the %s to unsigned integers would "+
+				"estimately hoard %d bytes\n\n",
+			name,
+			estimateMapHoard(lines),
+		)
 	}
 }
