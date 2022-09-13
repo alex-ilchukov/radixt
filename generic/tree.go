@@ -11,8 +11,7 @@ type node struct {
 }
 
 type tree struct {
-	noValue uint
-	nodes   []node
+	nodes []node
 }
 
 // Size returns amount of nodes in the tree.
