@@ -3,10 +3,11 @@ package generic
 import "github.com/alex-ilchukov/radixt"
 
 type node struct {
-	cAmount byte
-	cFirst  uint
-	chunk   string
-	value   uint
+	hasValue bool
+	cAmount  byte
+	cFirst   uint
+	chunk    string
+	value    uint
 }
 
 type tree struct {
