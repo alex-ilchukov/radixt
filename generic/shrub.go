@@ -1,6 +1,7 @@
 package generic
 
 type imago struct {
+	hasValue bool
 	chunk    string
 	value    uint
 	children []uint
