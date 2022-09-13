@@ -24,15 +24,10 @@ func (t *tree) Size() uint {
 // node and the node has value, or default unsigned integer with boolean false
 // otherwise.
 func (t *tree) Value(n uint) (v uint, has bool) {
-	if n >= t.Size() {
-		return
-	}
-
-	v = t.nodes[n].value
-	if v == t.noValue {
-		v = 0
-	} else {
-		has = true
+	if n < t.Size() {
+		node := t.nodes[n]
+		v = node.value
+		has = node.hasValue
 	}
 
 	return
