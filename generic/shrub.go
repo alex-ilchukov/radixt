@@ -58,20 +58,20 @@ func (s *shrub) insert(str string, value uint) {
 	switch {
 	case !found:
 		if s.within(n, npos) {
-			s.splitNode(n, npos, s.noValue)
+			s.splitNode(n, npos, 0, false)
 		}
 
 		s.addChild(n, str[pos:], value)
 
 	case s.within(n, npos):
-		s.splitNode(n, npos, value)
+		s.splitNode(n, npos, value, true)
 
 	case s.imagoes[n].value == s.noValue:
 		s.imagoes[n].value = value
 	}
 }
 
-func (s *shrub) splitNode(n, npos, value uint) {
+func (s *shrub) splitNode(n, npos, value uint, hasValue bool) {
 	no := s.imagoes[n]
 	chunk := no.chunk
 	no.chunk = chunk[npos:]
@@ -79,6 +79,7 @@ func (s *shrub) splitNode(n, npos, value uint) {
 	s.imagoes[n] = imago{
 		chunk:    chunk[:npos],
 		value:    value,
+		hasValue: hasValue,
 		children: []uint{uint(len(s.imagoes) - 1)},
 	}
 }
