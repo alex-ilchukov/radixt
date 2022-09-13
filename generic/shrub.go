@@ -1,13 +1,13 @@
 package generic
 
 type imago struct {
+	hasValue bool
 	chunk    string
 	value    uint
 	children []uint
 }
 
 type shrub struct {
-	noValue uint
 	imagoes []imago
 }
 
@@ -57,20 +57,21 @@ func (s *shrub) insert(str string, value uint) {
 	switch {
 	case !found:
 		if s.within(n, npos) {
-			s.splitNode(n, npos, s.noValue)
+			s.splitNode(n, npos, 0, false)
 		}
 
 		s.addChild(n, str[pos:], value)
 
 	case s.within(n, npos):
-		s.splitNode(n, npos, value)
+		s.splitNode(n, npos, value, true)
 
-	case s.imagoes[n].value == s.noValue:
+	case !s.imagoes[n].hasValue:
 		s.imagoes[n].value = value
+		s.imagoes[n].hasValue = true
 	}
 }
 
-func (s *shrub) splitNode(n, npos, value uint) {
+func (s *shrub) splitNode(n, npos, value uint, hasValue bool) {
 	no := s.imagoes[n]
 	chunk := no.chunk
 	no.chunk = chunk[npos:]
@@ -78,12 +79,16 @@ func (s *shrub) splitNode(n, npos, value uint) {
 	s.imagoes[n] = imago{
 		chunk:    chunk[:npos],
 		value:    value,
+		hasValue: hasValue,
 		children: []uint{uint(len(s.imagoes) - 1)},
 	}
 }
 
 func (s *shrub) addChild(n uint, chunk string, value uint) {
-	s.imagoes = append(s.imagoes, imago{chunk: chunk, value: value})
+	s.imagoes = append(
+		s.imagoes,
+		imago{chunk: chunk, value: value, hasValue: true},
+	)
 	s.imagoes[n].children = append(
 		s.imagoes[n].children,
 		uint(len(s.imagoes)-1),

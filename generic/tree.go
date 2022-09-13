@@ -3,15 +3,15 @@ package generic
 import "github.com/alex-ilchukov/radixt"
 
 type node struct {
-	cAmount byte
-	cFirst  uint
-	chunk   string
-	value   uint
+	hasValue bool
+	cAmount  byte
+	cFirst   uint
+	chunk    string
+	value    uint
 }
 
 type tree struct {
-	noValue uint
-	nodes   []node
+	nodes []node
 }
 
 // Size returns amount of nodes in the tree.
@@ -23,15 +23,10 @@ func (t *tree) Size() uint {
 // node and the node has value, or default unsigned integer with boolean false
 // otherwise.
 func (t *tree) Value(n uint) (v uint, has bool) {
-	if n >= t.Size() {
-		return
-	}
-
-	v = t.nodes[n].value
-	if v == t.noValue {
-		v = 0
-	} else {
-		has = true
+	if n < t.Size() {
+		node := t.nodes[n]
+		v = node.value
+		has = node.hasValue
 	}
 
 	return
@@ -63,7 +58,7 @@ func (t *tree) ChildrenRange(n uint) (low, high uint) {
 // Hoard returns amount of bytes, taken by the implementation, with
 // [radixt.HoardExactly] as interpretation hint.
 func (t *tree) Hoard() (uint, uint) {
-	amount := uint(32) + // tree
+	amount := uint(24) + // tree
 		// node.cAmount gets aligned to 8 bytes
 		uint(cap(t.nodes))*(8+8+16+8)
 

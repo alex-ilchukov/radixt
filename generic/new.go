@@ -8,8 +8,7 @@ func New(strings ...string) *tree {
 	}
 
 	s := new(shrub)
-	s.noValue = uint(len(strings))
-	s.imagoes = []imago{{chunk: strings[0], value: 0}}
+	s.imagoes = []imago{{chunk: strings[0], value: 0, hasValue: true}}
 
 	for v, str := range strings[1:] {
 		s.insert(str, uint(v+1))
@@ -33,8 +32,7 @@ func NewFromSV(sv ...SV) *tree {
 	}
 
 	s := new(shrub)
-	s.noValue = uint(len(sv))
-	s.imagoes = []imago{{chunk: sv[0].S, value: sv[0].V}}
+	s.imagoes = []imago{{chunk: sv[0].S, value: sv[0].V, hasValue: true}}
 
 	for _, e := range sv[1:] {
 		s.insert(e.S, e.V)

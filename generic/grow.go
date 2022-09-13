@@ -29,12 +29,13 @@ func grow(s *shrub) *tree {
 		}
 
 		nodes[n] = node{
-			cAmount: cAmount,
-			cFirst:  cFirst,
-			chunk:   im.chunk,
-			value:   im.value,
+			hasValue: im.hasValue,
+			cAmount:  cAmount,
+			cFirst:   cFirst,
+			chunk:    im.chunk,
+			value:    im.value,
 		}
 	}
 
-	return &tree{noValue: s.noValue, nodes: nodes}
+	return &tree{nodes: nodes}
 }
