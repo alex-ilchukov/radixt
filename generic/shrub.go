@@ -8,7 +8,6 @@ type imago struct {
 }
 
 type shrub struct {
-	noValue uint
 	imagoes []imago
 }
 
@@ -66,8 +65,9 @@ func (s *shrub) insert(str string, value uint) {
 	case s.within(n, npos):
 		s.splitNode(n, npos, value, true)
 
-	case s.imagoes[n].value == s.noValue:
+	case !s.imagoes[n].hasValue:
 		s.imagoes[n].value = value
+		s.imagoes[n].hasValue = true
 	}
 }
 
