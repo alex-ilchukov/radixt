@@ -85,7 +85,10 @@ func (s *shrub) splitNode(n, npos, value uint, hasValue bool) {
 }
 
 func (s *shrub) addChild(n uint, chunk string, value uint) {
-	s.imagoes = append(s.imagoes, imago{chunk: chunk, value: value})
+	s.imagoes = append(
+		s.imagoes,
+		imago{chunk: chunk, value: value, hasValue: true},
+	)
 	s.imagoes[n].children = append(
 		s.imagoes[n].children,
 		uint(len(s.imagoes)-1),
