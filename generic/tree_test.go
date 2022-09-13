@@ -173,10 +173,10 @@ var treeHoardTests = []struct {
 	result1 uint
 	result2 uint
 }{
-	{tree: empty, result1: 32, result2: radixt.HoardExactly},
+	{tree: empty, result1: 24, result2: radixt.HoardExactly},
 	{
 		tree: atree,
-		result1: 32 +
+		result1: 24 +
 			40*11 +
 			0 + 4 + 8 + 10 + 2 + 11 + 6 + 4 + 1 + 2 + 6,
 		result2: radixt.HoardExactly,
