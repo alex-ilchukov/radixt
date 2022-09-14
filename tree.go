@@ -29,4 +29,10 @@ type Tree interface {
 	// Chunk should return chunk of node n, if the tree has the node, or
 	// empty string otherwise.
 	Chunk(n uint) string
+
+	// EachChild should call function e just once for every child c of node
+	// n in _ascending_ order, if the tree has the node, until the function
+	// returns boolean truth. The method should do nothing if the tree does
+	// not have the node.
+	EachChild(n uint, e func(c uint) bool)
 }
