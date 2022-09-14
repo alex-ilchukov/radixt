@@ -1,6 +1,7 @@
 package evident_test
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
@@ -162,48 +163,86 @@ func TestTreeChunk(t *testing.T) {
 	}
 }
 
-var treeChildrenRangeTests = []struct {
-	tree    evident.Tree
-	n       uint
-	result1 uint
-	result2 uint
-}{
-	{tree: nil, n: 0, result1: 0, result2: 0},
-	{tree: nil, n: 1, result1: 0, result2: 0},
-	{tree: nil, n: 100, result1: 0, result2: 0},
-	{tree: empty, n: 0, result1: 0, result2: 0},
-	{tree: empty, n: 1, result1: 0, result2: 0},
-	{tree: empty, n: 100, result1: 0, result2: 0},
-	{tree: etree, n: 0, result1: 1, result2: 3},
-	{tree: etree, n: 1, result1: 3, result2: 5},
-	{tree: etree, n: 2, result1: 5, result2: 8},
-	{tree: etree, n: 3, result1: 0, result2: 0},
-	{tree: etree, n: 4, result1: 8, result2: 9},
-	{tree: etree, n: 5, result1: 0, result2: 0},
-	{tree: etree, n: 6, result1: 0, result2: 0},
-	{tree: etree, n: 7, result1: 0, result2: 0},
-	{tree: etree, n: 8, result1: 9, result2: 11},
-	{tree: etree, n: 9, result1: 0, result2: 0},
-	{tree: etree, n: 10, result1: 0, result2: 0},
-	{tree: etree, n: 100, result1: 0, result2: 0},
+func eachChild(tree evident.Tree, n uint) (indices string) {
+	tree.EachChild(n, func(c uint) bool {
+		if len(indices) > 0 {
+			indices += ", "
+		}
+
+		indices += strconv.FormatUint(uint64(c), 10)
+
+		return false
+	})
+
+	return
 }
 
-const testTreeChildrenRangeError = "Tree Children Range Test %d: got %d " +
-	"and %d for low and high indices of children of node %d (should " +
-	"be %d and %d)"
+func eachFirstChild(tree evident.Tree, n uint) (indices string) {
+	tree.EachChild(n, func(c uint) bool {
+		indices = strconv.FormatUint(uint64(c), 10)
 
-func TestTreeChildrenRange(t *testing.T) {
-	for i, tt := range treeChildrenRangeTests {
-		result1, result2 := tt.tree.ChildrenRange(tt.n)
-		if result1 != tt.result1 || result2 != tt.result2 {
+		return true
+	})
+
+	return
+}
+
+var treeEachChildTests = []struct {
+	tree    evident.Tree
+	n       uint
+	f       func(evident.Tree, uint) string
+	indices string
+}{
+	{tree: nil, n: 0, f: eachChild, indices: ""},
+	{tree: nil, n: 1, f: eachChild, indices: ""},
+	{tree: nil, n: 100, f: eachChild, indices: ""},
+	{tree: nil, n: 0, f: eachFirstChild, indices: ""},
+	{tree: nil, n: 1, f: eachFirstChild, indices: ""},
+	{tree: nil, n: 100, f: eachFirstChild, indices: ""},
+	{tree: empty, n: 0, f: eachChild, indices: ""},
+	{tree: empty, n: 1, f: eachChild, indices: ""},
+	{tree: empty, n: 100, f: eachChild, indices: ""},
+	{tree: empty, n: 0, f: eachFirstChild, indices: ""},
+	{tree: empty, n: 1, f: eachFirstChild, indices: ""},
+	{tree: empty, n: 100, f: eachFirstChild, indices: ""},
+	{tree: etree, n: 0, f: eachChild, indices: "1, 2"},
+	{tree: etree, n: 1, f: eachChild, indices: "3, 4"},
+	{tree: etree, n: 2, f: eachChild, indices: "5, 6, 7"},
+	{tree: etree, n: 3, f: eachChild, indices: ""},
+	{tree: etree, n: 4, f: eachChild, indices: "8"},
+	{tree: etree, n: 5, f: eachChild, indices: ""},
+	{tree: etree, n: 6, f: eachChild, indices: ""},
+	{tree: etree, n: 7, f: eachChild, indices: ""},
+	{tree: etree, n: 8, f: eachChild, indices: "9, 10"},
+	{tree: etree, n: 9, f: eachChild, indices: ""},
+	{tree: etree, n: 10, f: eachChild, indices: ""},
+	{tree: etree, n: 100, f: eachChild, indices: ""},
+	{tree: etree, n: 0, f: eachFirstChild, indices: "1"},
+	{tree: etree, n: 1, f: eachFirstChild, indices: "3"},
+	{tree: etree, n: 2, f: eachFirstChild, indices: "5"},
+	{tree: etree, n: 3, f: eachFirstChild, indices: ""},
+	{tree: etree, n: 4, f: eachFirstChild, indices: "8"},
+	{tree: etree, n: 5, f: eachFirstChild, indices: ""},
+	{tree: etree, n: 6, f: eachFirstChild, indices: ""},
+	{tree: etree, n: 7, f: eachFirstChild, indices: ""},
+	{tree: etree, n: 8, f: eachFirstChild, indices: "9"},
+	{tree: etree, n: 9, f: eachFirstChild, indices: ""},
+	{tree: etree, n: 10, f: eachFirstChild, indices: ""},
+	{tree: etree, n: 100, f: eachFirstChild, indices: ""},
+}
+
+const testTreeEachChildError = "Tree Each Child Test %d: got %s as result " +
+	"indices (should be %s)"
+
+func TestTreeEachChild(t *testing.T) {
+	for i, tt := range treeEachChildTests {
+		indices := tt.f(tt.tree, tt.n)
+		if indices != tt.indices {
 			t.Errorf(
-				testTreeChildrenRangeError,
+				testTreeEachChildError,
 				i,
-				result1,
-				result2,
-				tt.n,
-				tt.result1,
-				tt.result2,
+				indices,
+				tt.indices,
 			)
 		}
 	}
