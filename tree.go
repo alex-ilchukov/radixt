@@ -29,13 +29,4 @@ type Tree interface {
 	// Chunk should return chunk of node n, if the tree has the node, or
 	// empty string otherwise.
 	Chunk(n uint) string
-
-	// ChildrenRange should return low and high indices of children of
-	// node n, if the tree has the node and the node has children, or
-	// default unsigned integers otherwise. (The terms "low" and "high"
-	// have the same meaning as in the [specification] of Go slice
-	// expressions.)
-	//
-	// [specification]: https://go.dev/ref/spec#Slice_expressions
-	ChildrenRange(n uint) (low, high uint)
 }
