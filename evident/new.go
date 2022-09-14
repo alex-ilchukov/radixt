@@ -34,14 +34,15 @@ func New(t radixt.Tree) (result Tree) {
 		n := a.n
 		e := a.e
 
-		c, limit := t.ChildrenRange(n)
 		child := Tree(nil)
-		if c < limit {
-			child = make(Tree, limit-c)
-			for ; c < limit; c++ {
-				s = append(s, es{c, child})
+		t.EachChild(n, func(c uint) bool {
+			if child == nil {
+				child = make(Tree)
 			}
-		}
+			s = append(s, es{c, child})
+
+			return false
+		})
 
 		chunk := t.Chunk(n)
 		value, has := t.Value(n)
