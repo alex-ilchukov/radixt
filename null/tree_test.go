@@ -84,34 +84,27 @@ func TestTreeChunk(t *testing.T) {
 	}
 }
 
-var treeChildrenRangeTests = []struct {
-	tree    radixt.Tree
-	n       uint
-	result1 uint
-	result2 uint
+var treeEachChildTests = []struct {
+	tree radixt.Tree
+	n    uint
 }{
-	{tree: null.Tree, n: 0, result1: 0, result2: 0},
-	{tree: null.Tree, n: 1, result1: 0, result2: 0},
-	{tree: null.Tree, n: 100, result1: 0, result2: 0},
+	{tree: null.Tree, n: 0},
+	{tree: null.Tree, n: 1},
+	{tree: null.Tree, n: 100},
 }
 
-const testTreeChildrenRangeError = "Tree Children Range Test %d: got %d " +
-	"and %d for low and high indices of children of node %d (should " +
-	"be %d and %d)"
+const testTreeEachChildError = "Tree Each Child Test %d: provided function " +
+	"got called (and it should not)"
 
-func TestTreeChildrenRange(t *testing.T) {
-	for i, tt := range treeChildrenRangeTests {
-		result1, result2 := tt.tree.ChildrenRange(tt.n)
-		if result1 != tt.result1 || result2 != tt.result2 {
-			t.Errorf(
-				testTreeChildrenRangeError,
-				i,
-				result1,
-				result2,
-				tt.n,
-				tt.result1,
-				tt.result2,
-			)
+func TestTreeEachChild(t *testing.T) {
+	for i, tt := range treeEachChildTests {
+		called := false
+		tt.tree.EachChild(tt.n, func(uint) bool {
+			called = true
+			return false
+		})
+		if called {
+			t.Errorf(testTreeEachChildError, i)
 		}
 	}
 }

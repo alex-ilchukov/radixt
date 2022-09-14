@@ -19,10 +19,8 @@ func (tree) Chunk(uint) string {
 	return ""
 }
 
-// ChildrenRange always returns default unsigned integer values.
-func (tree) ChildrenRange(uint) (low, high uint) {
-	return
-}
+// EachChild does nothing.
+func (tree) EachChild(uint, func(uint) bool) {}
 
 // Hoard always returns zero amount of bytes, taken by the implementation, with
 // [radixt.HoardExactly] as interpretation hint.
