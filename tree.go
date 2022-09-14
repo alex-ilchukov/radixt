@@ -15,7 +15,8 @@ package radixt
 //  6. First bytes of children chunks should be unique over every parent node.
 //
 // The interface does not put any limitations on values besides its domain of
-// unsigned integers.
+// unsigned integers. User is responsible for tree being static enough to use,
+// unless it is explicitly stated in documentation of tree implementation.
 type Tree interface {
 	// Size should return amount of nodes in the tree.
 	Size() uint
