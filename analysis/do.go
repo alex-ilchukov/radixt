@@ -19,8 +19,6 @@ func Do(t radixt.Tree) A {
 	}
 
 	nodes := nodes(t)
-	indices := make([]uint, len(nodes))
-	parents := make(map[uint]uint)
 	chunks := []string{}
 	cml := uint(0)
 	cma := uint(0)
@@ -28,23 +26,16 @@ func Do(t radixt.Tree) A {
 	vm := uint(0)
 	ca := make(map[uint]uint)
 
-	for i, n := range nodes {
-		index := n.Index
-		indices[i] = index
-
-		for c := n.ChildrenLow; c < n.ChildrenHigh; c++ {
-			parents[c] = index
-		}
-
+	for _, n := range nodes {
 		cl := n.ChildrenHigh - n.ChildrenLow
 		if cma < cl {
 			cma = cl
 		}
 
 		if 0 < n.ChildrenHigh {
-			dcfp := n.ChildrenLow - n.Index
-			if dcplm < dcfp {
-				dcplm = dcfp
+			dclp := n.ChildrenLow - n.Index
+			if dcplm < dclp {
+				dcplm = dclp
 			}
 		}
 
@@ -62,20 +53,11 @@ func Do(t radixt.Tree) A {
 	}
 
 	c := cramChunks(chunks)
-	n := make(map[uint]N)
+	n := make(map[uint]N, len(nodes))
 
-	for i := range nodes {
-		index := nodes[i].Index
-		parent, has := parents[index]
-		if has {
-			nodes[i].Parent = parent
-		} else {
-			nodes[i].Root = true
-		}
-
-		nodes[i].ChunkPos = uint(strings.Index(c, nodes[i].Chunk))
-
-		n[index] = nodes[i]
+	for i, node := range nodes {
+		nodes[i].ChunkPos = uint(strings.Index(c, node.Chunk))
+		n[uint(i)] = nodes[i]
 	}
 
 	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: n, Ca: ca}
@@ -84,18 +66,45 @@ func Do(t radixt.Tree) A {
 func nodes(t radixt.Tree) []N {
 	size := t.Size()
 	nodes := make([]N, size, size)
+	if size == 0 {
+		return nodes
+	}
 
-	for n := uint(0); n < size; n++ {
+	type e struct {
+		n uint
+		p uint
+	}
+
+	for i, q := uint(0), []e{{}}; len(q) > 0; i++ {
+		a := q[0]
+		q = q[1:]
+
+		n := a.n
+
+		t.EachChild(n, func(c uint) bool {
+			q = append(q, e{n: c, p: n})
+			return false
+		})
+
 		v, has := t.Value(n)
-		low, high := t.ChildrenRange(n)
 		nodes[n] = N{
-			Index:        n,
-			Chunk:        t.Chunk(n),
-			Value:        v,
-			HasValue:     has,
-			ChildrenLow:  low,
-			ChildrenHigh: high,
+			Index:    i,
+			Chunk:    t.Chunk(n),
+			Value:    v,
+			HasValue: has,
+			Root:     n == 0,
 		}
+
+		if n == 0 {
+			continue
+		}
+
+		nodes[n].Parent = nodes[a.p].Index
+
+		if nodes[a.p].ChildrenHigh == 0 {
+			nodes[a.p].ChildrenLow = i
+		}
+		nodes[a.p].ChildrenHigh = i + 1
 	}
 
 	return nodes
