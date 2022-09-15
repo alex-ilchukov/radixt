@@ -1,6 +1,7 @@
 package strg_test
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
@@ -160,51 +161,92 @@ func TestTree3Chunk(t *testing.T) {
 	}
 }
 
-var tree3ChildrenRangeTests = []struct {
-	tree    strg.Tree[strg.N3]
-	n       uint
-	result1 uint
-	result2 uint
-}{
-	{tree: blank3, n: 0, result1: 0, result2: 0},
-	{tree: blank3, n: 1, result1: 0, result2: 0},
-	{tree: blank3, n: 100, result1: 0, result2: 0},
-	{tree: tooshort3, n: 0, result1: 0, result2: 0},
-	{tree: tooshort3, n: 1, result1: 0, result2: 0},
-	{tree: tooshort3, n: 100, result1: 0, result2: 0},
-	{tree: empty3, n: 0, result1: 0, result2: 0},
-	{tree: empty3, n: 1, result1: 0, result2: 0},
-	{tree: empty3, n: 100, result1: 0, result2: 0},
-	{tree: atree3, n: 0, result1: 1, result2: 3},
-	{tree: atree3, n: 1, result1: 3, result2: 5},
-	{tree: atree3, n: 2, result1: 5, result2: 8},
-	{tree: atree3, n: 3, result1: 8, result2: 9},
-	{tree: atree3, n: 4, result1: 0, result2: 0},
-	{tree: atree3, n: 5, result1: 0, result2: 0},
-	{tree: atree3, n: 6, result1: 0, result2: 0},
-	{tree: atree3, n: 7, result1: 0, result2: 0},
-	{tree: atree3, n: 8, result1: 9, result2: 11},
-	{tree: atree3, n: 9, result1: 0, result2: 0},
-	{tree: atree3, n: 10, result1: 0, result2: 0},
-	{tree: atree3, n: 100, result1: 0, result2: 0},
+func eachChild(tree radixt.Tree, n uint) (indices string) {
+	tree.EachChild(n, func(c uint) bool {
+		if len(indices) > 0 {
+			indices += ", "
+		}
+
+		indices += strconv.FormatUint(uint64(c), 10)
+
+		return false
+	})
+
+	return
 }
 
-const testTree3ChildrenRangeError = "Tree3 Children Range Test %d: got %d " +
-	"and %d for low and high indices of children of node %d (should be " +
-	"%d and %d)"
+func eachFirstChild(tree radixt.Tree, n uint) (indices string) {
+	tree.EachChild(n, func(c uint) bool {
+		indices = strconv.FormatUint(uint64(c), 10)
 
-func TestTree3ChildrenRange(t *testing.T) {
-	for i, tt := range tree3ChildrenRangeTests {
-		result1, result2 := tt.tree.ChildrenRange(tt.n)
-		if result1 != tt.result1 || result2 != tt.result2 {
+		return true
+	})
+
+	return
+}
+
+var tree3EachChildTests = []struct {
+	tree    strg.Tree[strg.N3]
+	n       uint
+	f       func(radixt.Tree, uint) string
+	indices string
+}{
+	{tree: blank3, n: 0, f: eachChild, indices: ""},
+	{tree: blank3, n: 1, f: eachChild, indices: ""},
+	{tree: blank3, n: 100, f: eachChild, indices: ""},
+	{tree: blank3, n: 0, f: eachFirstChild, indices: ""},
+	{tree: blank3, n: 1, f: eachFirstChild, indices: ""},
+	{tree: blank3, n: 100, f: eachFirstChild, indices: ""},
+	{tree: tooshort3, n: 0, f: eachChild, indices: ""},
+	{tree: tooshort3, n: 1, f: eachChild, indices: ""},
+	{tree: tooshort3, n: 100, f: eachChild, indices: ""},
+	{tree: tooshort3, n: 0, f: eachFirstChild, indices: ""},
+	{tree: tooshort3, n: 1, f: eachFirstChild, indices: ""},
+	{tree: tooshort3, n: 100, f: eachFirstChild, indices: ""},
+	{tree: empty3, n: 0, f: eachChild, indices: ""},
+	{tree: empty3, n: 1, f: eachChild, indices: ""},
+	{tree: empty3, n: 100, f: eachChild, indices: ""},
+	{tree: empty3, n: 0, f: eachFirstChild, indices: ""},
+	{tree: empty3, n: 1, f: eachFirstChild, indices: ""},
+	{tree: empty3, n: 100, f: eachFirstChild, indices: ""},
+	{tree: atree3, n: 0, f: eachChild, indices: "1, 2"},
+	{tree: atree3, n: 1, f: eachChild, indices: "3, 4"},
+	{tree: atree3, n: 2, f: eachChild, indices: "5, 6, 7"},
+	{tree: atree3, n: 3, f: eachChild, indices: "8"},
+	{tree: atree3, n: 4, f: eachChild, indices: ""},
+	{tree: atree3, n: 5, f: eachChild, indices: ""},
+	{tree: atree3, n: 6, f: eachChild, indices: ""},
+	{tree: atree3, n: 7, f: eachChild, indices: ""},
+	{tree: atree3, n: 8, f: eachChild, indices: "9, 10"},
+	{tree: atree3, n: 9, f: eachChild, indices: ""},
+	{tree: atree3, n: 10, f: eachChild, indices: ""},
+	{tree: atree3, n: 100, f: eachChild, indices: ""},
+	{tree: atree3, n: 0, f: eachFirstChild, indices: "1"},
+	{tree: atree3, n: 1, f: eachFirstChild, indices: "3"},
+	{tree: atree3, n: 2, f: eachFirstChild, indices: "5"},
+	{tree: atree3, n: 3, f: eachFirstChild, indices: "8"},
+	{tree: atree3, n: 4, f: eachFirstChild, indices: ""},
+	{tree: atree3, n: 5, f: eachFirstChild, indices: ""},
+	{tree: atree3, n: 6, f: eachFirstChild, indices: ""},
+	{tree: atree3, n: 7, f: eachFirstChild, indices: ""},
+	{tree: atree3, n: 8, f: eachFirstChild, indices: "9"},
+	{tree: atree3, n: 9, f: eachFirstChild, indices: ""},
+	{tree: atree3, n: 10, f: eachFirstChild, indices: ""},
+	{tree: atree3, n: 100, f: eachFirstChild, indices: ""},
+}
+
+const testTree3EachChildError = "Tree3 Each Child Test %d: got %s as result " +
+	"indices (should be %s)"
+
+func TestTree3EachChild(t *testing.T) {
+	for i, tt := range tree3EachChildTests {
+		indices := tt.f(tt.tree, tt.n)
+		if indices != tt.indices {
 			t.Errorf(
-				testTree3ChildrenRangeError,
+				testTree3EachChildError,
 				i,
-				result1,
-				result2,
-				tt.n,
-				tt.result1,
-				tt.result2,
+				indices,
+				tt.indices,
 			)
 		}
 	}
@@ -356,51 +398,68 @@ func TestTree4Chunk(t *testing.T) {
 	}
 }
 
-var tree4ChildrenRangeTests = []struct {
+var tree4EachChildTests = []struct {
 	tree    strg.Tree[strg.N4]
 	n       uint
-	result1 uint
-	result2 uint
+	f       func(radixt.Tree, uint) string
+	indices string
 }{
-	{tree: blank4, n: 0, result1: 0, result2: 0},
-	{tree: blank4, n: 1, result1: 0, result2: 0},
-	{tree: blank4, n: 100, result1: 0, result2: 0},
-	{tree: tooshort4, n: 0, result1: 0, result2: 0},
-	{tree: tooshort4, n: 1, result1: 0, result2: 0},
-	{tree: tooshort4, n: 100, result1: 0, result2: 0},
-	{tree: empty4, n: 0, result1: 0, result2: 0},
-	{tree: empty4, n: 1, result1: 0, result2: 0},
-	{tree: empty4, n: 100, result1: 0, result2: 0},
-	{tree: atree4, n: 0, result1: 1, result2: 3},
-	{tree: atree4, n: 1, result1: 3, result2: 5},
-	{tree: atree4, n: 2, result1: 5, result2: 8},
-	{tree: atree4, n: 3, result1: 8, result2: 9},
-	{tree: atree4, n: 4, result1: 0, result2: 0},
-	{tree: atree4, n: 5, result1: 0, result2: 0},
-	{tree: atree4, n: 6, result1: 0, result2: 0},
-	{tree: atree4, n: 7, result1: 0, result2: 0},
-	{tree: atree4, n: 8, result1: 9, result2: 11},
-	{tree: atree4, n: 9, result1: 0, result2: 0},
-	{tree: atree4, n: 10, result1: 0, result2: 0},
-	{tree: atree4, n: 100, result1: 0, result2: 0},
+	{tree: blank4, n: 0, f: eachChild, indices: ""},
+	{tree: blank4, n: 1, f: eachChild, indices: ""},
+	{tree: blank4, n: 100, f: eachChild, indices: ""},
+	{tree: blank4, n: 0, f: eachFirstChild, indices: ""},
+	{tree: blank4, n: 1, f: eachFirstChild, indices: ""},
+	{tree: blank4, n: 100, f: eachFirstChild, indices: ""},
+	{tree: tooshort4, n: 0, f: eachChild, indices: ""},
+	{tree: tooshort4, n: 1, f: eachChild, indices: ""},
+	{tree: tooshort4, n: 100, f: eachChild, indices: ""},
+	{tree: tooshort4, n: 0, f: eachFirstChild, indices: ""},
+	{tree: tooshort4, n: 1, f: eachFirstChild, indices: ""},
+	{tree: tooshort4, n: 100, f: eachFirstChild, indices: ""},
+	{tree: empty4, n: 0, f: eachChild, indices: ""},
+	{tree: empty4, n: 1, f: eachChild, indices: ""},
+	{tree: empty4, n: 100, f: eachChild, indices: ""},
+	{tree: empty4, n: 0, f: eachFirstChild, indices: ""},
+	{tree: empty4, n: 1, f: eachFirstChild, indices: ""},
+	{tree: empty4, n: 100, f: eachFirstChild, indices: ""},
+	{tree: atree4, n: 0, f: eachChild, indices: "1, 2"},
+	{tree: atree4, n: 1, f: eachChild, indices: "3, 4"},
+	{tree: atree4, n: 2, f: eachChild, indices: "5, 6, 7"},
+	{tree: atree4, n: 3, f: eachChild, indices: "8"},
+	{tree: atree4, n: 4, f: eachChild, indices: ""},
+	{tree: atree4, n: 5, f: eachChild, indices: ""},
+	{tree: atree4, n: 6, f: eachChild, indices: ""},
+	{tree: atree4, n: 7, f: eachChild, indices: ""},
+	{tree: atree4, n: 8, f: eachChild, indices: "9, 10"},
+	{tree: atree4, n: 9, f: eachChild, indices: ""},
+	{tree: atree4, n: 10, f: eachChild, indices: ""},
+	{tree: atree4, n: 100, f: eachChild, indices: ""},
+	{tree: atree4, n: 0, f: eachFirstChild, indices: "1"},
+	{tree: atree4, n: 1, f: eachFirstChild, indices: "3"},
+	{tree: atree4, n: 2, f: eachFirstChild, indices: "5"},
+	{tree: atree4, n: 3, f: eachFirstChild, indices: "8"},
+	{tree: atree4, n: 4, f: eachFirstChild, indices: ""},
+	{tree: atree4, n: 5, f: eachFirstChild, indices: ""},
+	{tree: atree4, n: 6, f: eachFirstChild, indices: ""},
+	{tree: atree4, n: 7, f: eachFirstChild, indices: ""},
+	{tree: atree4, n: 8, f: eachFirstChild, indices: "9"},
+	{tree: atree4, n: 9, f: eachFirstChild, indices: ""},
+	{tree: atree4, n: 10, f: eachFirstChild, indices: ""},
+	{tree: atree4, n: 100, f: eachFirstChild, indices: ""},
 }
 
-const testTree4ChildrenRangeError = "Tree4 Children Range Test %d: " +
-	"got %d and %d for low and high indices of children of node %d " +
-	"(should be %d and %d)"
+const testTree4EachChildError = "Tree4 Each Child Test %d: got %s as result " +
+	"indices (should be %s)"
 
-func TestTree4ChildrenRange(t *testing.T) {
-	for i, tt := range tree4ChildrenRangeTests {
-		result1, result2 := tt.tree.ChildrenRange(tt.n)
-		if result1 != tt.result1 || result2 != tt.result2 {
+func TestTree4EachChild(t *testing.T) {
+	for i, tt := range tree4EachChildTests {
+		indices := tt.f(tt.tree, tt.n)
+		if indices != tt.indices {
 			t.Errorf(
-				testTree4ChildrenRangeError,
+				testTree4EachChildError,
 				i,
-				result1,
-				result2,
-				tt.n,
-				tt.result1,
-				tt.result2,
+				indices,
+				tt.indices,
 			)
 		}
 	}

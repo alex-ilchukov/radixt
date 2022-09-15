@@ -50,15 +50,20 @@ func (t Tree[N]) Chunk(n uint) (c string) {
 	return
 }
 
-// ChildrenRange returns low and high indices of children of node n, if the
-// tree has the node and the node has children, or default unsigned integers
-// otherwise.
-func (t Tree[N]) ChildrenRange(n uint) (low, high uint) {
-	if valid, limit := t.valid(n); valid {
-		low, high = header.ChildrenRange(n, t.node(limit), t)
+// EachChild calls function e just once for every child of node n in ascending
+// order, if the tree has the node, until the function returns boolean truth.
+// The method does nothing if the tree does not have the node.
+func (t Tree[N]) EachChild(n uint, e func(uint) bool) {
+	valid, limit := t.valid(n)
+	if !valid {
+		return
 	}
 
-	return
+	for c, h := header.ChildrenRange(n, t.node(limit), t); c < h; c++ {
+		if e(c) {
+			return
+		}
+	}
 }
 
 // Hoard returns amount of bytes, taken by the implementation, with

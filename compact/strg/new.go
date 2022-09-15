@@ -34,8 +34,8 @@ func New[NX N](t radixt.Tree) (Tree[NX], error) {
 
 	copy(bytes[cstart:], a.C)
 
-	for i, n := range a.N {
-		o := noffset + int(i)*bytesLen[NX]()
+	for _, n := range a.N {
+		o := noffset + int(n.Index)*bytesLen[NX]()
 		node := nf(n)
 		bytes[o] = byte(node & 0xFF)
 		bytes[o+1] = byte(node >> 8 & 0xFF)
