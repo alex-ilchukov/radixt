@@ -1,6 +1,7 @@
 package structg_test
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
@@ -143,45 +144,80 @@ func TestTree32Chunk(t *testing.T) {
 	}
 }
 
-var tree32ChildrenRangeTests = []struct {
-	tree    radixt.Tree
-	n       uint
-	result1 uint
-	result2 uint
-}{
-	{tree: empty32, n: 0, result1: 0, result2: 0},
-	{tree: empty32, n: 1, result1: 0, result2: 0},
-	{tree: empty32, n: 100, result1: 0, result2: 0},
-	{tree: atree32, n: 0, result1: 1, result2: 3},
-	{tree: atree32, n: 1, result1: 3, result2: 5},
-	{tree: atree32, n: 2, result1: 5, result2: 8},
-	{tree: atree32, n: 3, result1: 8, result2: 9},
-	{tree: atree32, n: 4, result1: 0, result2: 0},
-	{tree: atree32, n: 5, result1: 0, result2: 0},
-	{tree: atree32, n: 6, result1: 0, result2: 0},
-	{tree: atree32, n: 7, result1: 0, result2: 0},
-	{tree: atree32, n: 8, result1: 9, result2: 11},
-	{tree: atree32, n: 9, result1: 0, result2: 0},
-	{tree: atree32, n: 10, result1: 0, result2: 0},
-	{tree: atree32, n: 100, result1: 0, result2: 0},
+func eachChild(tree radixt.Tree, n uint) (indices string) {
+	tree.EachChild(n, func(c uint) bool {
+		if len(indices) > 0 {
+			indices += ", "
+		}
+
+		indices += strconv.FormatUint(uint64(c), 10)
+
+		return false
+	})
+
+	return
 }
 
-const testTree32ChildrenRangeError = "Tree[uint32] Children Range Test %d: " +
-	"got %d and %d for low and high indices of children of node %d " +
-	"(should be %d and %d)"
+func eachFirstChild(tree radixt.Tree, n uint) (indices string) {
+	tree.EachChild(n, func(c uint) bool {
+		indices = strconv.FormatUint(uint64(c), 10)
 
-func TestTree32ChildrenRange(t *testing.T) {
-	for i, tt := range tree32ChildrenRangeTests {
-		result1, result2 := tt.tree.ChildrenRange(tt.n)
-		if result1 != tt.result1 || result2 != tt.result2 {
+		return true
+	})
+
+	return
+}
+
+var tree32EachChildTests = []struct {
+	tree    radixt.Tree
+	n       uint
+	f       func(radixt.Tree, uint) string
+	indices string
+}{
+	{tree: empty32, n: 0, f: eachChild, indices: ""},
+	{tree: empty32, n: 1, f: eachChild, indices: ""},
+	{tree: empty32, n: 100, f: eachChild, indices: ""},
+	{tree: empty32, n: 0, f: eachFirstChild, indices: ""},
+	{tree: empty32, n: 1, f: eachFirstChild, indices: ""},
+	{tree: empty32, n: 100, f: eachFirstChild, indices: ""},
+	{tree: atree32, n: 0, f: eachChild, indices: "1, 2"},
+	{tree: atree32, n: 1, f: eachChild, indices: "3, 4"},
+	{tree: atree32, n: 2, f: eachChild, indices: "5, 6, 7"},
+	{tree: atree32, n: 3, f: eachChild, indices: "8"},
+	{tree: atree32, n: 4, f: eachChild, indices: ""},
+	{tree: atree32, n: 5, f: eachChild, indices: ""},
+	{tree: atree32, n: 6, f: eachChild, indices: ""},
+	{tree: atree32, n: 7, f: eachChild, indices: ""},
+	{tree: atree32, n: 8, f: eachChild, indices: "9, 10"},
+	{tree: atree32, n: 9, f: eachChild, indices: ""},
+	{tree: atree32, n: 10, f: eachChild, indices: ""},
+	{tree: atree32, n: 100, f: eachChild, indices: ""},
+	{tree: atree32, n: 0, f: eachFirstChild, indices: "1"},
+	{tree: atree32, n: 1, f: eachFirstChild, indices: "3"},
+	{tree: atree32, n: 2, f: eachFirstChild, indices: "5"},
+	{tree: atree32, n: 3, f: eachFirstChild, indices: "8"},
+	{tree: atree32, n: 4, f: eachFirstChild, indices: ""},
+	{tree: atree32, n: 5, f: eachFirstChild, indices: ""},
+	{tree: atree32, n: 6, f: eachFirstChild, indices: ""},
+	{tree: atree32, n: 7, f: eachFirstChild, indices: ""},
+	{tree: atree32, n: 8, f: eachFirstChild, indices: "9"},
+	{tree: atree32, n: 9, f: eachFirstChild, indices: ""},
+	{tree: atree32, n: 10, f: eachFirstChild, indices: ""},
+	{tree: atree32, n: 100, f: eachFirstChild, indices: ""},
+}
+
+const testTree32EachChildError = "Tree[uint32] Each Child Test %d: got %s " +
+	"as result indices (should be %s)"
+
+func TestTree32EachChild(t *testing.T) {
+	for i, tt := range tree32EachChildTests {
+		indices := tt.f(tt.tree, tt.n)
+		if indices != tt.indices {
 			t.Errorf(
-				testTree32ChildrenRangeError,
+				testTree32EachChildError,
 				i,
-				result1,
-				result2,
-				tt.n,
-				tt.result1,
-				tt.result2,
+				indices,
+				tt.indices,
 			)
 		}
 	}
@@ -318,45 +354,56 @@ func TestTree64Chunk(t *testing.T) {
 	}
 }
 
-var tree64ChildrenRangeTests = []struct {
+var tree64EachChildTests = []struct {
 	tree    radixt.Tree
 	n       uint
-	result1 uint
-	result2 uint
+	f       func(radixt.Tree, uint) string
+	indices string
 }{
-	{tree: empty64, n: 0, result1: 0, result2: 0},
-	{tree: empty64, n: 1, result1: 0, result2: 0},
-	{tree: empty64, n: 100, result1: 0, result2: 0},
-	{tree: atree64, n: 0, result1: 1, result2: 3},
-	{tree: atree64, n: 1, result1: 3, result2: 5},
-	{tree: atree64, n: 2, result1: 5, result2: 8},
-	{tree: atree64, n: 3, result1: 8, result2: 9},
-	{tree: atree64, n: 4, result1: 0, result2: 0},
-	{tree: atree64, n: 5, result1: 0, result2: 0},
-	{tree: atree64, n: 6, result1: 0, result2: 0},
-	{tree: atree64, n: 7, result1: 0, result2: 0},
-	{tree: atree64, n: 8, result1: 9, result2: 11},
-	{tree: atree64, n: 9, result1: 0, result2: 0},
-	{tree: atree64, n: 10, result1: 0, result2: 0},
-	{tree: atree64, n: 100, result1: 0, result2: 0},
+	{tree: empty64, n: 0, f: eachChild, indices: ""},
+	{tree: empty64, n: 1, f: eachChild, indices: ""},
+	{tree: empty64, n: 100, f: eachChild, indices: ""},
+	{tree: empty64, n: 0, f: eachFirstChild, indices: ""},
+	{tree: empty64, n: 1, f: eachFirstChild, indices: ""},
+	{tree: empty64, n: 100, f: eachFirstChild, indices: ""},
+	{tree: atree64, n: 0, f: eachChild, indices: "1, 2"},
+	{tree: atree64, n: 1, f: eachChild, indices: "3, 4"},
+	{tree: atree64, n: 2, f: eachChild, indices: "5, 6, 7"},
+	{tree: atree64, n: 3, f: eachChild, indices: "8"},
+	{tree: atree64, n: 4, f: eachChild, indices: ""},
+	{tree: atree64, n: 5, f: eachChild, indices: ""},
+	{tree: atree64, n: 6, f: eachChild, indices: ""},
+	{tree: atree64, n: 7, f: eachChild, indices: ""},
+	{tree: atree64, n: 8, f: eachChild, indices: "9, 10"},
+	{tree: atree64, n: 9, f: eachChild, indices: ""},
+	{tree: atree64, n: 10, f: eachChild, indices: ""},
+	{tree: atree64, n: 100, f: eachChild, indices: ""},
+	{tree: atree64, n: 0, f: eachFirstChild, indices: "1"},
+	{tree: atree64, n: 1, f: eachFirstChild, indices: "3"},
+	{tree: atree64, n: 2, f: eachFirstChild, indices: "5"},
+	{tree: atree64, n: 3, f: eachFirstChild, indices: "8"},
+	{tree: atree64, n: 4, f: eachFirstChild, indices: ""},
+	{tree: atree64, n: 5, f: eachFirstChild, indices: ""},
+	{tree: atree64, n: 6, f: eachFirstChild, indices: ""},
+	{tree: atree64, n: 7, f: eachFirstChild, indices: ""},
+	{tree: atree64, n: 8, f: eachFirstChild, indices: "9"},
+	{tree: atree64, n: 9, f: eachFirstChild, indices: ""},
+	{tree: atree64, n: 10, f: eachFirstChild, indices: ""},
+	{tree: atree64, n: 100, f: eachFirstChild, indices: ""},
 }
 
-const testTree64ChildrenRangeError = "Tree[uint64] Children Range Test %d: " +
-	"got %d and %d for low and high indices of children of node %d " +
-	"(should be %d and %d)"
+const testTree64EachChildError = "Tree[uint64] Each Child Test %d: got %s " +
+	"as result indices (should be %s)"
 
-func TestTree64ChildrenRange(t *testing.T) {
-	for i, tt := range tree64ChildrenRangeTests {
-		result1, result2 := tt.tree.ChildrenRange(tt.n)
-		if result1 != tt.result1 || result2 != tt.result2 {
+func TestTree64EachChild(t *testing.T) {
+	for i, tt := range tree64EachChildTests {
+		indices := tt.f(tt.tree, tt.n)
+		if indices != tt.indices {
 			t.Errorf(
-				testTree64ChildrenRangeError,
+				testTree64EachChildError,
 				i,
-				result1,
-				result2,
-				tt.n,
-				tt.result1,
-				tt.result2,
+				indices,
+				tt.indices,
 			)
 		}
 	}
