@@ -34,14 +34,12 @@ func (l *L) Reset() {
 	l.stop = l.t.Size() == 0
 }
 
-func (l *L) try(b byte, n uint, chunk string) bool {
+func (l *L) try(b byte, n uint, chunk string) {
 	l.stop = b != chunk[0]
 	if !l.stop {
 		l.n = n
 		l.chunk = chunk[1:]
 	}
-
-	return l.stop
 }
 
 // Feed takes byte b and returns if the byte is found in radix tree accordingly
@@ -54,9 +52,10 @@ func (l *L) Feed(b byte) bool {
 	if l.chunk != "" {
 		l.try(b, l.n, l.chunk)
 	} else {
-		c, limit := l.t.ChildrenRange(l.n)
-		for ; c < limit && l.try(b, c, l.t.Chunk(c)); c++ {
-		}
+		l.t.EachChild(l.n, func(c uint) bool {
+			l.try(b, c, l.t.Chunk(c))
+			return !l.stop
+		})
 	}
 
 	return !l.stop
