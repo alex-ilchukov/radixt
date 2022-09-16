@@ -7,5 +7,6 @@
 // positions in the slice as values in the resulting tree.
 //
 // As the tree struct is not exported outside, the implementation assumes that
-// instance is never nil.
+// instance is never nil. Also, it is totally static and safe to use by
+// multiple goroutines concurrently.
 package generic

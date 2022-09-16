@@ -31,7 +31,9 @@
 // sorting of chunks. If a key is found, which doesn't satisfy format with '|'
 // above, the implementation panics. Technically, keys with the same chunk are
 // allowed in the same map and wouldn't bring a panic, but that can bring chaos
-// to lookup process.
+// to lookup process. The implementation is as dynamic and as safe to use by
+// multiple goroutines as regular Go maps are, that is, not _very_ safe during
+// simultaneous changing in one goroutines and using in others.
 //
 // The implementation provides a factory function, that allows to create an
 // evident representation of any provided tree (that is, an evident tree with

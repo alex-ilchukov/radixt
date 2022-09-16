@@ -1,7 +1,8 @@
 package analysis
 
-// N struct represents data on a node in radix tree in analysis result. Most of
-// the data is return values of Node* methods in [radixt.Tree] interface.
+// N struct represents data on a node in radix tree in analysis result. All the
+// indices presented in instances of the struct are result of renaming process
+// (see documentation on [A] struct).
 type N struct {
 	// Index is index of the node in the tree.
 	Index uint
@@ -41,6 +42,15 @@ type N struct {
 }
 
 // A struct represents result data of analysis of radix tree.
+//
+// User of the struct's instance can assume, that the data regarding indices
+// reflects results on _renaming_ (reindexing). The renamed indices have the
+// following property: all children of any node have their indices in
+// sequential order (l, l + 1, l + 2 and so on, that is). The property allows
+// to explain the sequences with use of [N.ChildrenLow] and [N.ChildrenHigh]
+// fields.
+//
+// The only place, where original indices residue, is keys of [A.N] field.
 type A struct {
 	// C is the string of all node chunks "crammed" together.
 	C string
@@ -58,7 +68,8 @@ type A struct {
 	// Vm is the maximum over values of all nodes.
 	Vm uint
 
-	// N is map from all node indices to node data in form of [N] structs.
+	// N is map from all original node indices to node data in form of [N]
+	// struct's instances.
 	N map[uint]N
 
 	// Ca is map from amounts of children to amount of nodes with those

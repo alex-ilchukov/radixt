@@ -18,8 +18,8 @@ func New[N node.N](t radixt.Tree) (*tree[N], error) {
 	}
 
 	nodes := make([]N, len(a.N), len(a.N))
-	for i, n := range a.N {
-		nodes[i] = nf(n)
+	for _, n := range a.N {
+		nodes[n.Index] = nf(n)
 	}
 
 	result := &tree[N]{h: h, chunks: a.C, nodes: nodes}

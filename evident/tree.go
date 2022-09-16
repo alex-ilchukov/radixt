@@ -47,10 +47,10 @@ func (t Tree) Chunk(n uint) string {
 	return extractChunk(key)
 }
 
-// ChildrenRange returns low and high indices of children of node n, if the
-// tree has the node and the node has children, or default unsigned integers
-// otherwise.
-func (t Tree) ChildrenRange(n uint) (low, high uint) {
+// EachChild calls function e just once for every child of node n in ascending
+// order, if the tree has the node, until the function returns boolean truth.
+// The method does nothing if the tree does not have the node.
+func (t Tree) EachChild(n uint, e func(uint) bool) {
 	a, m, q := t.grind(n)
 	if a == nil {
 		return
@@ -62,7 +62,7 @@ func (t Tree) ChildrenRange(n uint) (low, high uint) {
 		return
 	}
 
-	low = n + uint(len(a)) - m
+	low := n + uint(len(a)) - m
 	for _, c := range q.a {
 		low += uint(len(c))
 	}
@@ -71,9 +71,13 @@ func (t Tree) ChildrenRange(n uint) (low, high uint) {
 		low += uint(len(a[k]))
 	}
 
-	high = low + uint(len(a[key]))
+	high := low + uint(len(a[key]))
 
-	return
+	for c := low; c < high; c++ {
+		if e(c) {
+			return
+		}
+	}
 }
 
 // Eq returns true, if the provided tree u has the same structure, node chunks,
