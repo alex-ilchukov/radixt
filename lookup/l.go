@@ -7,6 +7,7 @@ import (
 
 type l[W Way] struct {
 	t     radixt.Tree
+	w     W
 	n     uint
 	chunk string
 	keep  bool
