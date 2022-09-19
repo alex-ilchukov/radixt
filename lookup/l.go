@@ -5,7 +5,7 @@ import (
 	"github.com/alex-ilchukov/radixt/null"
 )
 
-type l struct {
+type l[W Way] struct {
 	t     radixt.Tree
 	n     uint
 	chunk string
@@ -32,13 +32,13 @@ func New(t radixt.Tree) *L {
 }
 
 // Reset resets the lookup state.
-func (lkp *l) Reset() {
+func (lkp *l[_]) Reset() {
 	lkp.n = 0
 	lkp.chunk = lkp.t.Chunk(0)
 	lkp.keep = lkp.t.Size() > 0
 }
 
-func (lkp *l) try(b byte, n uint, chunk string) {
+func (lkp *l[_]) try(b byte, n uint, chunk string) {
 	lkp.keep = b == chunk[0]
 	if lkp.keep {
 		lkp.n = n
@@ -48,7 +48,7 @@ func (lkp *l) try(b byte, n uint, chunk string) {
 
 // Feed takes byte b and returns if the byte is found in radix tree accordingly
 // to the state or not.
-func (lkp *l) Feed(b byte) bool {
+func (lkp *l[_]) Feed(b byte) bool {
 	switch {
 	case !lkp.keep:
 		// no statement
@@ -66,7 +66,7 @@ func (lkp *l) Feed(b byte) bool {
 
 // Found returns if the lookup state points to result string with value in the
 // tree or not.
-func (lkp *l) Found() (found bool) {
+func (lkp *l[_]) Found() (found bool) {
 	if lkp.keep && lkp.chunk == "" {
 		_, found = lkp.t.Value(lkp.n)
 	}
@@ -75,11 +75,11 @@ func (lkp *l) Found() (found bool) {
 }
 
 // Tree returns radix tree.
-func (lkp *l) Tree() radixt.Tree {
+func (lkp *l[_]) Tree() radixt.Tree {
 	return lkp.t
 }
 
 // Node returns index of current tree node.
-func (lkp *l) Node() uint {
+func (lkp *l[_]) Node() uint {
 	return lkp.n
 }
