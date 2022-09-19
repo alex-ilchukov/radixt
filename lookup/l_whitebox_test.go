@@ -4,27 +4,34 @@ import (
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
-	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/evident"
 	"github.com/alex-ilchukov/radixt/null"
 )
 
 var (
-	empty = generic.New()
+	empty = evident.Tree{}
 
-	atree = generic.New(
-		"authorization",
-		"content-type",
-		"content-length",
-		"content-disposition",
-	)
+	atree = evident.Tree{
+		"|": {
+			"authorization|0": nil,
+			"content-|": {
+				"type|1": nil,
+				"length|2": nil,
+				"disposition|3": nil,
+			},
+		},
+	}
 
-	withBlank = generic.New(
-		"authorization",
-		"content-type",
-		"content-length",
-		"content-disposition",
-		"",
-	)
+	withBlank = evident.Tree{
+		"|4": {
+			"authorization|0": nil,
+			"content-|": {
+				"type|1": nil,
+				"length|2": nil,
+				"disposition|3": nil,
+			},
+		},
+	}
 )
 
 var newTests = []struct {
@@ -47,7 +54,7 @@ func TestNew(t *testing.T) {
 	for i, tt := range newTests {
 		l := New(tt.t)
 
-		if l.t != tt.lt ||
+		if !evident.New(l.t).Eq(tt.lt) ||
 			l.n != tt.ln ||
 			l.chunk != tt.lchunk ||
 			l.stop != tt.lstop {
