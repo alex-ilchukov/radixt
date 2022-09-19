@@ -18,6 +18,12 @@ type L struct {
 	l[Default]
 }
 
+// LS contains information on state of the lookup process with assistance of
+// [Switcher] instance.
+type LS struct {
+	l[Switch]
+}
+
 // New creates and initializes new lookup state accordingly to the provided
 // radix tree t, and returns a pointer the state. Nil values of t are supported
 // and interpreted as empty tree.
