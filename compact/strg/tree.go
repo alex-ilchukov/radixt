@@ -105,11 +105,11 @@ func (t Tree[_]) Switch(n uint, b byte) (c uint, chunk string, found bool) {
 	return
 }
 
-func (t Tree[N]) empty() bool {
+func (t Tree[_]) empty() bool {
 	return len(t) < ProperLen
 }
 
-func (t Tree[N]) nOffset() int {
+func (t Tree[_]) nOffset() int {
 	return int(t[hlen]) | int(t[hlen+1])<<8
 }
 
@@ -117,7 +117,7 @@ func (t Tree[N]) limit(offset int, n uint) int {
 	return offset + int(n+1)*bytesLen[N]()
 }
 
-func (t Tree[N]) valid(n uint) (result bool, limit int) {
+func (t Tree[_]) valid(n uint) (result bool, limit int) {
 	if !t.empty() {
 		limit = t.limit(t.nOffset(), n)
 		result = limit <= len(t)
