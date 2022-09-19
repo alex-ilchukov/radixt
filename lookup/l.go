@@ -14,7 +14,7 @@ type l[W Way] struct {
 
 // L contains information on state of the lookup process.
 type L struct {
-	l
+	l[Default]
 }
 
 // New creates and initializes new lookup state accordingly to the provided
@@ -25,7 +25,7 @@ func New(t radixt.Tree) *L {
 		t = null.Tree
 	}
 
-	l := &L{l: l{t: t}}
+	l := &L{l: l[Default]{t: t}}
 	l.Reset()
 
 	return l
