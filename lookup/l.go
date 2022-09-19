@@ -63,13 +63,12 @@ func (l *L) Feed(b byte) bool {
 
 // Found returns if the lookup state points to result string with value in the
 // tree or not.
-func (l *L) Found() bool {
-	if !l.keep || l.chunk != "" {
-		return false
+func (l *L) Found() (found bool) {
+	if l.keep && l.chunk == "" {
+		_, found = l.t.Value(l.n)
 	}
 
-	_, has := l.t.Value(l.n)
-	return has
+	return
 }
 
 // Tree returns radix tree.
