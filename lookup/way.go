@@ -8,3 +8,8 @@ type Default [0]Switcher
 // of lookup in radix trees, which is assisted (and possible sped up) by
 // [Switcher] implementation.
 type Switch [1]Switcher
+
+// Way is type set of types of lookup ways.
+type Way interface {
+	Default | Switch
+}
