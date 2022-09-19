@@ -10,7 +10,7 @@ type L struct {
 	t     radixt.Tree
 	n     uint
 	chunk string
-	stop  bool
+	keep  bool
 }
 
 // New creates and initializes new lookup state accordingly to the provided
@@ -31,12 +31,12 @@ func New(t radixt.Tree) *L {
 func (l *L) Reset() {
 	l.n = 0
 	l.chunk = l.t.Chunk(0)
-	l.stop = l.t.Size() == 0
+	l.keep = l.t.Size() > 0
 }
 
 func (l *L) try(b byte, n uint, chunk string) {
-	l.stop = b != chunk[0]
-	if !l.stop {
+	l.keep = b == chunk[0]
+	if l.keep {
 		l.n = n
 		l.chunk = chunk[1:]
 	}
@@ -45,7 +45,7 @@ func (l *L) try(b byte, n uint, chunk string) {
 // Feed takes byte b and returns if the byte is found in radix tree accordingly
 // to the state or not.
 func (l *L) Feed(b byte) bool {
-	if l.stop {
+	if !l.keep {
 		return false
 	}
 
@@ -54,17 +54,17 @@ func (l *L) Feed(b byte) bool {
 	} else {
 		l.t.EachChild(l.n, func(c uint) bool {
 			l.try(b, c, l.t.Chunk(c))
-			return !l.stop
+			return l.keep
 		})
 	}
 
-	return !l.stop
+	return l.keep
 }
 
 // Found returns if the lookup state points to result string with value in the
 // tree or not.
 func (l *L) Found() bool {
-	if l.stop || l.chunk != "" {
+	if !l.keep || l.chunk != "" {
 		return false
 	}
 
