@@ -44,11 +44,7 @@ func (t *tree[_]) Chunk(n uint) (c string) {
 // order, if the tree has the node, until the function returns boolean truth.
 // The method does nothing if the tree does not have the node.
 func (t *tree[_]) EachChild(n uint, e func(uint) bool) {
-	if n >= t.Size() {
-		return
-	}
-
-	for c, h := header.ChildrenRange(n, t.nodes[n], t.h); c < h; c++ {
+	for c, h := t.childrenRange(n); c < h; c++ {
 		if e(c) {
 			return
 		}
@@ -75,17 +71,21 @@ func (t *tree[N]) Hoard() (amount, hint uint) {
 // without first byte and boolean truth. Otherwise or if the node is not in the
 // tree, it returns corresponding default values.
 func (t *tree[_]) Switch(n uint, b byte) (c uint, chunk string, found bool) {
-	if n >= t.Size() {
-		return
-	}
-
-	for c, h := header.ChildrenRange(n, t.nodes[n], t.h); c < h; c++ {
+	for c, h := t.childrenRange(n); c < h; c++ {
 		child := t.nodes[c]
 		low := header.ChunkLow(child, t.h)
 		if t.chunks[low] == b {
 			high := low + header.ChunkLen(child, t.h)
 			return c, t.chunks[low+1 : high], true
 		}
+	}
+
+	return
+}
+
+func (t *tree[_]) childrenRange(n uint) (low, high uint) {
+	if n < t.Size() {
+		low, high = header.ChildrenRange(n, t.nodes[n], t.h)
 	}
 
 	return
