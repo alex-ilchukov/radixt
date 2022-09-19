@@ -106,9 +106,13 @@ func (t Tree[N]) nOffset() int {
 	return int(t[hlen]) | int(t[hlen+1])<<8
 }
 
+func (t Tree[N]) limit(offset int, n uint) int {
+	return offset + int(n+1)*bytesLen[N]()
+}
+
 func (t Tree[N]) valid(n uint) (result bool, limit int) {
 	if !t.empty() {
-		limit = t.nOffset() + int(n+1)*bytesLen[N]()
+		limit = t.limit(t.nOffset(), n)
 		result = limit <= len(t)
 	}
 
