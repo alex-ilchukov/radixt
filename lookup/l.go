@@ -49,12 +49,19 @@ func (lkp *l[_]) try(b byte, n uint, chunk string) {
 
 // Feed takes byte b and returns if the byte is found in radix tree accordingly
 // to the state or not.
-func (lkp *l[_]) Feed(b byte) bool {
+func (lkp *l[W]) Feed(b byte) bool {
 	switch {
 	case !lkp.keep:
 		// no statement
 	case lkp.chunk != "":
 		lkp.try(b, lkp.n, lkp.chunk)
+	case IsSwitch[W]():
+		// The trick with len is required to coax the compiler: putting
+		// just 0 would bring its wrath on the case, where the array
+		// has zero length (Default way that is), despite the guardian
+		// IsSwitch check.
+		w := lkp.w[len(lkp.w)-1]
+		lkp.n, lkp.chunk, lkp.keep = w.Switch(lkp.n, b)
 	default:
 		lkp.t.EachChild(lkp.n, func(c uint) bool {
 			lkp.try(b, c, lkp.t.Chunk(c))
