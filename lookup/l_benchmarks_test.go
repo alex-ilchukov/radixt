@@ -32,7 +32,7 @@ func loadLines(path string) (lines []string) {
 	return
 }
 
-func createGenericTreeFromLines(path string) (radixt.Tree, []string) {
+func createGenericTreeFromLines(path string) (lookup.Tritcher, []string) {
 	lines := loadLines(path)
 	return generic.New(lines...), lines
 }
@@ -69,6 +69,14 @@ func feed(l *lookup.L, s string) {
 	}
 }
 
+func feedLS(l *lookup.LS, s string) {
+	for i := 0; i < len(s); i++ {
+		if !l.Feed(s[i]) {
+			return
+		}
+	}
+}
+
 func benchmarkLookupInTree(b *testing.B, t radixt.Tree, lines []string) {
 	l := lookup.New(t)
 	b.ResetTimer()
@@ -76,6 +84,21 @@ func benchmarkLookupInTree(b *testing.B, t radixt.Tree, lines []string) {
 		for j := 0; j < len(lines); j++ {
 			l.Reset()
 			feed(l, lines[j])
+		}
+	}
+}
+
+func benchmarkLookupInTritcher(
+	b     *testing.B,
+	t     lookup.Tritcher,
+	lines []string,
+) {
+	l := lookup.NewInTritcher(t)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		for j := 0; j < len(lines); j++ {
+			l.Reset()
+			feedLS(l, lines[j])
 		}
 	}
 }
@@ -111,6 +134,11 @@ func BenchmarkLookupMethodsInGeneric(b *testing.B) {
 	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupMethodsInGenericTritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(methods)
+	benchmarkLookupInTritcher(b, g, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupMethodsInStrgN3(b *testing.B) {
 	g, lines := createGenericTreeFromLines(methods)
 	t, err := strg.New[strg.N3](g)
@@ -118,6 +146,15 @@ func BenchmarkLookupMethodsInStrgN3(b *testing.B) {
 		panic(err)
 	}
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupMethodsInStrgN3Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(methods)
+	t, err := strg.New[strg.N3](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupMethodsInStrgN4(b *testing.B) {
@@ -129,6 +166,15 @@ func BenchmarkLookupMethodsInStrgN4(b *testing.B) {
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupMethodsInStrgN4Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(methods)
+	t, err := strg.New[strg.N4](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupMethodsInStructgUint32(b *testing.B) {
 	g, lines := createGenericTreeFromLines(methods)
 	t, err := structg.New[uint32](g)
@@ -138,6 +184,15 @@ func BenchmarkLookupMethodsInStructgUint32(b *testing.B) {
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupMethodsInStructgUint32Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(methods)
+	t, err := structg.New[uint32](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupMethodsInStructgUint64(b *testing.B) {
 	g, lines := createGenericTreeFromLines(methods)
 	t, err := structg.New[uint64](g)
@@ -145,6 +200,15 @@ func BenchmarkLookupMethodsInStructgUint64(b *testing.B) {
 		panic(err)
 	}
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupMethodsInStructgUint64Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(methods)
+	t, err := structg.New[uint64](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupMethodsInEvident(b *testing.B) {
@@ -163,6 +227,11 @@ func BenchmarkLookupHeadersInGeneric(b *testing.B) {
 	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupHeadersInGenericTritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(headers)
+	benchmarkLookupInTritcher(b, g, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupHeadersInStrgN4(b *testing.B) {
 	g, lines := createGenericTreeFromLines(headers)
 	t, err := strg.New[strg.N4](g)
@@ -170,6 +239,15 @@ func BenchmarkLookupHeadersInStrgN4(b *testing.B) {
 		panic(err)
 	}
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupHeadersInStrgN4Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(headers)
+	t, err := strg.New[strg.N4](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupHeadersInStructgUint32(b *testing.B) {
@@ -181,6 +259,15 @@ func BenchmarkLookupHeadersInStructgUint32(b *testing.B) {
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupHeadersInStructgUint32Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(headers)
+	t, err := structg.New[uint32](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupHeadersInStructgUint64(b *testing.B) {
 	g, lines := createGenericTreeFromLines(headers)
 	t, err := structg.New[uint64](g)
@@ -188,6 +275,15 @@ func BenchmarkLookupHeadersInStructgUint64(b *testing.B) {
 		panic(err)
 	}
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupHeadersInStructgUint64Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(headers)
+	t, err := structg.New[uint64](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupHeadersInEvident(b *testing.B) {
@@ -206,6 +302,11 @@ func BenchmarkLookupGoalsInGeneric(b *testing.B) {
 	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupGoalsInGenericTritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(goals)
+	benchmarkLookupInTritcher(b, g, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupGoalsInStructgUint64(b *testing.B) {
 	g, lines := createGenericTreeFromLines(goals)
 	t, err := structg.New[uint64](g)
@@ -213,6 +314,15 @@ func BenchmarkLookupGoalsInStructgUint64(b *testing.B) {
 		panic(err)
 	}
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupGoalsInStructgUint64Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(goals)
+	t, err := structg.New[uint64](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupWords200kInMap(b *testing.B) {
@@ -225,6 +335,11 @@ func BenchmarkLookupWords200kInGeneric(b *testing.B) {
 	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupWords200kInGenericTritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(words200k)
+	benchmarkLookupInTritcher(b, g, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupWords200kInStructgUint64(b *testing.B) {
 	g, lines := createGenericTreeFromLines(words200k)
 	t, err := structg.New[uint64](g)
@@ -232,6 +347,15 @@ func BenchmarkLookupWords200kInStructgUint64(b *testing.B) {
 		panic(err)
 	}
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupWords200kInStructgUint64Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(words200k)
+	t, err := structg.New[uint64](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupWordsInMap(b *testing.B) {
@@ -244,6 +368,11 @@ func BenchmarkLookupWordsInGeneric(b *testing.B) {
 	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupWordsInGenericTritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(words)
+	benchmarkLookupInTritcher(b, g, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupWordsInStructgUint64(b *testing.B) {
 	g, lines := createGenericTreeFromLines(words)
 	t, err := structg.New[uint64](g)
@@ -251,4 +380,13 @@ func BenchmarkLookupWordsInStructgUint64(b *testing.B) {
 		panic(err)
 	}
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupWordsInStructgUint64Tritcher(b *testing.B) {
+	g, lines := createGenericTreeFromLines(words)
+	t, err := structg.New[uint64](g)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTritcher(b, t, chooseSomeLines(lines))
 }
