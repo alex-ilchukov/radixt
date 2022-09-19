@@ -4,27 +4,34 @@ import (
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
-	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/evident"
 	"github.com/alex-ilchukov/radixt/null"
 )
 
 var (
-	empty = generic.New()
+	empty = evident.Tree{}
 
-	atree = generic.New(
-		"authorization",
-		"content-type",
-		"content-length",
-		"content-disposition",
-	)
+	atree = evident.Tree{
+		"|": {
+			"authorization|0": nil,
+			"content-|": {
+				"type|1":        nil,
+				"length|2":      nil,
+				"disposition|3": nil,
+			},
+		},
+	}
 
-	withBlank = generic.New(
-		"authorization",
-		"content-type",
-		"content-length",
-		"content-disposition",
-		"",
-	)
+	withBlank = evident.Tree{
+		"|4": {
+			"authorization|0": nil,
+			"content-|": {
+				"type|1":        nil,
+				"length|2":      nil,
+				"disposition|3": nil,
+			},
+		},
+	}
 )
 
 var newTests = []struct {
@@ -32,13 +39,13 @@ var newTests = []struct {
 	lt     radixt.Tree
 	ln     uint
 	lchunk string
-	lstop  bool
+	lkeep  bool
 }{
-	{t: nil, lt: null.Tree, ln: 0, lchunk: "", lstop: true},
-	{t: null.Tree, lt: null.Tree, ln: 0, lchunk: "", lstop: true},
-	{t: empty, lt: empty, ln: 0, lchunk: "", lstop: true},
-	{t: atree, lt: atree, ln: 0, lchunk: "", lstop: false},
-	{t: withBlank, lt: withBlank, ln: 0, lchunk: "", lstop: false},
+	{t: nil, lt: null.Tree, ln: 0, lchunk: "", lkeep: false},
+	{t: null.Tree, lt: null.Tree, ln: 0, lchunk: "", lkeep: false},
+	{t: empty, lt: empty, ln: 0, lchunk: "", lkeep: false},
+	{t: atree, lt: atree, ln: 0, lchunk: "", lkeep: true},
+	{t: withBlank, lt: withBlank, ln: 0, lchunk: "", lkeep: true},
 }
 
 const testNewError = "Test New %d: for tree %v got %v (should be %v)"
@@ -47,10 +54,10 @@ func TestNew(t *testing.T) {
 	for i, tt := range newTests {
 		l := New(tt.t)
 
-		if l.t != tt.lt ||
+		if !evident.New(l.t).Eq(tt.lt) ||
 			l.n != tt.ln ||
 			l.chunk != tt.lchunk ||
-			l.stop != tt.lstop {
+			l.keep != tt.lkeep {
 			t.Errorf(testNewError, i, tt.t, l, tt)
 		}
 	}
@@ -61,75 +68,75 @@ var lResetTests = []struct {
 	input  string
 	ln     uint
 	lchunk string
-	lstop  bool
+	lkeep  bool
 }{
-	{tree: nil, input: "", ln: 0, lchunk: "", lstop: true},
-	{tree: nil, input: "content-type", ln: 0, lchunk: "", lstop: true},
-	{tree: empty, input: "", ln: 0, lchunk: "", lstop: true},
-	{tree: empty, input: "content-type", ln: 0, lchunk: "", lstop: true},
-	{tree: atree, input: "authorization", ln: 0, lchunk: "", lstop: false},
-	{tree: atree, input: "content-type", ln: 0, lchunk: "", lstop: false},
+	{tree: nil, input: "", ln: 0, lchunk: "", lkeep: false},
+	{tree: nil, input: "content-type", ln: 0, lchunk: "", lkeep: false},
+	{tree: empty, input: "", ln: 0, lchunk: "", lkeep: false},
+	{tree: empty, input: "content-type", ln: 0, lchunk: "", lkeep: false},
+	{tree: atree, input: "authorization", ln: 0, lchunk: "", lkeep: true},
+	{tree: atree, input: "content-type", ln: 0, lchunk: "", lkeep: true},
 	{
 		tree:   atree,
 		input:  "content-length",
 		ln:     0,
 		lchunk: "",
-		lstop:  false,
+		lkeep:  true,
 	},
 	{
 		tree:   atree,
 		input:  "content-disposition",
 		ln:     0,
 		lchunk: "",
-		lstop:  false,
+		lkeep:  true,
 	},
-	{tree: atree, input: "content-typ", ln: 0, lchunk: "", lstop: false},
-	{tree: atree, input: "content-", ln: 0, lchunk: "", lstop: false},
-	{tree: atree, input: "auth", ln: 0, lchunk: "", lstop: false},
-	{tree: atree, input: "", ln: 0, lchunk: "", lstop: false},
+	{tree: atree, input: "content-typ", ln: 0, lchunk: "", lkeep: true},
+	{tree: atree, input: "content-", ln: 0, lchunk: "", lkeep: true},
+	{tree: atree, input: "auth", ln: 0, lchunk: "", lkeep: true},
+	{tree: atree, input: "", ln: 0, lchunk: "", lkeep: true},
 
 	{
 		tree:   withBlank,
 		input:  "authorization",
 		ln:     0,
 		lchunk: "",
-		lstop:  false,
+		lkeep:  true,
 	},
 	{
 		tree:   withBlank,
 		input:  "content-type",
 		ln:     0,
 		lchunk: "",
-		lstop:  false,
+		lkeep:  true,
 	},
 	{
 		tree:   withBlank,
 		input:  "content-length",
 		ln:     0,
 		lchunk: "",
-		lstop:  false,
+		lkeep:  true,
 	},
 	{
 		tree:   withBlank,
 		input:  "content-disposition",
 		ln:     0,
 		lchunk: "",
-		lstop:  false,
+		lkeep:  true,
 	},
 	{
 		tree:   withBlank,
 		input:  "content-typ",
 		ln:     0,
 		lchunk: "",
-		lstop:  false,
+		lkeep:  true,
 	},
-	{tree: withBlank, input: "content-", ln: 0, lchunk: "", lstop: false},
-	{tree: withBlank, input: "auth", ln: 0, lchunk: "", lstop: false},
-	{tree: withBlank, input: "", ln: 0, lchunk: "", lstop: false},
+	{tree: withBlank, input: "content-", ln: 0, lchunk: "", lkeep: true},
+	{tree: withBlank, input: "auth", ln: 0, lchunk: "", lkeep: true},
+	{tree: withBlank, input: "", ln: 0, lchunk: "", lkeep: true},
 }
 
 const testLResetError = "Test L Reset %d: got l.n = %d, l.npos = '%s', " +
-	"l.stop = %t (should be %d, '%s' and %t)"
+	"l.keep = %t (should be %d, '%s' and %t)"
 
 func TestLReset(t *testing.T) {
 	for i, tt := range lResetTests {
@@ -142,16 +149,16 @@ func TestLReset(t *testing.T) {
 		}
 
 		l.Reset()
-		if l.n != tt.ln || l.chunk != tt.lchunk || l.stop != tt.lstop {
+		if l.n != tt.ln || l.chunk != tt.lchunk || l.keep != tt.lkeep {
 			t.Errorf(
 				testLResetError,
 				i,
 				l.n,
 				l.chunk,
-				l.stop,
+				l.keep,
 				tt.ln,
 				tt.lchunk,
-				tt.lstop,
+				tt.lkeep,
 			)
 		}
 	}

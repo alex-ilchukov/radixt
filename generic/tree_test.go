@@ -6,6 +6,7 @@ import (
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/lookup"
 )
 
 var (
@@ -233,6 +234,292 @@ func TestTreeHoard(t *testing.T) {
 				result2,
 				tt.result1,
 				tt.result2,
+			)
+		}
+	}
+}
+
+var treeSwitchTests = []struct {
+	switcher lookup.Switcher
+	n        uint
+	b        byte
+	result1  uint
+	result2  string
+	result3  bool
+}{
+	{
+		switcher: empty,
+		n:        0,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: empty,
+		n:        1,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: empty,
+		n:        100,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        0,
+		b:        97,
+		result1:  1,
+		result2:  "uth",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        0,
+		b:        99,
+		result1:  2,
+		result2:  "ontent-",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        0,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        1,
+		b:        101,
+		result1:  4,
+		result2:  "ntication",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        1,
+		b:        111,
+		result1:  3,
+		result2:  "r",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        1,
+		b:        112,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        2,
+		b:        116,
+		result1:  5,
+		result2:  "ype",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        2,
+		b:        108,
+		result1:  6,
+		result2:  "ength",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        2,
+		b:        100,
+		result1:  7,
+		result2:  "isposition",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        2,
+		b:        99,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        3,
+		b:        105,
+		result1:  8,
+		result2:  "",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        3,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        4,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        4,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        5,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        5,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        6,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        6,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        7,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        7,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        8,
+		b:        116,
+		result1:  9,
+		result2:  "y",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        8,
+		b:        122,
+		result1:  10,
+		result2:  "ation",
+		result3:  true,
+	},
+	{
+		switcher: atree,
+		n:        8,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        9,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        9,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        10,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        10,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree,
+		n:        100,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+}
+
+const testTreeSwitchError = "Tree Switch Test %d: got %d, '%s', and %t, " +
+	"trying to switch from node %d by byte %d (should be %d, '%s', and %t)"
+
+func TestTreeSwitch(t *testing.T) {
+	for i, tt := range treeSwitchTests {
+		result1, result2, result3 := tt.switcher.Switch(tt.n, tt.b)
+
+		e := result1 != tt.result1 ||
+			result2 != tt.result2 ||
+			result3 != tt.result3
+
+		if e {
+			t.Errorf(
+				testTreeSwitchError,
+				i,
+				result1,
+				result2,
+				result3,
+				tt.n,
+				tt.b,
+				tt.result1,
+				tt.result2,
+				tt.result3,
 			)
 		}
 	}

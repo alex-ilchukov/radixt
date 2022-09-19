@@ -1,6 +1,9 @@
 package generic
 
-import "github.com/alex-ilchukov/radixt"
+import (
+	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/lookup"
+)
 
 type node struct {
 	hasValue bool
@@ -46,14 +49,7 @@ func (t *tree) Chunk(n uint) string {
 // order, if the tree has the node, until the function returns boolean truth.
 // The method does nothing if the tree does not have the node.
 func (t *tree) EachChild(n uint, e func(uint) bool) {
-	if n >= t.Size() {
-		return
-	}
-
-	node := t.nodes[n]
-	low := node.cFirst
-	high := low + uint(node.cAmount)
-	for c := low; c < high; c++ {
+	for c, high := t.childrenRange(n); c < high; c++ {
 		if e(c) {
 			return
 		}
@@ -74,7 +70,34 @@ func (t *tree) Hoard() (uint, uint) {
 	return amount, radixt.HoardExactly
 }
 
+// Switch takes node n and byte b. If the node belongs to the tree, it looks
+// for a child c of the node with such a chunk, that its first byte coincides
+// with b. If such a child is found, it returns the child with its chunk
+// without first byte and boolean truth. Otherwise or if the node is not in the
+// tree, it returns corresponding default values.
+func (t *tree) Switch(n uint, b byte) (c uint, chunk string, found bool) {
+	for c, high := t.childrenRange(n); c < high; c++ {
+		chunk := t.nodes[c].chunk
+		if chunk[0] == b {
+			return c, chunk[1:], true
+		}
+	}
+
+	return
+}
+
+func (t *tree) childrenRange(n uint) (low, high uint) {
+	if n >= t.Size() {
+		return
+	}
+
+	node := t.nodes[n]
+	low = node.cFirst
+	return low, low + uint(node.cAmount)
+}
+
 var (
-	_ radixt.Tree    = (*tree)(nil)
-	_ radixt.Hoarder = (*tree)(nil)
+	_ radixt.Tree     = (*tree)(nil)
+	_ radixt.Hoarder  = (*tree)(nil)
+	_ lookup.Switcher = (*tree)(nil)
 )

@@ -7,6 +7,7 @@ import (
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/structg"
 	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/lookup"
 )
 
 var (
@@ -251,6 +252,293 @@ func TestTree32Hoard(t *testing.T) {
 	}
 }
 
+var tree32SwitchTests = []struct {
+	switcher lookup.Switcher
+	n        uint
+	b        byte
+	result1  uint
+	result2  string
+	result3  bool
+}{
+	{
+		switcher: empty32,
+		n:        0,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: empty32,
+		n:        1,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: empty32,
+		n:        100,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        0,
+		b:        97,
+		result1:  1,
+		result2:  "uth",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        0,
+		b:        99,
+		result1:  2,
+		result2:  "ontent-",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        0,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        1,
+		b:        101,
+		result1:  4,
+		result2:  "ntication",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        1,
+		b:        111,
+		result1:  3,
+		result2:  "r",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        1,
+		b:        112,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        2,
+		b:        116,
+		result1:  5,
+		result2:  "ype",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        2,
+		b:        108,
+		result1:  6,
+		result2:  "ength",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        2,
+		b:        100,
+		result1:  7,
+		result2:  "isposition",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        2,
+		b:        99,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        3,
+		b:        105,
+		result1:  8,
+		result2:  "",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        3,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        4,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        4,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        5,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        5,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        6,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        6,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        7,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        7,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        8,
+		b:        116,
+		result1:  9,
+		result2:  "y",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        8,
+		b:        122,
+		result1:  10,
+		result2:  "ation",
+		result3:  true,
+	},
+	{
+		switcher: atree32,
+		n:        8,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        9,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        9,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        10,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        10,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree32,
+		n:        100,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+}
+
+const testTree32SwitchError = "Tree[uint32] Switch Test %d: got %d, '%s', " +
+	"and %t, trying to switch from node %d by byte %d (should be %d, " +
+	"'%s', and %t)"
+
+func TestTree32Switch(t *testing.T) {
+	for i, tt := range tree32SwitchTests {
+		result1, result2, result3 := tt.switcher.Switch(tt.n, tt.b)
+
+		e := result1 != tt.result1 ||
+			result2 != tt.result2 ||
+			result3 != tt.result3
+
+		if e {
+			t.Errorf(
+				testTree32SwitchError,
+				i,
+				result1,
+				result2,
+				result3,
+				tt.n,
+				tt.b,
+				tt.result1,
+				tt.result2,
+				tt.result3,
+			)
+		}
+	}
+}
+
 var tree64SizeTests = []struct {
 	tree   radixt.Tree
 	result uint
@@ -432,6 +720,293 @@ func TestTree64Hoard(t *testing.T) {
 				result2,
 				tt.result1,
 				tt.result2,
+			)
+		}
+	}
+}
+
+var tree64SwitchTests = []struct {
+	switcher lookup.Switcher
+	n        uint
+	b        byte
+	result1  uint
+	result2  string
+	result3  bool
+}{
+	{
+		switcher: empty64,
+		n:        0,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: empty64,
+		n:        1,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: empty64,
+		n:        100,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        0,
+		b:        97,
+		result1:  1,
+		result2:  "uth",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        0,
+		b:        99,
+		result1:  2,
+		result2:  "ontent-",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        0,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        1,
+		b:        101,
+		result1:  4,
+		result2:  "ntication",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        1,
+		b:        111,
+		result1:  3,
+		result2:  "r",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        1,
+		b:        112,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        2,
+		b:        116,
+		result1:  5,
+		result2:  "ype",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        2,
+		b:        108,
+		result1:  6,
+		result2:  "ength",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        2,
+		b:        100,
+		result1:  7,
+		result2:  "isposition",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        2,
+		b:        99,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        3,
+		b:        105,
+		result1:  8,
+		result2:  "",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        3,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        4,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        4,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        5,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        5,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        6,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        6,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        7,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        7,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        8,
+		b:        116,
+		result1:  9,
+		result2:  "y",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        8,
+		b:        122,
+		result1:  10,
+		result2:  "ation",
+		result3:  true,
+	},
+	{
+		switcher: atree64,
+		n:        8,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        9,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        9,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        10,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        10,
+		b:        98,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+	{
+		switcher: atree64,
+		n:        100,
+		b:        97,
+		result1:  0,
+		result2:  "",
+		result3:  false,
+	},
+}
+
+const testTree64SwitchError = "Tree[uint64] Switch Test %d: got %d, '%s', " +
+	"and %t, trying to switch from node %d by byte %d (should be %d, " +
+	"'%s', and %t)"
+
+func TestTree64Switch(t *testing.T) {
+	for i, tt := range tree64SwitchTests {
+		result1, result2, result3 := tt.switcher.Switch(tt.n, tt.b)
+
+		e := result1 != tt.result1 ||
+			result2 != tt.result2 ||
+			result3 != tt.result3
+
+		if e {
+			t.Errorf(
+				testTree64SwitchError,
+				i,
+				result1,
+				result2,
+				result3,
+				tt.n,
+				tt.b,
+				tt.result1,
+				tt.result2,
+				tt.result3,
 			)
 		}
 	}

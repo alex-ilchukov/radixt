@@ -3,6 +3,7 @@ package strg
 import (
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/internal/header"
+	"github.com/alex-ilchukov/radixt/lookup"
 )
 
 // Tree is radix tree implementation, which support 3-bytes nodes and 4-bytes
@@ -72,17 +73,53 @@ func (t Tree[_]) Hoard() (uint, uint) {
 	return uint(len(t)), radixt.HoardExactly
 }
 
-func (t Tree[N]) empty() bool {
+// Switch takes node n and byte b. If the node belongs to the tree, it looks
+// for a child c of the node with such a chunk, that its first byte coincides
+// with b. If such a child is found, it returns the child with its chunk
+// without first byte and boolean truth. Otherwise or if the node is not in the
+// tree, it returns corresponding default values.
+func (t Tree[_]) Switch(n uint, b byte) (c uint, chunk string, found bool) {
+	valid, limit := t.valid(n)
+	if !valid {
+		return
+	}
+
+	l, h := header.ChildrenRange(n, t.node(limit), t)
+	if l >= h {
+		return
+	}
+
+	chunks := string(t[cstart:])
+	offset := t.nOffset()
+	// Explicit hiding of c to possible use in return after the loop
+	for c := l; c < h; c++ {
+		limit := t.limit(offset, c)
+		child := t.node(limit)
+		low := header.ChunkLow(child, t)
+		if chunks[low] == b {
+			high := low + header.ChunkLen(child, t)
+			return c, chunks[low+1 : high], true
+		}
+	}
+
+	return
+}
+
+func (t Tree[_]) empty() bool {
 	return len(t) < ProperLen
 }
 
-func (t Tree[N]) nOffset() int {
+func (t Tree[_]) nOffset() int {
 	return int(t[hlen]) | int(t[hlen+1])<<8
 }
 
-func (t Tree[N]) valid(n uint) (result bool, limit int) {
+func (t Tree[N]) limit(offset int, n uint) int {
+	return offset + int(n+1)*bytesLen[N]()
+}
+
+func (t Tree[_]) valid(n uint) (result bool, limit int) {
 	if !t.empty() {
-		limit = t.nOffset() + int(n+1)*bytesLen[N]()
+		limit = t.limit(t.nOffset(), n)
 		result = limit <= len(t)
 	}
 
@@ -100,8 +137,10 @@ func (t Tree[N]) node(limit int) (result uint32) {
 }
 
 var (
-	_ radixt.Tree    = Tree[N3]("")
-	_ radixt.Hoarder = Tree[N3]("")
-	_ radixt.Tree    = Tree[N4]("")
-	_ radixt.Hoarder = Tree[N4]("")
+	_ radixt.Tree     = Tree[N3]("")
+	_ radixt.Hoarder  = Tree[N3]("")
+	_ lookup.Switcher = Tree[N3]("")
+	_ radixt.Tree     = Tree[N4]("")
+	_ radixt.Hoarder  = Tree[N4]("")
+	_ lookup.Switcher = Tree[N4]("")
 )
