@@ -1,5 +1,7 @@
 package lookup
 
+import "github.com/alex-ilchukov/radixt"
+
 // Switcher is auxiliary interface for radix trees implementation. Lookup
 // process in trees, which realize the interface, can go faster.
 type Switcher interface {
@@ -11,4 +13,10 @@ type Switcher interface {
 	// the node is not in the tree, the method should return corresponding
 	// default values (zero, empty string, and boolean false that is).
 	Switch(n uint, b byte) (c uint, chunk string, found bool)
+}
+
+// Tritcher is stricter interface for radix trees with [Switcher] support.
+type Tritcher interface {
+	radixt.Tree
+	Switcher
 }
