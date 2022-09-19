@@ -92,10 +92,10 @@ func (t *tree[_]) childrenRange(n uint) (low, high uint) {
 }
 
 var (
-	_ radixt.Tree    = (*tree[uint32])(nil)
-	_ radixt.Hoarder = (*tree[uint32])(nil)
+	_ radixt.Tree     = (*tree[uint32])(nil)
+	_ radixt.Hoarder  = (*tree[uint32])(nil)
 	_ lookup.Switcher = (*tree[uint32])(nil)
-	_ radixt.Tree    = (*tree[uint64])(nil)
-	_ radixt.Hoarder = (*tree[uint64])(nil)
+	_ radixt.Tree     = (*tree[uint64])(nil)
+	_ radixt.Hoarder  = (*tree[uint64])(nil)
 	_ lookup.Switcher = (*tree[uint64])(nil)
 )
