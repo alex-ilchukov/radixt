@@ -38,6 +38,22 @@ func New(t radixt.Tree) *L {
 	return l
 }
 
+// NewInTritcher creates and initializes new lookup state with support of
+// [Switch] lookup way accordingly to the provided radix tree t, and returns a
+// pointer the state. Nil values of t are supported and interpreted as empty
+// tree.
+func NewInTritcher(tr Tritcher) *LS {
+	t := radixt.Tree(tr)
+	if tr == nil {
+		t = null.Tree
+	}
+
+	l := &LS{l: l[Switch]{t: t, w: Switch{tr}}}
+	l.Reset()
+
+	return l
+}
+
 // Reset resets the lookup state.
 func (lkp *l[_]) Reset() {
 	lkp.n = 0
