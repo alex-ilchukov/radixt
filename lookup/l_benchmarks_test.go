@@ -89,8 +89,8 @@ func benchmarkLookupInTree(b *testing.B, t radixt.Tree, lines []string) {
 }
 
 func benchmarkLookupInTritcher(
-	b     *testing.B,
-	t     lookup.Tritcher,
+	b *testing.B,
+	t lookup.Tritcher,
 	lines []string,
 ) {
 	l := lookup.NewInTritcher(t)

@@ -15,8 +15,8 @@ var (
 		"|": {
 			"authorization|0": nil,
 			"content-|": {
-				"type|1": nil,
-				"length|2": nil,
+				"type|1":        nil,
+				"length|2":      nil,
 				"disposition|3": nil,
 			},
 		},
@@ -26,8 +26,8 @@ var (
 		"|4": {
 			"authorization|0": nil,
 			"content-|": {
-				"type|1": nil,
-				"length|2": nil,
+				"type|1":        nil,
+				"length|2":      nil,
 				"disposition|3": nil,
 			},
 		},
