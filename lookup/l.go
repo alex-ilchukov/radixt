@@ -45,13 +45,12 @@ func (l *L) try(b byte, n uint, chunk string) {
 // Feed takes byte b and returns if the byte is found in radix tree accordingly
 // to the state or not.
 func (l *L) Feed(b byte) bool {
-	if !l.keep {
-		return false
-	}
-
-	if l.chunk != "" {
+	switch {
+	case !l.keep:
+		// no statement
+	case l.chunk != "":
 		l.try(b, l.n, l.chunk)
-	} else {
+	default:
 		l.t.EachChild(l.n, func(c uint) bool {
 			l.try(b, c, l.t.Chunk(c))
 			return l.keep
