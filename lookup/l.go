@@ -5,13 +5,15 @@ import (
 	"github.com/alex-ilchukov/radixt/null"
 )
 
-// L contains information on state of the lookup process.
-type L struct {
+type l struct {
 	t     radixt.Tree
 	n     uint
 	chunk string
 	keep  bool
 }
+
+// L contains information on state of the lookup process.
+type L l
 
 // New creates and initializes new lookup state accordingly to the provided
 // radix tree t, and returns a pointer the state. Nil values of t are supported
