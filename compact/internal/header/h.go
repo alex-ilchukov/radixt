@@ -58,11 +58,22 @@ func Value[N node.N, Header H](n N, h Header) (v uint, has bool) {
 	return
 }
 
+// ChunkLow takes node n with header h and returns low index to select the
+// node's chunk from string of all chunks combined.
+func ChunkLow[N node.N, Header H](n N, h Header) uint {
+	return head(n, h)
+}
+
+// ChunkLen takes node n with header h and returns length of the node's chunk.
+func ChunkLen[N node.N, Header H](n N, h Header) uint {
+	return tail(n, h)
+}
+
 // ChunkRange takes node n with header h and returns low and high indices to
 // select the node's chunk from string of all chunks combined.
 func ChunkRange[N node.N, Header H](n N, h Header) (low, high uint) {
-	low = head(n, h)
-	high = low + tail(n, h)
+	low = ChunkLow(n, h)
+	high = low + ChunkLen(n, h)
 	return
 }
 
