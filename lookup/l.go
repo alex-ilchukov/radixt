@@ -13,7 +13,9 @@ type l struct {
 }
 
 // L contains information on state of the lookup process.
-type L l
+type L struct {
+	l
+}
 
 // New creates and initializes new lookup state accordingly to the provided
 // radix tree t, and returns a pointer the state. Nil values of t are supported
@@ -23,61 +25,61 @@ func New(t radixt.Tree) *L {
 		t = null.Tree
 	}
 
-	l := &L{t: t}
+	l := &L{l: l{t: t}}
 	l.Reset()
 
 	return l
 }
 
 // Reset resets the lookup state.
-func (l *L) Reset() {
-	l.n = 0
-	l.chunk = l.t.Chunk(0)
-	l.keep = l.t.Size() > 0
+func (lkp *l) Reset() {
+	lkp.n = 0
+	lkp.chunk = lkp.t.Chunk(0)
+	lkp.keep = lkp.t.Size() > 0
 }
 
-func (l *L) try(b byte, n uint, chunk string) {
-	l.keep = b == chunk[0]
-	if l.keep {
-		l.n = n
-		l.chunk = chunk[1:]
+func (lkp *l) try(b byte, n uint, chunk string) {
+	lkp.keep = b == chunk[0]
+	if lkp.keep {
+		lkp.n = n
+		lkp.chunk = chunk[1:]
 	}
 }
 
 // Feed takes byte b and returns if the byte is found in radix tree accordingly
 // to the state or not.
-func (l *L) Feed(b byte) bool {
+func (lkp *l) Feed(b byte) bool {
 	switch {
-	case !l.keep:
+	case !lkp.keep:
 		// no statement
-	case l.chunk != "":
-		l.try(b, l.n, l.chunk)
+	case lkp.chunk != "":
+		lkp.try(b, lkp.n, lkp.chunk)
 	default:
-		l.t.EachChild(l.n, func(c uint) bool {
-			l.try(b, c, l.t.Chunk(c))
-			return l.keep
+		lkp.t.EachChild(lkp.n, func(c uint) bool {
+			lkp.try(b, c, lkp.t.Chunk(c))
+			return lkp.keep
 		})
 	}
 
-	return l.keep
+	return lkp.keep
 }
 
 // Found returns if the lookup state points to result string with value in the
 // tree or not.
-func (l *L) Found() (found bool) {
-	if l.keep && l.chunk == "" {
-		_, found = l.t.Value(l.n)
+func (lkp *l) Found() (found bool) {
+	if lkp.keep && lkp.chunk == "" {
+		_, found = lkp.t.Value(lkp.n)
 	}
 
 	return
 }
 
 // Tree returns radix tree.
-func (l *L) Tree() radixt.Tree {
-	return l.t
+func (lkp *l) Tree() radixt.Tree {
+	return lkp.t
 }
 
 // Node returns index of current tree node.
-func (l *L) Node() uint {
-	return l.n
+func (lkp *l) Node() uint {
+	return lkp.n
 }
