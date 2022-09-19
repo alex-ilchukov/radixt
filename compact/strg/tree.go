@@ -3,6 +3,7 @@ package strg
 import (
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/internal/header"
+	"github.com/alex-ilchukov/radixt/lookup"
 )
 
 // Tree is radix tree implementation, which support 3-bytes nodes and 4-bytes
@@ -72,6 +73,31 @@ func (t Tree[_]) Hoard() (uint, uint) {
 	return uint(len(t)), radixt.HoardExactly
 }
 
+// Switch takes node n and byte b. If the node belongs to the tree, it looks
+// for a child c of the node with such a chunk, that its first byte coincides
+// with b. If such a child is found, it returns the child with its chunk
+// without first byte and boolean truth. Otherwise or if the node is not in the
+// tree, it returns corresponding default values.
+func (t Tree[_]) Switch(n uint, b byte) (c uint, chunk string, found bool) {
+	valid, limit := t.valid(n)
+	if !valid {
+		return
+	}
+
+	chunks := string(t[cstart:])
+	for c, h := header.ChildrenRange(n, t.node(limit), t); c < h; c++ {
+		_, limit := t.valid(c)
+		child := t.node(limit)
+		low := header.ChunkLow(child, t)
+		if chunks[low] == b {
+			high := low + header.ChunkLen(child, t)
+			return c, chunks[low+1 : high], true
+		}
+	}
+
+	return
+}
+
 func (t Tree[N]) empty() bool {
 	return len(t) < ProperLen
 }
@@ -100,8 +126,10 @@ func (t Tree[N]) node(limit int) (result uint32) {
 }
 
 var (
-	_ radixt.Tree    = Tree[N3]("")
-	_ radixt.Hoarder = Tree[N3]("")
-	_ radixt.Tree    = Tree[N4]("")
-	_ radixt.Hoarder = Tree[N4]("")
+	_ radixt.Tree     = Tree[N3]("")
+	_ radixt.Hoarder  = Tree[N3]("")
+	_ lookup.Switcher = Tree[N3]("")
+	_ radixt.Tree     = Tree[N4]("")
+	_ radixt.Hoarder  = Tree[N4]("")
+	_ lookup.Switcher = Tree[N4]("")
 )
