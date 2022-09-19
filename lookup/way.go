@@ -13,3 +13,9 @@ type Switch [1]Switcher
 type Way interface {
 	Default | Switch
 }
+
+// IsSwitch returns, if the provided type parameter from [Way] is [Switch].
+func IsSwitch[W Way]() bool {
+	var w W
+	return len(w) > 0
+}
