@@ -84,9 +84,16 @@ func (t Tree[_]) Switch(n uint, b byte) (c uint, chunk string, found bool) {
 		return
 	}
 
+	l, h := header.ChildrenRange(n, t.node(limit), t)
+	if l >= h {
+		return
+	}
+
 	chunks := string(t[cstart:])
-	for c, h := header.ChildrenRange(n, t.node(limit), t); c < h; c++ {
-		_, limit := t.valid(c)
+	offset := t.nOffset()
+	// Explicit hiding of c to possible use in return after the loop
+	for c := l; c < h; c++ {
+		limit := t.limit(offset, c)
 		child := t.node(limit)
 		low := header.ChunkLow(child, t)
 		if chunks[low] == b {
