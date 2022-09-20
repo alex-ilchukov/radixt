@@ -7,8 +7,8 @@ import (
 	"github.com/alex-ilchukov/radixt/compact"
 	"github.com/alex-ilchukov/radixt/compact/strg"
 	"github.com/alex-ilchukov/radixt/evident"
-	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/null"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 const (
@@ -19,9 +19,9 @@ const (
 )
 
 var (
-	emptyOriginal = generic.New()
+	emptyOriginal = sapling.New()
 
-	regularValues = generic.New(
+	regularValues = sapling.New(
 		"GET",
 		"POST",
 		"PATCH",
@@ -33,52 +33,52 @@ var (
 		"TRACE",
 	)
 
-	borderValues3 = generic.NewFromSV(
-		generic.SV{S: "GET", V: border3},
-		generic.SV{S: "POST", V: border3},
-		generic.SV{S: "PATCH", V: border3},
-		generic.SV{S: "DELETE", V: border3},
-		generic.SV{S: "PUT", V: border3},
-		generic.SV{S: "OPTIONS", V: border3},
-		generic.SV{S: "CONNECT", V: border3},
-		generic.SV{S: "HEAD", V: border3},
-		generic.SV{S: "TRACE", V: border3},
+	borderValues3 = sapling.NewFromSV(
+		sapling.SV{S: "GET", V: border3},
+		sapling.SV{S: "POST", V: border3},
+		sapling.SV{S: "PATCH", V: border3},
+		sapling.SV{S: "DELETE", V: border3},
+		sapling.SV{S: "PUT", V: border3},
+		sapling.SV{S: "OPTIONS", V: border3},
+		sapling.SV{S: "CONNECT", V: border3},
+		sapling.SV{S: "HEAD", V: border3},
+		sapling.SV{S: "TRACE", V: border3},
 	)
 
-	largeValues3 = generic.NewFromSV(
-		generic.SV{S: "GET", V: large3},
-		generic.SV{S: "POST", V: large3},
-		generic.SV{S: "PATCH", V: large3},
-		generic.SV{S: "DELETE", V: large3},
-		generic.SV{S: "PUT", V: large3},
-		generic.SV{S: "OPTIONS", V: large3},
-		generic.SV{S: "CONNECT", V: large3},
-		generic.SV{S: "HEAD", V: large3},
-		generic.SV{S: "TRACE", V: large3},
+	largeValues3 = sapling.NewFromSV(
+		sapling.SV{S: "GET", V: large3},
+		sapling.SV{S: "POST", V: large3},
+		sapling.SV{S: "PATCH", V: large3},
+		sapling.SV{S: "DELETE", V: large3},
+		sapling.SV{S: "PUT", V: large3},
+		sapling.SV{S: "OPTIONS", V: large3},
+		sapling.SV{S: "CONNECT", V: large3},
+		sapling.SV{S: "HEAD", V: large3},
+		sapling.SV{S: "TRACE", V: large3},
 	)
 
-	borderValues4 = generic.NewFromSV(
-		generic.SV{S: "GET", V: border4},
-		generic.SV{S: "POST", V: border4},
-		generic.SV{S: "PATCH", V: border4},
-		generic.SV{S: "DELETE", V: border4},
-		generic.SV{S: "PUT", V: border4},
-		generic.SV{S: "OPTIONS", V: border4},
-		generic.SV{S: "CONNECT", V: border4},
-		generic.SV{S: "HEAD", V: border4},
-		generic.SV{S: "TRACE", V: border4},
+	borderValues4 = sapling.NewFromSV(
+		sapling.SV{S: "GET", V: border4},
+		sapling.SV{S: "POST", V: border4},
+		sapling.SV{S: "PATCH", V: border4},
+		sapling.SV{S: "DELETE", V: border4},
+		sapling.SV{S: "PUT", V: border4},
+		sapling.SV{S: "OPTIONS", V: border4},
+		sapling.SV{S: "CONNECT", V: border4},
+		sapling.SV{S: "HEAD", V: border4},
+		sapling.SV{S: "TRACE", V: border4},
 	)
 
-	largeValues4 = generic.NewFromSV(
-		generic.SV{S: "GET", V: large4},
-		generic.SV{S: "POST", V: large4},
-		generic.SV{S: "PATCH", V: large4},
-		generic.SV{S: "DELETE", V: large4},
-		generic.SV{S: "PUT", V: large4},
-		generic.SV{S: "OPTIONS", V: large4},
-		generic.SV{S: "CONNECT", V: large4},
-		generic.SV{S: "HEAD", V: large4},
-		generic.SV{S: "TRACE", V: large4},
+	largeValues4 = sapling.NewFromSV(
+		sapling.SV{S: "GET", V: large4},
+		sapling.SV{S: "POST", V: large4},
+		sapling.SV{S: "PATCH", V: large4},
+		sapling.SV{S: "DELETE", V: large4},
+		sapling.SV{S: "PUT", V: large4},
+		sapling.SV{S: "OPTIONS", V: large4},
+		sapling.SV{S: "CONNECT", V: large4},
+		sapling.SV{S: "HEAD", V: large4},
+		sapling.SV{S: "TRACE", V: large4},
 	)
 )
 
