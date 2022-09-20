@@ -5,13 +5,13 @@ import (
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/evident"
-	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 var (
-	newEmpty = generic.New()
+	newEmpty = sapling.New()
 
-	newATree = generic.New(
+	newATree = sapling.New(
 		"authority",
 		"authorization",
 		"author",
