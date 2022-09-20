@@ -92,7 +92,6 @@ func nodes(t radixt.Tree) []N {
 			Chunk:    t.Chunk(n),
 			Value:    v,
 			HasValue: has,
-			Root:     n == 0,
 		}
 
 		if n == 0 {
