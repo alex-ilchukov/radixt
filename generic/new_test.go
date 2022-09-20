@@ -3,18 +3,20 @@ package generic_test
 import (
 	"testing"
 
+	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/evident"
 	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 var newTests = []struct {
-	strings []string
-	e       evident.Tree
+	t radixt.Tree
+	e evident.Tree
 }{
-	{strings: nil, e: nil},
-	{strings: []string{}, e: nil},
+	{t: nil, e: nil},
+	{t: sapling.New(), e: nil},
 	{
-		strings: []string{
+		t: sapling.New(
 			"authority",
 			"authorization",
 			"author",
@@ -23,7 +25,7 @@ var newTests = []struct {
 			"content-type",
 			"content-length",
 			"content-disposition",
-		},
+		),
 		e: evident.Tree{
 			"|": {
 				"auth|4": {
@@ -50,60 +52,9 @@ const testNewError = "New Test %d: got that New(%v...) is\n\n%v\n\nwhich is " +
 
 func TestNew(t *testing.T) {
 	for i, tt := range newTests {
-		result := generic.New(tt.strings...)
+		result := generic.New(tt.t)
 		if !tt.e.Eq(result) {
-			t.Errorf(testNewError, i, tt.strings, result, tt.e)
-		}
-	}
-}
-
-var newFromSVTests = []struct {
-	sv []generic.SV
-	e  evident.Tree
-}{
-	{sv: nil, e: nil},
-	{sv: []generic.SV{}, e: nil},
-	{
-		sv: []generic.SV{
-			{S: "authority", V: 123},
-			{S: "authorization", V: 456},
-			{S: "author", V: 789},
-			{S: "authentication", V: 135},
-			{S: "auth", V: 680},
-			{S: "content-type", V: 234},
-			{S: "content-length", V: 453},
-			{S: "content-disposition", V: 656534},
-			{S: "", V: 9000},
-		},
-		e: evident.Tree{
-			"|9000": {
-				"auth|680": {
-					"entication|135": nil,
-					"or|789": {
-						"i|": {
-							"ty|123":     nil,
-							"zation|456": nil,
-						},
-					},
-				},
-				"content-|": {
-					"disposition|656534": nil,
-					"length|453":         nil,
-					"type|234":           nil,
-				},
-			},
-		},
-	},
-}
-
-const testNewFromSVError = "NewFromSV Test %d: got that NewFromSV(%v...) is" +
-	"\n\n%v\n\nwhich is not equal to \n\n%v\n\n (but should be equal)"
-
-func TestNewFromSV(t *testing.T) {
-	for i, tt := range newFromSVTests {
-		result := generic.NewFromSV(tt.sv...)
-		if !tt.e.Eq(result) {
-			t.Errorf(testNewFromSVError, i, tt.sv, result, tt.e)
+			t.Errorf(testNewError, i, tt.t, result, tt.e)
 		}
 	}
 }

@@ -1,42 +1,49 @@
 package generic
 
-// New creates a new generic tree, inserting the provided strings, and returns
-// a pointer on the tree. Node values are indices of the strings.
-func New(strings ...string) *tree {
-	if len(strings) == 0 {
-		return new(tree)
+import "github.com/alex-ilchukov/radixt"
+
+// New creates a new generic tree as a copy of the provided tree t and returns
+// a pointer on the created tree. It returns empty tree, if t is nil.
+func New(t radixt.Tree) *tree {
+	if t == nil {
+		return &tree{}
 	}
 
-	s := new(shrub)
-	s.imagoes = []imago{{chunk: strings[0], value: 0, hasValue: true}}
-
-	for v, str := range strings[1:] {
-		s.insert(str, uint(v+1))
+	l := t.Size()
+	if l == 0 {
+		return &tree{}
 	}
 
-	return grow(s)
-}
-
-// SV represents a couple of string key S and unsigned integer value V to be
-// contained in a tree
-type SV struct {
-	S string
-	V uint
-}
-
-// NewFromSV creates a new generic tree, inserting strings with values from the
-// provided sv slice, and returns a pointer on the tree.
-func NewFromSV(sv ...SV) *tree {
-	if len(sv) == 0 {
-		return new(tree)
+	type e struct {
+		n uint
+		p uint
 	}
 
-	s := new(shrub)
-	s.imagoes = []imago{{chunk: sv[0].S, value: sv[0].V, hasValue: true}}
+	nodes := make([]node, l, l)
+	for i, q := uint(0), make([]e, 1, l); len(q) > 0; i++ {
+		a := q[0]
+		q = q[1:]
 
-	for _, e := range sv[1:] {
-		s.insert(e.S, e.V)
+		n := a.n
+
+		t.EachChild(n, func(c uint) bool {
+			q = append(q, e{n: c, p: i})
+			return false
+		})
+
+		v, has := t.Value(n)
+		nodes[i] = node{hasValue: has, chunk: t.Chunk(n), value: v}
+
+		if n == 0 {
+			continue
+		}
+
+		p := a.p
+		if nodes[p].cAmount == 0 {
+			nodes[p].cFirst = i
+		}
+		nodes[p].cAmount = byte(i - nodes[p].cFirst + 1)
 	}
 
-	return grow(s)
+	return &tree{nodes: nodes}
 }
