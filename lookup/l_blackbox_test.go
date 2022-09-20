@@ -4,22 +4,22 @@ import (
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
-	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/lookup"
 	"github.com/alex-ilchukov/radixt/null"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 var (
-	empty = generic.New()
+	empty = sapling.New()
 
-	atree = generic.New(
+	atree = sapling.New(
 		"authorization",
 		"content-type",
 		"content-length",
 		"content-disposition",
 	)
 
-	withBlank = generic.New(
+	withBlank = sapling.New(
 		"authorization",
 		"content-type",
 		"content-length",
