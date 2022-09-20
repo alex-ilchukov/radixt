@@ -6,14 +6,14 @@ import (
 	"testing"
 
 	"github.com/alex-ilchukov/radixt"
-	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/null"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 var (
-	empty = generic.New()
+	empty = sapling.New()
 
-	atree = generic.New(
+	atree = sapling.New(
 		"authority",
 		"authorization",
 		"author",
@@ -24,7 +24,7 @@ var (
 		"content-disposition",
 	)
 
-	methods = generic.New(
+	methods = sapling.New(
 		"DELETE",
 		"GET",
 		"HEAD",
@@ -97,86 +97,6 @@ var doTests = []struct {
 					ChunkPos:     0,
 				},
 				1: {
-					Index:        1,
-					Chunk:        "auth",
-					Value:        4,
-					HasValue:     true,
-					Parent:       0,
-					ChildrenLow:  3,
-					ChildrenHigh: 5,
-					ChunkPos:     41,
-				},
-				2: {
-					Index:        2,
-					Chunk:        "content-",
-					Value:        0,
-					HasValue:     false,
-					Parent:       0,
-					ChildrenLow:  5,
-					ChildrenHigh: 8,
-					ChunkPos:     21,
-				},
-				3: {
-					Index:        3,
-					Chunk:        "or",
-					Value:        2,
-					HasValue:     true,
-					Parent:       1,
-					ChildrenLow:  8,
-					ChildrenHigh: 9,
-					ChunkPos:     49,
-				},
-				4: {
-					Index:        4,
-					Chunk:        "entication",
-					Value:        3,
-					HasValue:     true,
-					Parent:       1,
-					ChildrenLow:  0,
-					ChildrenHigh: 0,
-					ChunkPos:     11,
-				},
-				5: {
-					Index:        5,
-					Chunk:        "type",
-					Value:        5,
-					HasValue:     true,
-					Parent:       2,
-					ChildrenLow:  0,
-					ChildrenHigh: 0,
-					ChunkPos:     45,
-				},
-				6: {
-					Index:        6,
-					Chunk:        "length",
-					Value:        6,
-					HasValue:     true,
-					Parent:       2,
-					ChildrenLow:  0,
-					ChildrenHigh: 0,
-					ChunkPos:     29,
-				},
-				7: {
-					Index:        7,
-					Chunk:        "disposition",
-					Value:        7,
-					HasValue:     true,
-					Parent:       2,
-					ChildrenLow:  0,
-					ChildrenHigh: 0,
-					ChunkPos:     0,
-				},
-				8: {
-					Index:        8,
-					Chunk:        "i",
-					Value:        0,
-					HasValue:     false,
-					Parent:       3,
-					ChildrenLow:  9,
-					ChildrenHigh: 11,
-					ChunkPos:     1,
-				},
-				9: {
 					Index:        9,
 					Chunk:        "ty",
 					Value:        0,
@@ -186,7 +106,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     45,
 				},
-				10: {
+				2: {
 					Index:        10,
 					Chunk:        "zation",
 					Value:        1,
@@ -195,6 +115,86 @@ var doTests = []struct {
 					ChildrenLow:  0,
 					ChildrenHigh: 0,
 					ChunkPos:     35,
+				},
+				3: {
+					Index:        8,
+					Chunk:        "i",
+					Value:        0,
+					HasValue:     false,
+					Parent:       3,
+					ChildrenLow:  9,
+					ChildrenHigh: 11,
+					ChunkPos:     1,
+				},
+				4: {
+					Index:        3,
+					Chunk:        "or",
+					Value:        2,
+					HasValue:     true,
+					Parent:       1,
+					ChildrenLow:  8,
+					ChildrenHigh: 9,
+					ChunkPos:     49,
+				},
+				5: {
+					Index:        4,
+					Chunk:        "entication",
+					Value:        3,
+					HasValue:     true,
+					Parent:       1,
+					ChildrenLow:  0,
+					ChildrenHigh: 0,
+					ChunkPos:     11,
+				},
+				6: {
+					Index:        1,
+					Chunk:        "auth",
+					Value:        4,
+					HasValue:     true,
+					Parent:       0,
+					ChildrenLow:  3,
+					ChildrenHigh: 5,
+					ChunkPos:     41,
+				},
+				7: {
+					Index:        2,
+					Chunk:        "content-",
+					Value:        0,
+					HasValue:     false,
+					Parent:       0,
+					ChildrenLow:  5,
+					ChildrenHigh: 8,
+					ChunkPos:     21,
+				},
+				8: {
+					Index:        5,
+					Chunk:        "type",
+					Value:        5,
+					HasValue:     true,
+					Parent:       2,
+					ChildrenLow:  0,
+					ChildrenHigh: 0,
+					ChunkPos:     45,
+				},
+				9: {
+					Index:        6,
+					Chunk:        "length",
+					Value:        6,
+					HasValue:     true,
+					Parent:       2,
+					ChildrenLow:  0,
+					ChildrenHigh: 0,
+					ChunkPos:     29,
+				},
+				10: {
+					Index:        7,
+					Chunk:        "disposition",
+					Value:        7,
+					HasValue:     true,
+					Parent:       2,
+					ChildrenLow:  0,
+					ChildrenHigh: 0,
+					ChunkPos:     0,
 				},
 			},
 			Ca: map[uint]uint{0: 6, 1: 1, 2: 3, 3: 1},
@@ -270,16 +270,6 @@ var doTests = []struct {
 					ChunkPos:     1,
 				},
 				6: {
-					Index:        6,
-					Chunk:        "TRACE",
-					Value:        7,
-					HasValue:     true,
-					Parent:       0,
-					ChildrenLow:  0,
-					ChildrenHigh: 0,
-					ChunkPos:     13,
-				},
-				7: {
 					Index:        7,
 					Chunk:        "ATCH",
 					Value:        4,
@@ -289,7 +279,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     18,
 				},
-				8: {
+				7: {
 					Index:        8,
 					Chunk:        "OST",
 					Value:        5,
@@ -299,7 +289,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     29,
 				},
-				9: {
+				8: {
 					Index:        9,
 					Chunk:        "UT",
 					Value:        6,
@@ -308,6 +298,16 @@ var doTests = []struct {
 					ChildrenLow:  0,
 					ChildrenHigh: 0,
 					ChunkPos:     32,
+				},
+				9: {
+					Index:        6,
+					Chunk:        "TRACE",
+					Value:        7,
+					HasValue:     true,
+					Parent:       0,
+					ChildrenLow:  0,
+					ChildrenHigh: 0,
+					ChunkPos:     13,
 				},
 			},
 			Ca: map[uint]uint{0: 8, 3: 1, 6: 1},
