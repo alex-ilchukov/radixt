@@ -8,7 +8,7 @@ import (
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/analysis"
-	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 func createTreeFromLines(path string) (t radixt.Tree, err error) {
@@ -21,12 +21,11 @@ func createTreeFromLines(path string) (t radixt.Tree, err error) {
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
 
-	var lines []string
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
+	s := sapling.New()
+	for i := uint(0); scanner.Scan(); i++ {
+		s.Grow(scanner.Text(), i)
 	}
-
-	t = generic.New(lines...)
+	t = s
 
 	return
 }
