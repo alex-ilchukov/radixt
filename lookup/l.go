@@ -8,6 +8,7 @@ import (
 // L contains information on state of the lookup process.
 type L struct {
 	t     radixt.Tree
+	s     Switcher
 	n     uint
 	chunk string
 	keep  bool
