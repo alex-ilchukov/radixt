@@ -52,6 +52,8 @@ func (l *L) Feed(b byte) bool {
 		// no statement
 	case l.chunk != "":
 		l.try(b, l.n, l.chunk)
+	case l.s != nil:
+		l.n, l.chunk, l.keep = l.s.Switch(l.n, b)
 	default:
 		l.t.EachChild(l.n, func(c uint) bool {
 			l.try(b, c, l.t.Chunk(c))
