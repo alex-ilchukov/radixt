@@ -22,7 +22,8 @@ func New(t radixt.Tree) *L {
 		t = null.Tree
 	}
 
-	l := &L{t: t}
+	s, _ := t.(Switcher)
+	l := &L{t: t, s: s}
 	l.Reset()
 
 	return l
