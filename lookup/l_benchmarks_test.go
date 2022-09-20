@@ -32,7 +32,7 @@ func loadLines(path string) (lines []string) {
 	return
 }
 
-func createGenericTreeFromLines(path string) (lookup.Tritcher, []string) {
+func createGenericTreeFromLines(path string) (radixt.Tree, []string) {
 	lines := loadLines(path)
 	return generic.New(lines...), lines
 }
