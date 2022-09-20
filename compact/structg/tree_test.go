@@ -6,15 +6,15 @@ import (
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/structg"
-	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/lookup"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 var (
 	empty32 = structg.MustCreate[uint32](nil)
 
 	atree32 = structg.MustCreate[uint32](
-		generic.New(
+		sapling.New(
 			"authority",
 			"authorization",
 			"author",
@@ -29,7 +29,7 @@ var (
 	empty64 = structg.MustCreate[uint64](nil)
 
 	atree64 = structg.MustCreate[uint64](
-		generic.New(
+		sapling.New(
 			"authority",
 			"authorization",
 			"author",
