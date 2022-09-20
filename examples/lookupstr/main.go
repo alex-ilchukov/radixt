@@ -5,9 +5,9 @@ import (
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/strg"
-	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/lookup"
 	"github.com/alex-ilchukov/radixt/null"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 func feed(l *lookup.L, s string) {
@@ -20,7 +20,7 @@ func feed(l *lookup.L, s string) {
 }
 
 func main() {
-	headers := generic.New(
+	headers := sapling.New(
 		"authorization",
 		"content-type",
 		"content-disposition",

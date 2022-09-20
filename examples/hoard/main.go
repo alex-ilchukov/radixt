@@ -10,7 +10,7 @@ import (
 	"github.com/alex-ilchukov/radixt/compact/strg"
 	"github.com/alex-ilchukov/radixt/compact/structg"
 	"github.com/alex-ilchukov/radixt/evident"
-	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 func loadLines(path string) (lines []string, err error) {
@@ -166,7 +166,7 @@ func main() {
 			printGenericErr(path, err)
 		}
 
-		processGeneric(name, generic.New(lines...))
+		processGeneric(name, sapling.New(lines...))
 
 		fmt.Printf(
 			"\tA map from the %s to unsigned integers would "+

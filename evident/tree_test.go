@@ -6,14 +6,14 @@ import (
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/evident"
-	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/null"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 var (
 	empty = evident.Tree{}
 
-	atree = generic.New(
+	atree = sapling.New(
 		"authority",
 		"authorization",
 		"author",
@@ -24,7 +24,7 @@ var (
 		"content-disposition",
 	)
 
-	btree = generic.New(
+	btree = sapling.New(
 		"authority",
 		"authorization",
 		"author",

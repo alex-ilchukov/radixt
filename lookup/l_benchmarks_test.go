@@ -13,6 +13,7 @@ import (
 	"github.com/alex-ilchukov/radixt/evident"
 	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/lookup"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 func loadLines(path string) (lines []string) {
@@ -32,9 +33,9 @@ func loadLines(path string) (lines []string) {
 	return
 }
 
-func createGenericTreeFromLines(path string) (radixt.Tree, []string) {
+func createSaplingTreeFromLines(path string) (radixt.Tree, []string) {
 	lines := loadLines(path)
-	return generic.New(lines...), lines
+	return sapling.New(lines...), lines
 }
 
 func createMapFromLines(path string) (map[string]uint, []string) {
@@ -107,13 +108,14 @@ func BenchmarkLookupMethodsInMap(b *testing.B) {
 }
 
 func BenchmarkLookupMethodsInGeneric(b *testing.B) {
-	g, lines := createGenericTreeFromLines(methods)
-	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
+	s, lines := createSaplingTreeFromLines(methods)
+	t := generic.New(s)
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupMethodsInStrgN3(b *testing.B) {
-	g, lines := createGenericTreeFromLines(methods)
-	t, err := strg.New[strg.N3](g)
+	s, lines := createSaplingTreeFromLines(methods)
+	t, err := strg.New[strg.N3](s)
 	if err != nil {
 		panic(err)
 	}
@@ -121,8 +123,8 @@ func BenchmarkLookupMethodsInStrgN3(b *testing.B) {
 }
 
 func BenchmarkLookupMethodsInStrgN4(b *testing.B) {
-	g, lines := createGenericTreeFromLines(methods)
-	t, err := strg.New[strg.N4](g)
+	s, lines := createSaplingTreeFromLines(methods)
+	t, err := strg.New[strg.N4](s)
 	if err != nil {
 		panic(err)
 	}
@@ -130,8 +132,8 @@ func BenchmarkLookupMethodsInStrgN4(b *testing.B) {
 }
 
 func BenchmarkLookupMethodsInStructgUint32(b *testing.B) {
-	g, lines := createGenericTreeFromLines(methods)
-	t, err := structg.New[uint32](g)
+	s, lines := createSaplingTreeFromLines(methods)
+	t, err := structg.New[uint32](s)
 	if err != nil {
 		panic(err)
 	}
@@ -139,8 +141,8 @@ func BenchmarkLookupMethodsInStructgUint32(b *testing.B) {
 }
 
 func BenchmarkLookupMethodsInStructgUint64(b *testing.B) {
-	g, lines := createGenericTreeFromLines(methods)
-	t, err := structg.New[uint64](g)
+	s, lines := createSaplingTreeFromLines(methods)
+	t, err := structg.New[uint64](s)
 	if err != nil {
 		panic(err)
 	}
@@ -148,8 +150,8 @@ func BenchmarkLookupMethodsInStructgUint64(b *testing.B) {
 }
 
 func BenchmarkLookupMethodsInEvident(b *testing.B) {
-	g, lines := createGenericTreeFromLines(methods)
-	t := evident.New(g)
+	s, lines := createSaplingTreeFromLines(methods)
+	t := evident.New(s)
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
@@ -159,13 +161,14 @@ func BenchmarkLookupHeadersInMap(b *testing.B) {
 }
 
 func BenchmarkLookupHeadersInGeneric(b *testing.B) {
-	g, lines := createGenericTreeFromLines(headers)
-	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
+	s, lines := createSaplingTreeFromLines(headers)
+	t := generic.New(s)
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupHeadersInStrgN4(b *testing.B) {
-	g, lines := createGenericTreeFromLines(headers)
-	t, err := strg.New[strg.N4](g)
+	s, lines := createSaplingTreeFromLines(headers)
+	t, err := strg.New[strg.N4](s)
 	if err != nil {
 		panic(err)
 	}
@@ -173,8 +176,8 @@ func BenchmarkLookupHeadersInStrgN4(b *testing.B) {
 }
 
 func BenchmarkLookupHeadersInStructgUint32(b *testing.B) {
-	g, lines := createGenericTreeFromLines(headers)
-	t, err := structg.New[uint32](g)
+	s, lines := createSaplingTreeFromLines(headers)
+	t, err := structg.New[uint32](s)
 	if err != nil {
 		panic(err)
 	}
@@ -182,8 +185,8 @@ func BenchmarkLookupHeadersInStructgUint32(b *testing.B) {
 }
 
 func BenchmarkLookupHeadersInStructgUint64(b *testing.B) {
-	g, lines := createGenericTreeFromLines(headers)
-	t, err := structg.New[uint64](g)
+	s, lines := createSaplingTreeFromLines(headers)
+	t, err := structg.New[uint64](s)
 	if err != nil {
 		panic(err)
 	}
@@ -191,8 +194,8 @@ func BenchmarkLookupHeadersInStructgUint64(b *testing.B) {
 }
 
 func BenchmarkLookupHeadersInEvident(b *testing.B) {
-	g, lines := createGenericTreeFromLines(headers)
-	t := evident.New(g)
+	s, lines := createSaplingTreeFromLines(headers)
+	t := evident.New(s)
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
@@ -202,13 +205,14 @@ func BenchmarkLookupGoalsInMap(b *testing.B) {
 }
 
 func BenchmarkLookupGoalsInGeneric(b *testing.B) {
-	g, lines := createGenericTreeFromLines(goals)
-	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
+	s, lines := createSaplingTreeFromLines(goals)
+	t := generic.New(s)
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupGoalsInStructgUint64(b *testing.B) {
-	g, lines := createGenericTreeFromLines(goals)
-	t, err := structg.New[uint64](g)
+	s, lines := createSaplingTreeFromLines(goals)
+	t, err := structg.New[uint64](s)
 	if err != nil {
 		panic(err)
 	}
@@ -221,13 +225,14 @@ func BenchmarkLookupWords200kInMap(b *testing.B) {
 }
 
 func BenchmarkLookupWords200kInGeneric(b *testing.B) {
-	g, lines := createGenericTreeFromLines(words200k)
-	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
+	s, lines := createSaplingTreeFromLines(words200k)
+	t := generic.New(s)
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupWords200kInStructgUint64(b *testing.B) {
-	g, lines := createGenericTreeFromLines(words200k)
-	t, err := structg.New[uint64](g)
+	s, lines := createSaplingTreeFromLines(words200k)
+	t, err := structg.New[uint64](s)
 	if err != nil {
 		panic(err)
 	}
@@ -240,13 +245,14 @@ func BenchmarkLookupWordsInMap(b *testing.B) {
 }
 
 func BenchmarkLookupWordsInGeneric(b *testing.B) {
-	g, lines := createGenericTreeFromLines(words)
-	benchmarkLookupInTree(b, g, chooseSomeLines(lines))
+	s, lines := createSaplingTreeFromLines(words)
+	t := generic.New(s)
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
 func BenchmarkLookupWordsInStructgUint64(b *testing.B) {
-	g, lines := createGenericTreeFromLines(words)
-	t, err := structg.New[uint64](g)
+	s, lines := createSaplingTreeFromLines(words)
+	t, err := structg.New[uint64](s)
 	if err != nil {
 		panic(err)
 	}

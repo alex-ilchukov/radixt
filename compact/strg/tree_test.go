@@ -6,7 +6,7 @@ import (
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/strg"
-	"github.com/alex-ilchukov/radixt/generic"
+	"github.com/alex-ilchukov/radixt/sapling"
 )
 
 var (
@@ -15,7 +15,7 @@ var (
 	empty3    = strg.MustCreate[strg.N3](nil)
 
 	atree3 = strg.MustCreate[strg.N3](
-		generic.New(
+		sapling.New(
 			"authority",
 			"authorization",
 			"author",
@@ -32,7 +32,7 @@ var (
 	empty4    = strg.MustCreate[strg.N4](nil)
 
 	atree4 = strg.MustCreate[strg.N4](
-		generic.New(
+		sapling.New(
 			"authority",
 			"authorization",
 			"author",
