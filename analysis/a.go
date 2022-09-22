@@ -68,8 +68,4 @@ type A struct {
 	// N is map from all original node indices to node data in form of [N]
 	// struct's instances.
 	N map[uint]N
-
-	// Ca is map from amounts of children to amount of nodes with those
-	// children.
-	Ca map[uint]uint
 }
