@@ -7,6 +7,7 @@ import (
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/null"
+	"github.com/alex-ilchukov/radixt/pass"
 )
 
 // Do analyzes radix tree t and returns result of the analysis. It guarantees
@@ -63,50 +64,38 @@ func Do(t radixt.Tree) A {
 	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: n, Ca: ca}
 }
 
+type yielder struct {
+	t     radixt.Tree
+	nodes []N
+}
+
+func (y *yielder) Yield(i, n, tag uint) uint {
+	v, has := y.t.Value(n)
+	y.nodes[n] = N{Index: i, Chunk: y.t.Chunk(n), Value: v, HasValue: has}
+	y.processParent(i, n, tag)
+
+	return n
+}
+
+func (y *yielder) processParent(i, n, p uint) {
+	if n == 0 {
+		return
+	}
+
+	nodes := y.nodes
+	nodes[n].Parent = nodes[p].Index
+
+	if nodes[p].ChildrenHigh == 0 {
+		nodes[p].ChildrenLow = i
+	}
+	nodes[p].ChildrenHigh = i + 1
+}
+
 func nodes(t radixt.Tree) []N {
-	size := t.Size()
-	nodes := make([]N, size, size)
-	if size == 0 {
-		return nodes
-	}
-
-	type e struct {
-		n uint
-		p uint
-	}
-
-	for i, q := uint(0), []e{{}}; len(q) > 0; i++ {
-		a := q[0]
-		q = q[1:]
-
-		n := a.n
-
-		t.EachChild(n, func(c uint) bool {
-			q = append(q, e{n: c, p: n})
-			return false
-		})
-
-		v, has := t.Value(n)
-		nodes[n] = N{
-			Index:    i,
-			Chunk:    t.Chunk(n),
-			Value:    v,
-			HasValue: has,
-		}
-
-		if n == 0 {
-			continue
-		}
-
-		nodes[n].Parent = nodes[a.p].Index
-
-		if nodes[a.p].ChildrenHigh == 0 {
-			nodes[a.p].ChildrenLow = i
-		}
-		nodes[a.p].ChildrenHigh = i + 1
-	}
-
-	return nodes
+	l := t.Size()
+	y := &yielder{t: t, nodes: make([]N, l, l)}
+	pass.Do(t, y)
+	return y.nodes
 }
 
 func cramChunks(chunks []string) string {
