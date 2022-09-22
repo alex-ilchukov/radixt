@@ -18,51 +18,45 @@ func Do(t radixt.Tree) A {
 		t = null.Tree
 	}
 
-	nodes := nodes(t)
-	cml := uint(0)
-	cma := uint(0)
-	dcplm := uint(0)
-	vm := uint(0)
+	l := t.Size()
+	y := &yielder{t: t, a: A{N: make([]N, l, l)}, p: make([]*N, l, l)}
+	pass.Do(t, y)
+	y.cramChunks()
 
-	for _, n := range nodes {
-		cl := n.ChildrenHigh - n.ChildrenLow
-		if cma < cl {
-			cma = cl
-		}
-
-		if 0 < n.ChildrenHigh {
-			dclp := n.ChildrenLow - n.Index
-			if dcplm < dclp {
-				dcplm = dclp
-			}
-		}
-
-		cl = uint(len(n.Chunk))
-		if cml < cl {
-			cml = cl
-		}
-
-		if vm < n.Value {
-			vm = n.Value
-		}
-	}
-
-	c := cramChunks(nodes)
-
-	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: nodes}
+	return y.a
 }
 
 type yielder struct {
-	t     radixt.Tree
-	nodes []N
+	t  radixt.Tree
+	a  A
+	p  []*N
+	cl uint
 }
 
 func (y *yielder) Yield(i, n, tag uint) uint {
-	v, has := y.t.Value(n)
-	y.nodes[n] = N{Index: i, Chunk: y.t.Chunk(n), Value: v, HasValue: has}
+	y.processNode(i, n)
 	y.processParent(i, n, tag)
 
 	return n
+}
+
+func (y *yielder) processNode(i, n uint) {
+	t := y.t
+
+	chunk := t.Chunk(n)
+	v, has := t.Value(n)
+	y.a.N[n] = N{Index: i, Chunk: chunk, Value: v, HasValue: has}
+	y.p[n] = &y.a.N[n]
+
+	cl := uint(len(chunk))
+	y.cl += cl
+	if y.a.Cml < cl {
+		y.a.Cml = cl
+	}
+
+	if y.a.Vm < v {
+		y.a.Vm = v
+	}
 }
 
 func (y *yielder) processParent(i, n, p uint) {
@@ -70,43 +64,38 @@ func (y *yielder) processParent(i, n, p uint) {
 		return
 	}
 
-	nodes := y.nodes
+	nodes := y.a.N
 	nodes[n].Parent = nodes[p].Index
 
 	if nodes[p].ChildrenHigh == 0 {
 		nodes[p].ChildrenLow = i
+
+		dclp := i - nodes[p].Index
+		if y.a.Dclpm < dclp {
+			y.a.Dclpm = dclp
+		}
 	}
 	nodes[p].ChildrenHigh = i + 1
-}
 
-func nodes(t radixt.Tree) []N {
-	l := t.Size()
-	y := &yielder{t: t, nodes: make([]N, l, l)}
-	pass.Do(t, y)
-	return y.nodes
-}
-
-func cramChunks(nodes []N) string {
-	l := len(nodes)
-	pods := make([]*N, l, l)
-	t := 0
-	for i := range nodes {
-		pods[i] = &nodes[i]
-		t += len(nodes[i].Chunk)
+	ca := i + 1 - nodes[p].ChildrenLow
+	if y.a.Cma < ca {
+		y.a.Cma = ca
 	}
-	b := make([]byte, t)
+}
 
-	sort.SliceStable(pods, func(i, j int) bool {
-		pi := pods[i].Chunk
-		pj := pods[j].Chunk
+func (y *yielder) cramChunks() {
+	sort.SliceStable(y.p, func(i, j int) bool {
+		pi := y.p[i].Chunk
+		pj := y.p[j].Chunk
 		li := len(pi)
 		lj := len(pj)
 
 		return li > lj || (li == lj && pi <= pj)
 	})
 
-	t = 0
-	for _, p := range pods {
+	t := 0
+	b := make([]byte, y.cl)
+	for _, p := range y.p {
 		s := []byte(p.Chunk)
 		pos := bytes.Index(b, s)
 		if pos == -1 {
@@ -116,5 +105,5 @@ func cramChunks(nodes []N) string {
 		p.ChunkPos = uint(pos)
 	}
 
-	return string(b[:t])
+	y.a.C = string(b[:t])
 }
