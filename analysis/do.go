@@ -3,7 +3,6 @@ package analysis
 import (
 	"bytes"
 	"sort"
-	"strings"
 
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/null"
@@ -20,7 +19,6 @@ func Do(t radixt.Tree) A {
 	}
 
 	nodes := nodes(t)
-	chunks := []string{}
 	cml := uint(0)
 	cma := uint(0)
 	dcplm := uint(0)
@@ -39,8 +37,6 @@ func Do(t radixt.Tree) A {
 			}
 		}
 
-		chunks = append(chunks, n.Chunk)
-
 		cl = uint(len(n.Chunk))
 		if cml < cl {
 			cml = cl
@@ -51,10 +47,7 @@ func Do(t radixt.Tree) A {
 		}
 	}
 
-	c := cramChunks(chunks)
-	for i, node := range nodes {
-		nodes[i].ChunkPos = uint(strings.Index(c, node.Chunk))
-	}
+	c := cramChunks(nodes)
 
 	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: nodes}
 }
@@ -93,32 +86,34 @@ func nodes(t radixt.Tree) []N {
 	return y.nodes
 }
 
-func cramChunks(chunks []string) string {
-	sort.SliceStable(chunks, func(i, j int) bool {
-		pi := chunks[i]
-		pj := chunks[j]
+func cramChunks(nodes []N) string {
+	l := len(nodes)
+	pods := make([]*N, l, l)
+	t := 0
+	for i := range nodes {
+		pods[i] = &nodes[i]
+		t += len(nodes[i].Chunk)
+	}
+	b := make([]byte, t)
+
+	sort.SliceStable(pods, func(i, j int) bool {
+		pi := pods[i].Chunk
+		pj := pods[j].Chunk
 		li := len(pi)
 		lj := len(pj)
 
 		return li > lj || (li == lj && pi <= pj)
 	})
 
-	l := len(chunks)
-	t := 0
-	byteSlices := make([][]byte, l)
-	for i, p := range chunks {
-		byteSlices[i] = []byte(p)
-		t += len(p)
-	}
-
-	b := make([]byte, t)
 	t = 0
-	for i := 0; i < l; i++ {
-		s := byteSlices[i]
-		if !bytes.Contains(b, s) {
-			copy(b[t:], s)
-			t += len(s)
+	for _, p := range pods {
+		s := []byte(p.Chunk)
+		pos := bytes.Index(b, s)
+		if pos == -1 {
+			pos = t
+			t += copy(b[t:], s)
 		}
+		p.ChunkPos = uint(pos)
 	}
 
 	return string(b[:t])
