@@ -52,14 +52,11 @@ func Do(t radixt.Tree) A {
 	}
 
 	c := cramChunks(chunks)
-	n := make(map[uint]N, len(nodes))
-
 	for i, node := range nodes {
 		nodes[i].ChunkPos = uint(strings.Index(c, node.Chunk))
-		n[uint(i)] = nodes[i]
 	}
 
-	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: n}
+	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: nodes}
 }
 
 type yielder struct {

@@ -48,7 +48,7 @@ var doTests = []struct {
 			Cma:   0,
 			Dclpm: 0,
 			Vm:    0,
-			N:     map[uint]N{},
+			N:     []N{},
 		},
 	},
 	{
@@ -59,7 +59,7 @@ var doTests = []struct {
 			Cma:   0,
 			Dclpm: 0,
 			Vm:    0,
-			N:     map[uint]N{},
+			N:     []N{},
 		},
 	},
 	{
@@ -70,7 +70,7 @@ var doTests = []struct {
 			Cma:   0,
 			Dclpm: 0,
 			Vm:    0,
-			N:     map[uint]N{},
+			N:     []N{},
 		},
 	},
 	{
@@ -82,8 +82,8 @@ var doTests = []struct {
 			Cma:   3,
 			Dclpm: 5,
 			Vm:    7,
-			N: map[uint]N{
-				0: {
+			N: []N{
+				{
 					Index:        0,
 					Chunk:        "",
 					Value:        0,
@@ -93,7 +93,7 @@ var doTests = []struct {
 					ChildrenHigh: 3,
 					ChunkPos:     0,
 				},
-				1: {
+				{
 					Index:        9,
 					Chunk:        "ty",
 					Value:        0,
@@ -103,7 +103,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     45,
 				},
-				2: {
+				{
 					Index:        10,
 					Chunk:        "zation",
 					Value:        1,
@@ -113,7 +113,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     35,
 				},
-				3: {
+				{
 					Index:        8,
 					Chunk:        "i",
 					Value:        0,
@@ -123,7 +123,7 @@ var doTests = []struct {
 					ChildrenHigh: 11,
 					ChunkPos:     1,
 				},
-				4: {
+				{
 					Index:        3,
 					Chunk:        "or",
 					Value:        2,
@@ -133,7 +133,7 @@ var doTests = []struct {
 					ChildrenHigh: 9,
 					ChunkPos:     49,
 				},
-				5: {
+				{
 					Index:        4,
 					Chunk:        "entication",
 					Value:        3,
@@ -143,7 +143,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     11,
 				},
-				6: {
+				{
 					Index:        1,
 					Chunk:        "auth",
 					Value:        4,
@@ -153,7 +153,7 @@ var doTests = []struct {
 					ChildrenHigh: 5,
 					ChunkPos:     41,
 				},
-				7: {
+				{
 					Index:        2,
 					Chunk:        "content-",
 					Value:        0,
@@ -163,7 +163,7 @@ var doTests = []struct {
 					ChildrenHigh: 8,
 					ChunkPos:     21,
 				},
-				8: {
+				{
 					Index:        5,
 					Chunk:        "type",
 					Value:        5,
@@ -173,7 +173,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     45,
 				},
-				9: {
+				{
 					Index:        6,
 					Chunk:        "length",
 					Value:        6,
@@ -183,7 +183,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     29,
 				},
-				10: {
+				{
 					Index:        7,
 					Chunk:        "disposition",
 					Value:        7,
@@ -204,8 +204,8 @@ var doTests = []struct {
 			Cma:   6,
 			Dclpm: 2,
 			Vm:    7,
-			N: map[uint]N{
-				0: {
+			N: []N{
+				{
 					Index:        0,
 					Chunk:        "",
 					Value:        0,
@@ -215,7 +215,7 @@ var doTests = []struct {
 					ChildrenHigh: 7,
 					ChunkPos:     0,
 				},
-				1: {
+				{
 					Index:        1,
 					Chunk:        "DELETE",
 					Value:        0,
@@ -225,7 +225,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     7,
 				},
-				2: {
+				{
 					Index:        2,
 					Chunk:        "GET",
 					Value:        1,
@@ -235,7 +235,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     26,
 				},
-				3: {
+				{
 					Index:        3,
 					Chunk:        "HEAD",
 					Value:        2,
@@ -245,7 +245,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     22,
 				},
-				4: {
+				{
 					Index:        4,
 					Chunk:        "OPTIONS",
 					Value:        3,
@@ -255,7 +255,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     0,
 				},
-				5: {
+				{
 					Index:        5,
 					Chunk:        "P",
 					Value:        0,
@@ -265,7 +265,7 @@ var doTests = []struct {
 					ChildrenHigh: 10,
 					ChunkPos:     1,
 				},
-				6: {
+				{
 					Index:        7,
 					Chunk:        "ATCH",
 					Value:        4,
@@ -275,7 +275,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     18,
 				},
-				7: {
+				{
 					Index:        8,
 					Chunk:        "OST",
 					Value:        5,
@@ -285,7 +285,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     29,
 				},
-				8: {
+				{
 					Index:        9,
 					Chunk:        "UT",
 					Value:        6,
@@ -295,7 +295,7 @@ var doTests = []struct {
 					ChildrenHigh: 0,
 					ChunkPos:     32,
 				},
-				9: {
+				{
 					Index:        6,
 					Chunk:        "TRACE",
 					Value:        7,
@@ -328,35 +328,15 @@ func guilty(a, b A) string {
 		return "Vm"
 
 	case !reflect.DeepEqual(a.N, b.N):
-		for k, v := range a.N {
-			v1, has := b.N[k]
-			switch {
-			case !has:
-				return fmt.Sprintf(
-					"N and unnessesary key %d",
-					k,
-				)
-			case !reflect.DeepEqual(v, v1):
-				return fmt.Sprintf(
-					"N and values at key %d: %v != %v",
-					k,
-					v,
-					v1,
-				)
-			}
+		if len(a.N) != len(b.N) {
+			return "different lengths of N"
 		}
 
-		for k, v1 := range b.N {
-			v, has := a.N[k]
-			switch {
-			case !has:
+		for k, v := range a.N {
+			v1 := b.N[k]
+			if v != v1 {
 				return fmt.Sprintf(
-					"N and required key %d",
-					k,
-				)
-			case !reflect.DeepEqual(v, v1):
-				return fmt.Sprintf(
-					"N and values at key %d: %v != %v",
+					"N and values at index %d: %v != %v",
 					k,
 					v,
 					v1,
