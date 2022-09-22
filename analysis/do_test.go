@@ -49,7 +49,6 @@ var doTests = []struct {
 			Dclpm: 0,
 			Vm:    0,
 			N:     map[uint]N{},
-			Ca:    map[uint]uint{},
 		},
 	},
 	{
@@ -61,7 +60,6 @@ var doTests = []struct {
 			Dclpm: 0,
 			Vm:    0,
 			N:     map[uint]N{},
-			Ca:    map[uint]uint{},
 		},
 	},
 	{
@@ -73,7 +71,6 @@ var doTests = []struct {
 			Dclpm: 0,
 			Vm:    0,
 			N:     map[uint]N{},
-			Ca:    map[uint]uint{},
 		},
 	},
 	{
@@ -197,7 +194,6 @@ var doTests = []struct {
 					ChunkPos:     0,
 				},
 			},
-			Ca: map[uint]uint{0: 6, 1: 1, 2: 3, 3: 1},
 		},
 	},
 	{
@@ -310,7 +306,6 @@ var doTests = []struct {
 					ChunkPos:     13,
 				},
 			},
-			Ca: map[uint]uint{0: 8, 3: 1, 6: 1},
 		},
 	},
 }
@@ -331,43 +326,6 @@ func guilty(a, b A) string {
 
 	case a.Vm != b.Vm:
 		return "Vm"
-
-	case !reflect.DeepEqual(a.Ca, b.Ca):
-		for k, v := range a.Ca {
-			v1, has := b.Ca[k]
-			switch {
-			case !has:
-				return fmt.Sprintf(
-					"Ca and unnessesary key %d",
-					k,
-				)
-			case v != v1:
-				return fmt.Sprintf(
-					"Ca and values at key %d: %d != %d",
-					k,
-					v,
-					v1,
-				)
-			}
-		}
-
-		for k, v1 := range b.Ca {
-			v, has := a.Ca[k]
-			switch {
-			case !has:
-				return fmt.Sprintf(
-					"Ca and required key %d",
-					k,
-				)
-			case v != v1:
-				return fmt.Sprintf(
-					"Ca and values at key %d: %d != %d",
-					k,
-					v,
-					v1,
-				)
-			}
-		}
 
 	case !reflect.DeepEqual(a.N, b.N):
 		for k, v := range a.N {

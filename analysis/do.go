@@ -25,7 +25,6 @@ func Do(t radixt.Tree) A {
 	cma := uint(0)
 	dcplm := uint(0)
 	vm := uint(0)
-	ca := make(map[uint]uint)
 
 	for _, n := range nodes {
 		cl := n.ChildrenHigh - n.ChildrenLow
@@ -40,7 +39,6 @@ func Do(t radixt.Tree) A {
 			}
 		}
 
-		ca[cl] += 1
 		chunks = append(chunks, n.Chunk)
 
 		cl = uint(len(n.Chunk))
@@ -61,7 +59,7 @@ func Do(t radixt.Tree) A {
 		n[uint(i)] = nodes[i]
 	}
 
-	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: n, Ca: ca}
+	return A{C: c, Cml: cml, Cma: cma, Dclpm: dcplm, Vm: vm, N: n}
 }
 
 type yielder struct {
