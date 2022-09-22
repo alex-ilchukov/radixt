@@ -52,7 +52,6 @@ func printAnalysis(name string, a analysis.A) {
 	printWithBitsRequired(avm, a.Vm)
 	printWithBitsRequired(lenan, uint(len(a.N)))
 	printWithBitsRequired(acma, a.Cma)
-	fmt.Printf("\tAmounts of children to amounts of nodes: %v\n", a.Ca)
 }
 
 func printErr(path string, err error) {

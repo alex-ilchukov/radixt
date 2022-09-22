@@ -47,7 +47,7 @@ type N struct {
 // to explain the sequences with use of [N.ChildrenLow] and [N.ChildrenHigh]
 // fields.
 //
-// The only place, where original indices residue, is keys of [A.N] field.
+// The only place, where original indices residue, is indices of [A.N] field.
 type A struct {
 	// C is the string of all node chunks "crammed" together.
 	C string
@@ -65,11 +65,7 @@ type A struct {
 	// Vm is the maximum over values of all nodes.
 	Vm uint
 
-	// N is map from all original node indices to node data in form of [N]
-	// struct's instances.
-	N map[uint]N
-
-	// Ca is map from amounts of children to amount of nodes with those
-	// children.
-	Ca map[uint]uint
+	// N is slice of instance of [N] struct. Its indices are original node
+	// indices in the tree analyzed.
+	N []N
 }
