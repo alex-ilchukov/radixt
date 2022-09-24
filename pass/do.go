@@ -13,6 +13,9 @@ import (
 // it supposes it has zero tag. The function does nothing if either of t and y
 // is nil.
 //
+// Additionally, Do sorts children of a node by ascending order of first bytes
+// of their chunks. That would allow to implement lookup in more efficien way.
+//
 // Example. For the following instance of grown [sapling.Tree]
 //
 //	                             0: ""
@@ -26,7 +29,7 @@ import (
 //	1: "ty"     2: "zation"
 //
 // the nodes would be enumerated and yielded in the following order: 0, 6, 7,
-// 4, 5, 8, 9, 10, 3, 1, 2.
+// 5, 4, 10, 9, 8, 3, 1, 2.
 func Do(t radixt.Tree, y Yielder) {
 	if t == nil || y == nil || t.Size() == 0 {
 		return
