@@ -1,6 +1,10 @@
 package pass
 
-import "github.com/alex-ilchukov/radixt"
+import (
+	"sort"
+
+	"github.com/alex-ilchukov/radixt"
+)
 
 // Do iterates over nodes of the provided radix tree t in breadth-wide search
 // manner and yields to y just once for every node. If the tree is not empty,
@@ -33,13 +37,26 @@ func Do(t radixt.Tree, y Yielder) {
 		tag uint
 	}
 
+	children := []uint{}
 	for i, q := uint(0), []e{{}}; len(q) > 0; i, q = i+1, q[1:] {
 		a := q[0]
 		ctag := y.Yield(i, a.n, a.tag)
 
 		t.EachChild(a.n, func(c uint) bool {
-			q = append(q, e{n: c, tag: ctag})
+			children = append(children, c)
 			return false
 		})
+
+		sort.Slice(children, func(i, j int) bool {
+			ci := t.Chunk(children[i])
+			cj := t.Chunk(children[j])
+			return ci[0] < cj[0]
+		})
+
+		for _, c := range children {
+			q = append(q, e{n: c, tag: ctag})
+		}
+
+		children = children[:0]
 	}
 }
