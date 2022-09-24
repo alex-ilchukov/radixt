@@ -71,12 +71,20 @@ func (t *tree[N]) Hoard() (amount, hint uint) {
 // without first byte and boolean truth. Otherwise or if the node is not in the
 // tree, it returns corresponding default values.
 func (t *tree[_]) Switch(n uint, b byte) (c uint, chunk string, found bool) {
-	for c, h := t.childrenRange(n); c < h; c++ {
-		child := t.nodes[c]
+	for l, h := t.childrenRange(n); l < h; {
+		m := l + (h - l) >> 1
+		child := t.nodes[m]
 		low := header.ChunkLow(child, t.h)
-		if t.chunks[low] == b {
+		b1 := t.chunks[low]
+		switch {
+		case b1 == b:
 			high := low + header.ChunkLen(child, t.h)
-			return c, t.chunks[low+1 : high], true
+			return m, t.chunks[low+1 : high], true
+
+		case b1 > b:
+			h = m
+		default:
+			l = m + 1
 		}
 	}
 

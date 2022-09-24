@@ -80,7 +80,7 @@ var doTests = []struct {
 				"typeor",
 			Cml:   11,
 			Cma:   3,
-			Dclpm: 5,
+			Dclpm: 4,
 			Vm:    7,
 			N: []N{
 				{
@@ -118,13 +118,13 @@ var doTests = []struct {
 					Chunk:        "i",
 					Value:        0,
 					HasValue:     false,
-					Parent:       3,
+					Parent:       4,
 					ChildrenLow:  9,
 					ChildrenHigh: 11,
 					ChunkPos:     1,
 				},
 				{
-					Index:        3,
+					Index:        4,
 					Chunk:        "or",
 					Value:        2,
 					HasValue:     true,
@@ -134,7 +134,7 @@ var doTests = []struct {
 					ChunkPos:     49,
 				},
 				{
-					Index:        4,
+					Index:        3,
 					Chunk:        "entication",
 					Value:        3,
 					HasValue:     true,
@@ -164,7 +164,7 @@ var doTests = []struct {
 					ChunkPos:     21,
 				},
 				{
-					Index:        5,
+					Index:        7,
 					Chunk:        "type",
 					Value:        5,
 					HasValue:     true,
@@ -184,7 +184,7 @@ var doTests = []struct {
 					ChunkPos:     29,
 				},
 				{
-					Index:        7,
+					Index:        5,
 					Chunk:        "disposition",
 					Value:        7,
 					HasValue:     true,

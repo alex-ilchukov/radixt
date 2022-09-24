@@ -12,10 +12,10 @@ import (
 )
 
 const (
-	border3 = 0x1_FF - 1
-	large3  = 0x1_FF
-	border4 = 0x1_FF_FF - 1
-	large4  = 0x1_FF_FF
+	border3 = 0x7_FF - 1
+	large3  = 0x7_FF
+	border4 = 0x7_FF_FF - 1
+	large4  = 0x7_FF_FF
 )
 
 var (

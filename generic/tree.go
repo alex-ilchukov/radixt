@@ -76,10 +76,17 @@ func (t *tree) Hoard() (uint, uint) {
 // without first byte and boolean truth. Otherwise or if the node is not in the
 // tree, it returns corresponding default values.
 func (t *tree) Switch(n uint, b byte) (c uint, chunk string, found bool) {
-	for c, high := t.childrenRange(n); c < high; c++ {
-		chunk := t.nodes[c].chunk
-		if chunk[0] == b {
-			return c, chunk[1:], true
+	for l, h := t.childrenRange(n); l < h; {
+		m := l + (h - l) >> 1
+		s := t.nodes[m].chunk
+		b1 := s[0]
+		switch {
+		case b1 == b:
+			return m, s[1:], true
+		case b1 > b:
+			h = m
+		default:
+			l = m + 1
 		}
 	}
 

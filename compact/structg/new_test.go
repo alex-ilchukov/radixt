@@ -12,10 +12,10 @@ import (
 )
 
 const (
-	border32 = 0x1_FF_FF - 1
-	large32  = 0x1_FF_FF
-	border64 = 0x1_FF_FF_FF_FF_FF_FF - 1
-	large64  = 0x1_FF_FF_FF_FF_FF_FF
+	border32 = 0x7_FF_FF - 1
+	large32  = 0x7_FF_FF
+	border64 = 0x7_FF_FF_FF_FF_FF_FF - 1
+	large64  = 0x7_FF_FF_FF_FF_FF_FF
 )
 
 var (
