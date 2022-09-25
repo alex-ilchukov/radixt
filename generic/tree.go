@@ -62,13 +62,11 @@ func (t *tree) EachChild(n uint, e func(uint) bool) {
 // Hoard returns amount of bytes, taken by the implementation, with
 // [radixt.HoardExactly] as interpretation hint.
 func (t *tree) Hoard() (uint, uint) {
-	amount := uint(24) + // tree
-		// node.cAmount gets aligned to 8 bytes
-		uint(cap(t.nodes))*(8+8+16+8)
-
-	for _, n := range t.nodes {
-		amount += uint(len(n.chunk))
-	}
+	amount := uint(40) + // tree
+		uint(len(t.c)) +
+		// node.cAmount with node.hasValue get aligned together to 8
+		// bytes
+		uint(len(t.nodes))*(8+8+8+8+8)
 
 	return amount, radixt.HoardExactly
 }
