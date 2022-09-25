@@ -102,9 +102,8 @@ func (t *tree) childrenRange(n uint) (low, high uint) {
 		return
 	}
 
-	node := t.nodes[n]
-	low = node.cFirst
-	return low, low + uint(node.cAmount)
+	low = t.nodes[n].cFirst
+	return low, low + uint(t.nodes[n].cAmount)
 }
 
 var (
