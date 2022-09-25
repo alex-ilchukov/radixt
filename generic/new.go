@@ -2,47 +2,24 @@ package generic
 
 import (
 	"github.com/alex-ilchukov/radixt"
-	"github.com/alex-ilchukov/radixt/pass"
+	"github.com/alex-ilchukov/radixt/analysis"
 )
-
-type yielder struct {
-	t     radixt.Tree
-	nodes []node
-}
-
-func (y *yielder) Yield(i, n, tag uint) uint {
-	v, has := y.t.Value(n)
-	y.nodes[i] = node{hasValue: has, chunk: y.t.Chunk(n), value: v}
-	y.processParent(i, tag)
-
-	return i
-}
-
-func (y *yielder) processParent(i, p uint) {
-	if i == 0 {
-		return
-	}
-
-	nodes := y.nodes
-	if nodes[p].cAmount == 0 {
-		nodes[p].cFirst = i
-	}
-	nodes[p].cAmount = byte(i - nodes[p].cFirst + 1)
-}
 
 // New creates a new generic tree as a copy of the provided tree t and returns
 // a pointer on the created tree. It returns empty tree, if t is nil.
 func New(t radixt.Tree) *tree {
-	if t == nil {
-		return &tree{}
+	a := analysis.Do(t)
+	nodes := make([]node, len(a.N), len(a.N))
+	for _, n := range a.N {
+		nodes[n.Index] = node{
+			hasValue:  n.HasValue,
+			cAmount:   byte(n.ChildrenHigh - n.ChildrenLow),
+			cFirst:    n.ChildrenLow,
+			chunkLow:  n.ChunkPos,
+			chunkHigh: n.ChunkPos + uint(len(n.Chunk)),
+			value:     n.Value,
+		}
 	}
 
-	l := t.Size()
-	if l == 0 {
-		return &tree{}
-	}
-
-	y := &yielder{t: t, nodes: make([]node, l, l)}
-	pass.Do(t, y)
-	return &tree{nodes: y.nodes}
+	return &tree{nodes: nodes, c: a.C}
 }

@@ -6,14 +6,16 @@ import (
 )
 
 type node struct {
-	hasValue bool
-	cAmount  byte
-	cFirst   uint
-	chunk    string
-	value    uint
+	hasValue  bool
+	cAmount   byte
+	cFirst    uint
+	chunkLow  uint
+	chunkHigh uint
+	value     uint
 }
 
 type tree struct {
+	c     string
 	nodes []node
 }
 
@@ -37,12 +39,13 @@ func (t *tree) Value(n uint) (v uint, has bool) {
 
 // Chunk returns chunk of node n, if the tree has the node, or empty string
 // otherwise.
-func (t *tree) Chunk(n uint) string {
-	if n >= t.Size() {
-		return ""
+func (t *tree) Chunk(n uint) (chunk string) {
+	if n < t.Size() {
+		node := t.nodes[n]
+		chunk = t.c[node.chunkLow:node.chunkHigh]
 	}
 
-	return t.nodes[n].chunk
+	return
 }
 
 // EachChild calls function e just once for every child of node n in ascending
@@ -59,13 +62,11 @@ func (t *tree) EachChild(n uint, e func(uint) bool) {
 // Hoard returns amount of bytes, taken by the implementation, with
 // [radixt.HoardExactly] as interpretation hint.
 func (t *tree) Hoard() (uint, uint) {
-	amount := uint(24) + // tree
-		// node.cAmount gets aligned to 8 bytes
-		uint(cap(t.nodes))*(8+8+16+8)
-
-	for _, n := range t.nodes {
-		amount += uint(len(n.chunk))
-	}
+	amount := uint(40) + // tree
+		uint(len(t.c)) +
+		// node.cAmount with node.hasValue get aligned together to 8
+		// bytes
+		uint(len(t.nodes))*(8+8+8+8+8)
 
 	return amount, radixt.HoardExactly
 }
@@ -77,12 +78,12 @@ func (t *tree) Hoard() (uint, uint) {
 // tree, it returns corresponding default values.
 func (t *tree) Switch(n uint, b byte) (c uint, chunk string, found bool) {
 	for l, h := t.childrenRange(n); l < h; {
-		m := l + (h - l) >> 1
-		s := t.nodes[m].chunk
-		b1 := s[0]
+		m := l + (h-l)>>1
+		node := t.nodes[m]
+		b1 := t.c[node.chunkLow]
 		switch {
 		case b1 == b:
-			return m, s[1:], true
+			return m, t.c[node.chunkLow+1 : node.chunkHigh], true
 		case b1 > b:
 			h = m
 		default:
