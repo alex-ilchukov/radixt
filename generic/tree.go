@@ -6,10 +6,12 @@ import (
 )
 
 type node struct {
-	hasValue bool
-	cAmount  byte
-	cFirst   uint
-	value    uint
+	hasValue  bool
+	cAmount   byte
+	cFirst    uint
+	chunkLow  uint
+	chunkHigh uint
+	value     uint
 }
 
 type tree struct {
