@@ -14,6 +14,7 @@ type node struct {
 }
 
 type tree struct {
+	c     string
 	nodes []node
 }
 
