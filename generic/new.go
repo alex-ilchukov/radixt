@@ -12,11 +12,12 @@ func New(t radixt.Tree) *tree {
 	nodes := make([]node, len(a.N), len(a.N))
 	for _, n := range a.N {
 		nodes[n.Index] = node{
-			hasValue: n.HasValue,
-			cAmount:  byte(n.ChildrenHigh - n.ChildrenLow),
-			cFirst:   n.ChildrenLow,
-			chunk:    n.Chunk,
-			value:    n.Value,
+			hasValue:  n.HasValue,
+			cAmount:   byte(n.ChildrenHigh - n.ChildrenLow),
+			cFirst:    n.ChildrenLow,
+			chunkLow:  n.ChunkPos,
+			chunkHigh: n.ChunkPos + uint(len(n.Chunk)),
+			value:     n.Value,
 		}
 	}
 
