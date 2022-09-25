@@ -39,12 +39,13 @@ func (t *tree) Value(n uint) (v uint, has bool) {
 
 // Chunk returns chunk of node n, if the tree has the node, or empty string
 // otherwise.
-func (t *tree) Chunk(n uint) string {
-	if n >= t.Size() {
-		return ""
+func (t *tree) Chunk(n uint) (chunk string) {
+	if n < t.Size() {
+		node := t.nodes[n]
+		chunk = t.c[node.ChunkLow : node.ChunkHigh]
 	}
 
-	return t.nodes[n].chunk
+	return
 }
 
 // EachChild calls function e just once for every child of node n in ascending
