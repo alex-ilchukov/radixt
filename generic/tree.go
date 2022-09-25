@@ -81,11 +81,11 @@ func (t *tree) Hoard() (uint, uint) {
 func (t *tree) Switch(n uint, b byte) (c uint, chunk string, found bool) {
 	for l, h := t.childrenRange(n); l < h; {
 		m := l + (h - l) >> 1
-		s := t.nodes[m].chunk
-		b1 := s[0]
+		node := t.nodes[m]
+		b1 := t.c[node.chunkLow]
 		switch {
 		case b1 == b:
-			return m, s[1:], true
+			return m, t.c[node.chunkLow+1 : node.chunkHigh], true
 		case b1 > b:
 			h = m
 		default:
