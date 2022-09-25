@@ -42,7 +42,7 @@ func (t *tree) Value(n uint) (v uint, has bool) {
 func (t *tree) Chunk(n uint) (chunk string) {
 	if n < t.Size() {
 		node := t.nodes[n]
-		chunk = t.c[node.chunkLow : node.chunkHigh]
+		chunk = t.c[node.chunkLow:node.chunkHigh]
 	}
 
 	return
@@ -78,7 +78,7 @@ func (t *tree) Hoard() (uint, uint) {
 // tree, it returns corresponding default values.
 func (t *tree) Switch(n uint, b byte) (c uint, chunk string, found bool) {
 	for l, h := t.childrenRange(n); l < h; {
-		m := l + (h - l) >> 1
+		m := l + (h-l)>>1
 		node := t.nodes[m]
 		b1 := t.c[node.chunkLow]
 		switch {
