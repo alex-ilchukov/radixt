@@ -9,7 +9,6 @@ type node struct {
 	hasValue bool
 	cAmount  byte
 	cFirst   uint
-	chunk    string
 	value    uint
 }
 
