@@ -42,8 +42,9 @@ func (t *tree) Value(n uint) (v uint, has bool) {
 // otherwise.
 func (t *tree) Chunk(n uint) (chunk string) {
 	if n < t.Size() {
-		node := t.nodes[n]
-		chunk = t.c[node.chunkLow:node.chunkHigh]
+		l := t.nodes[n].chunkLow
+		h := t.nodes[n].chunkHigh
+		chunk = t.c[l:h]
 	}
 
 	return
