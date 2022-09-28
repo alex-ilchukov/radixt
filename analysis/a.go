@@ -30,7 +30,7 @@ type N struct {
 	// same meaning as in slice expression like slice[low : high].
 	ChildrenLow uint
 
-	// ChildrenLast is incremented last (maximum) index of children nodes
+	// ChildrenHigh is incremented last (maximum) index of children nodes
 	// of the node, if the node has children, or 0 otherwise. "High" here
 	// has the same meaning as in slice expression like slice[low : high].
 	//
