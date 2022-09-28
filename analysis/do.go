@@ -44,8 +44,21 @@ func (y *yielder) processNode(i, n uint) {
 	t := y.t
 
 	chunk := t.Chunk(n)
+	chunkEmpty := len(chunk) == 0
+	chunkFirst := byte(0)
+	if !chunkEmpty {
+		chunkFirst = chunk[0]
+	}
+
 	v, has := t.Value(n)
-	y.a.N[n] = N{Index: i, Chunk: chunk, Value: v, HasValue: has}
+	y.a.N[n] = N{
+		HasValue:   has,
+		ChunkFirst: chunkFirst,
+		ChunkEmpty: chunkEmpty,
+		Index:      i,
+		Chunk:      chunk,
+		Value:      v,
+	}
 	y.p[n] = &y.a.N[n]
 
 	cl := uint(len(chunk))
