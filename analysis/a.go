@@ -7,6 +7,10 @@ type N struct {
 	// HasValue reflects the fact if the node has value or not.
 	HasValue bool
 
+	// ChunkFirst is the first byte of node's original chunk. It holds
+	// default value if the node has empty chunk.
+	ChunkFirst byte
+
 	// Index is index of the node in the tree.
 	Index uint
 
