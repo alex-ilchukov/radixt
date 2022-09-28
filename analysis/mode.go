@@ -18,3 +18,9 @@ type Default [0]byte
 //   - [N.ChunkEmpty] would hold the boolean flag on if the node has empty
 //     original chunk or not.
 type Firstless [1]byte
+
+// Mode is set of types of tree analysis regarding processing of its nodes'
+// chunks.
+type Mode interface {
+	Default | Firstless
+}
