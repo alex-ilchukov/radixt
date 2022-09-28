@@ -73,6 +73,10 @@ type N[M Mode] struct {
 // meaning of some of its fields (see documentation on [Firstless] processing
 // type).
 type A[M Mode] struct {
+	// N is slice of instances of [analysis.N] struct. Its indices are
+	// original node indices in the tree analyzed.
+	N []N[M]
+
 	// C is the string, made of all [N.Chunk] "crammed" together.
 	//
 	// Remark: As [N.Chunk] depends on provided parameter M, C depends on
@@ -94,8 +98,4 @@ type A[M Mode] struct {
 
 	// Vm is the maximum over values of all nodes.
 	Vm uint
-
-	// N is slice of instance of [N] struct. Its indices are original node
-	// indices in the tree analyzed.
-	N []N[M]
 }
