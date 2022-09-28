@@ -11,6 +11,9 @@ type N struct {
 	// default value if the node has empty chunk.
 	ChunkFirst byte
 
+	// ChunkEmpty reflects the fact if the node has empty chunk or not.
+	ChunkEmpty bool
+
 	// Index is index of the node in the tree.
 	Index uint
 
