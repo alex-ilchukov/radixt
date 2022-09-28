@@ -3,7 +3,7 @@ package analysis
 // N struct represents data on a node in radix tree in analysis result. All the
 // indices presented in instances of the struct are result of renaming process
 // (see documentation on [A] struct).
-type N struct {
+type N[M Mode] struct {
 	// HasValue reflects the fact if the node has value or not.
 	HasValue bool
 
@@ -55,7 +55,7 @@ type N struct {
 // fields.
 //
 // The only place, where original indices residue, is indices of [A.N] field.
-type A struct {
+type A[M Mode] struct {
 	// C is the string of all node chunks "crammed" together.
 	C string
 
