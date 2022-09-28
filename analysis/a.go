@@ -74,5 +74,5 @@ type A[M Mode] struct {
 
 	// N is slice of instance of [N] struct. Its indices are original node
 	// indices in the tree analyzed.
-	N []N
+	N []N[M]
 }
