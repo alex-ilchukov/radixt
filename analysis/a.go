@@ -4,14 +4,14 @@ package analysis
 // indices presented in instances of the struct are result of renaming process
 // (see documentation on [A] struct).
 type N struct {
+	// HasValue reflects the fact if the node has value or not.
+	HasValue bool
+
 	// Index is index of the node in the tree.
 	Index uint
 
 	// Chunk is chunk of the node.
 	Chunk string
-
-	// HasValue reflects the fact if the node has value or not.
-	HasValue bool
 
 	// Value is value of the node, if the node has value (see [HasValue]),
 	// or default unsigned integer otherwise.
