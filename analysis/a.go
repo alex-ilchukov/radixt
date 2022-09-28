@@ -38,7 +38,7 @@ type N struct {
 	// ChildrenHigh - [ChildrenLow].
 	ChildrenHigh uint
 
-	// ChunkPos is position of chunk in the [A.P] string.
+	// ChunkPos is position of chunk in the [A.C] string.
 	ChunkPos uint
 }
 
