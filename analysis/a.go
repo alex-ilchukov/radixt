@@ -2,22 +2,32 @@ package analysis
 
 // N struct represents data on a node in radix tree in analysis result. All the
 // indices presented in instances of the struct are result of renaming process
-// (see documentation on [A] struct).
+// (see documentation on [A] struct). The struct depends on type parameter M
+// from [Mode] type set, which represents chosen type of processing for node's
+// chunk, and that reflects on meaning of some of its fields (see documentation
+// on [Firstless] processing type).
 type N[M Mode] struct {
 	// HasValue reflects the fact if the node has value or not.
 	HasValue bool
 
 	// ChunkFirst is the first byte of node's original chunk. It holds
 	// default value if the node has empty chunk.
+	//
+	// Remark: The field does _not_ depend on provided type parameter M.
 	ChunkFirst byte
 
-	// ChunkEmpty reflects the fact if the node has empty chunk or not.
+	// ChunkEmpty reflects the fact if the node has empty original chunk or
+	// not.
+	//
+	// Remark: The field does _not_ depend on provided type parameter M.
 	ChunkEmpty bool
 
 	// Index is index of the node in the tree.
 	Index uint
 
-	// Chunk is chunk of the node.
+	// Chunk is chunk of the node. Depending on provided processing mode M,
+	// it hold either original chunk ([Default] processing) or original
+	// chunk without first byte ([Firstless] processing).
 	Chunk string
 
 	// Value is value of the node, if the node has value (see [HasValue]),
@@ -41,7 +51,10 @@ type N[M Mode] struct {
 	// ChildrenHigh - [ChildrenLow].
 	ChildrenHigh uint
 
-	// ChunkPos is position of chunk in the [A.C] string.
+	// ChunkPos is position of [Chunk] in the [A.C] string.
+	//
+	// Remark: As [Chunk] depends on provided parameter M, ChunkPos depends
+	// on it too.
 	ChunkPos uint
 }
 
@@ -52,14 +65,24 @@ type N[M Mode] struct {
 // following property: all children of any node have their indices in
 // sequential order (l, l + 1, l + 2 and so on, that is). The property allows
 // to explain the sequences with use of [N.ChildrenLow] and [N.ChildrenHigh]
-// fields.
+// fields. The only place, where original indices residue, is indices of [A.N]
+// field.
 //
-// The only place, where original indices residue, is indices of [A.N] field.
+// The struct depends on type parameter M from [Mode] type set, which
+// represents chosen type of processing for node's chunk, and that reflects on
+// meaning of some of its fields (see documentation on [Firstless] processing
+// type).
 type A[M Mode] struct {
-	// C is the string of all node chunks "crammed" together.
+	// C is the string, made of all [N.Chunk] "crammed" together.
+	//
+	// Remark: As [N.Chunk] depends on provided parameter M, C depends on
+	// it too.
 	C string
 
-	// Cml is the maximum over chunk lengths of all nodes.
+	// Cml is the maximum of all lengths of [N.Chunk].
+
+	// Remark: As [N.Chunk] depends on provided parameter M, Cml depends on
+	// it too.
 	Cml uint
 
 	// Cma is the maximum over children amounts of all nodes.
