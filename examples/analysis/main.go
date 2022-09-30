@@ -45,8 +45,17 @@ const (
 	acma  = "\tMaximum amount of children:              %d"
 )
 
-func printAnalysis(name string, a analysis.A[analysis.Default]) {
-	fmt.Printf("Analysis on %s tree:\n", name)
+func modeString[M analysis.Mode]() string {
+	var m M
+	if len(m) == 0 {
+		return "in default mode"
+	}
+
+	return "in firstless mode"
+}
+
+func printAnalysis[M analysis.Mode](name string, a analysis.A[M]) {
+	fmt.Printf("Analysis %s on %s tree:\n", modeString[M](), name)
 	printWithBitsRequired(lenac, uint(len(a.C)))
 	printWithBitsRequired(acml, a.Cml)
 	printWithBitsRequired(avm, a.Vm)
@@ -73,8 +82,9 @@ func main() {
 			printErr(path, err)
 		}
 
-		a := analysis.Do[analysis.Default](t)
-		printAnalysis(name, a)
+		printAnalysis(name, analysis.Do[analysis.Default](t))
+		fmt.Println()
+		printAnalysis(name, analysis.Do[analysis.Firstless](t))
 		fmt.Println()
 	}
 }
