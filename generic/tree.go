@@ -42,10 +42,11 @@ func (t *tree) Value(n uint) (v uint, has bool) {
 // Chunk returns chunk of node n, if the tree has the node, or empty string
 // otherwise.
 func (t *tree) Chunk(n uint) (chunk string) {
-	if n < t.Size() {
+	if n < t.Size() && !t.nodes[n].chunkEmpty {
+		f := t.nodes[n].chunkFirst
 		l := t.nodes[n].chunkLow
 		h := t.nodes[n].chunkHigh
-		chunk = t.c[l:h]
+		chunk = string(append([]byte{f}, t.c[l:h]...))
 	}
 
 	return
