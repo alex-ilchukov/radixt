@@ -15,7 +15,7 @@ const maxChunksLen = math.MaxUint16 - cstart
 // it returns new, compactified representation of the tree and nil for error.
 // In case of an error, it returns nil for tree and the error.
 func New[NX N](t radixt.Tree) (Tree[NX], error) {
-	a := analysis.Do(t)
+	a := analysis.Do[analysis.Default](t)
 	if len(a.C) > maxChunksLen {
 		return "", compact.ErrorChunksOverflow
 	}
