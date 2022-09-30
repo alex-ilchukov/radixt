@@ -18,6 +18,7 @@ func New(t radixt.Tree) *tree {
 
 		nodes[n.Index] = node{
 			chunkFirst: chunkFirst,
+			chunkEmpty: n.ChunkEmpty,
 			hasValue:   n.HasValue,
 			cAmount:    byte(n.ChildrenHigh - n.ChildrenLow),
 			cFirst:     n.ChildrenLow,
