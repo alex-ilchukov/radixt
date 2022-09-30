@@ -36,7 +36,7 @@ var (
 	)
 )
 
-var doTests = []struct {
+var doDefaultTests = []struct {
 	tree   radixt.Tree
 	result A[Default]
 }{
@@ -390,14 +390,15 @@ func guilty[M Mode](a, b A[M]) string {
 	return ""
 }
 
-const doTestError = "Do Test %d: got %v for result (should be %v, look at %v)"
+const doTestDefaultError = "Do[Default] Test %d: got %v for result (should " +
+	"be %v, look at %v)"
 
-func TestDo(t *testing.T) {
-	for i, tt := range doTests {
-		result := Do(tt.tree)
+func TestDoDefault(t *testing.T) {
+	for i, tt := range doDefaultTests {
+		result := Do[Default](tt.tree)
 		if !reflect.DeepEqual(result, tt.result) {
 			g := guilty(result, tt.result)
-			t.Errorf(doTestError, i, result, tt.result, g)
+			t.Errorf(doTestDefaultError, i, result, tt.result, g)
 		}
 	}
 }
