@@ -13,13 +13,17 @@ import (
 // to return the same result for the same tree with the same order of subfield
 // slices. It is safe to invoke the function concurrently for the same tree or
 // for different trees.
-func Do(t radixt.Tree) A {
+func Do(t radixt.Tree) A[Default] {
 	if t == nil {
 		t = null.Tree
 	}
 
 	l := t.Size()
-	y := &yielder{t: t, a: A{N: make([]N, l, l)}, p: make([]*N, l, l)}
+	y := &yielder{
+		t: t,
+		a: A[Default]{N: make([]N[Default], l, l)},
+		p: make([]*N[Default], l, l),
+	}
 	pass.Do(t, y)
 	y.cramChunks()
 
@@ -28,8 +32,8 @@ func Do(t radixt.Tree) A {
 
 type yielder struct {
 	t  radixt.Tree
-	a  A
-	p  []*N
+	a  A[Default]
+	p  []*N[Default]
 	cl uint
 }
 
@@ -51,7 +55,7 @@ func (y *yielder) processNode(i, n uint) {
 	}
 
 	v, has := t.Value(n)
-	y.a.N[n] = N{
+	y.a.N[n] = N[Default]{
 		HasValue:   has,
 		ChunkFirst: chunkFirst,
 		ChunkEmpty: chunkEmpty,

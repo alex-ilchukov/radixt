@@ -38,51 +38,51 @@ var (
 
 var doTests = []struct {
 	tree   radixt.Tree
-	result A
+	result A[Default]
 }{
 	{
 		tree: nil,
-		result: A{
+		result: A[Default]{
 			C:     "",
 			Cml:   0,
 			Cma:   0,
 			Dclpm: 0,
 			Vm:    0,
-			N:     []N{},
+			N:     []N[Default]{},
 		},
 	},
 	{
 		tree: null.Tree,
-		result: A{
+		result: A[Default]{
 			C:     "",
 			Cml:   0,
 			Cma:   0,
 			Dclpm: 0,
 			Vm:    0,
-			N:     []N{},
+			N:     []N[Default]{},
 		},
 	},
 	{
 		tree: empty,
-		result: A{
+		result: A[Default]{
 			C:     "",
 			Cml:   0,
 			Cma:   0,
 			Dclpm: 0,
 			Vm:    0,
-			N:     []N{},
+			N:     []N[Default]{},
 		},
 	},
 	{
 		tree: atree,
-		result: A{
+		result: A[Default]{
 			C: "dispositionenticationcontent-lengthzationauth" +
 				"typeor",
 			Cml:   11,
 			Cma:   3,
 			Dclpm: 4,
 			Vm:    7,
-			N: []N{
+			N: []N[Default]{
 				{
 					HasValue:     false,
 					ChunkFirst:   0,
@@ -220,13 +220,13 @@ var doTests = []struct {
 	},
 	{
 		tree: methods,
-		result: A{
+		result: A[Default]{
 			C:     "OPTIONSDELETETRACEATCHHEADGETOSTUT",
 			Cml:   7,
 			Cma:   6,
 			Dclpm: 2,
 			Vm:    7,
-			N: []N{
+			N: []N[Default]{
 				{
 					HasValue:     false,
 					ChunkFirst:   0,
@@ -352,7 +352,7 @@ var doTests = []struct {
 	},
 }
 
-func guilty(a, b A) string {
+func guilty[M Mode](a, b A[M]) string {
 	switch {
 	case a.C != b.C:
 		return "C"
