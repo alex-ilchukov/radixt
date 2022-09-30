@@ -10,7 +10,7 @@ import (
 
 // NodeFactory represents all factory functions, which take result of node
 // analysis and return node in form of type from [internal/node.N] type set.
-type NodeFactory[N node.N] func(n analysis.N) N
+type NodeFactory[N node.N] func(n analysis.N[analysis.Default]) N
 
 type fields [fieldsAmount]uint
 type fieldLens [fieldsAmount]int
@@ -24,7 +24,7 @@ type fieldShifts [fieldsAmount]byte
 //  1. [compact.ErrorInvalidLenNode] if provided lenNode is more than actual
 //     bits length of node;
 //  2. [compact.ErrorOverflow] if node fields can not be fit into node value.
-func Calc[N node.N](lenNode int, a analysis.A) (
+func Calc[N node.N](lenNode int, a analysis.A[analysis.Default]) (
 	h A8b,
 	nf NodeFactory[N],
 	err error,
@@ -51,7 +51,7 @@ func Calc[N node.N](lenNode int, a analysis.A) (
 	return
 }
 
-func fillLens(a analysis.A) (lens fieldLens) {
+func fillLens(a analysis.A[analysis.Default]) (lens fieldLens) {
 	lens[fieldChunkPos] = bits.Len(uint(len(a.C)))
 	// Zero is NoValue, so (a.Vm + 1) values would be in use
 	lens[fieldValue] = bits.Len(a.Vm + 1)
@@ -85,7 +85,7 @@ func fillHeader(lenNode int, lens fieldLens) (h A8b) {
 
 func createNodeFactory[N node.N](lens fieldLens) NodeFactory[N] {
 	s := fillShifts(lens)
-	return func(n analysis.N) N {
+	return func(n analysis.N[analysis.Default]) N {
 		var f fields
 
 		f[fieldChunkPos] = n.ChunkPos
