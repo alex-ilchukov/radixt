@@ -24,3 +24,8 @@ type Firstless [1]byte
 type Mode interface {
 	Default | Firstless
 }
+
+func ident[M Mode]() int {
+	var m M
+	return len(m)
+}
