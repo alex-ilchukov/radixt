@@ -86,7 +86,7 @@ func (t *tree) Switch(n uint, b byte) (c uint, chunk string, found bool) {
 		b1 := t.nodes[m].chunkFirst
 		switch {
 		case b1 == b:
-			cl := t.nodes[m].chunkLow + 1
+			cl := t.nodes[m].chunkLow
 			ch := t.nodes[m].chunkHigh
 			return m, t.c[cl:ch], true
 		case b1 > b:
