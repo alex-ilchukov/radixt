@@ -7,6 +7,7 @@ import (
 
 type node struct {
 	chunkFirst byte
+	chunkEmpty bool
 	hasValue   bool
 	cAmount    byte
 	cFirst     uint
