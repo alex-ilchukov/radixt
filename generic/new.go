@@ -8,7 +8,7 @@ import (
 // New creates a new generic tree as a copy of the provided tree t and returns
 // a pointer on the created tree. It returns empty tree, if t is nil.
 func New(t radixt.Tree) *tree {
-	a := analysis.Do[analysis.Default](t)
+	a := analysis.Do[analysis.Firstless](t)
 	nodes := make([]node, len(a.N), len(a.N))
 	for _, n := range a.N {
 		nodes[n.Index] = node{
