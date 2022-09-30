@@ -52,6 +52,7 @@ func (y *yielder[M]) processNode(i, n uint) {
 	chunkFirst := byte(0)
 	if !chunkEmpty {
 		chunkFirst = chunk[0]
+		chunk = chunk[ident[M]():]
 	}
 
 	v, has := t.Value(n)
