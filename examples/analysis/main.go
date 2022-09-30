@@ -73,7 +73,7 @@ func main() {
 			printErr(path, err)
 		}
 
-		a := analysis.Do(t)
+		a := analysis.Do[analysis.Default](t)
 		printAnalysis(name, a)
 		fmt.Println()
 	}
