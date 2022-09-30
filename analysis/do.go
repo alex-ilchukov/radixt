@@ -13,39 +13,57 @@ import (
 // to return the same result for the same tree with the same order of subfield
 // slices. It is safe to invoke the function concurrently for the same tree or
 // for different trees.
-func Do(t radixt.Tree) A {
+func Do[M Mode](t radixt.Tree) A[M] {
 	if t == nil {
 		t = null.Tree
 	}
 
 	l := t.Size()
-	y := &yielder{t: t, a: A{N: make([]N, l, l)}, p: make([]*N, l, l)}
+	y := &yielder[M]{
+		t: t,
+		a: A[M]{N: make([]N[M], l, l)},
+		p: make([]*N[M], l, l),
+	}
 	pass.Do(t, y)
 	y.cramChunks()
 
 	return y.a
 }
 
-type yielder struct {
+type yielder[M Mode] struct {
 	t  radixt.Tree
-	a  A
-	p  []*N
+	a  A[M]
+	p  []*N[M]
 	cl uint
 }
 
-func (y *yielder) Yield(i, n, tag uint) uint {
+func (y *yielder[_]) Yield(i, n, tag uint) uint {
 	y.processNode(i, n)
 	y.processParent(i, n, tag)
 
 	return n
 }
 
-func (y *yielder) processNode(i, n uint) {
+func (y *yielder[M]) processNode(i, n uint) {
 	t := y.t
 
 	chunk := t.Chunk(n)
+	chunkEmpty := len(chunk) == 0
+	chunkFirst := byte(0)
+	if !chunkEmpty {
+		chunkFirst = chunk[0]
+		chunk = chunk[ident[M]():]
+	}
+
 	v, has := t.Value(n)
-	y.a.N[n] = N{Index: i, Chunk: chunk, Value: v, HasValue: has}
+	y.a.N[n] = N[M]{
+		HasValue:   has,
+		ChunkFirst: chunkFirst,
+		ChunkEmpty: chunkEmpty,
+		Index:      i,
+		Chunk:      chunk,
+		Value:      v,
+	}
 	y.p[n] = &y.a.N[n]
 
 	cl := uint(len(chunk))
@@ -59,7 +77,7 @@ func (y *yielder) processNode(i, n uint) {
 	}
 }
 
-func (y *yielder) processParent(i, n, p uint) {
+func (y *yielder[_]) processParent(i, n, p uint) {
 	if n == 0 {
 		return
 	}
@@ -83,7 +101,7 @@ func (y *yielder) processParent(i, n, p uint) {
 	}
 }
 
-func (y *yielder) cramChunks() {
+func (y *yielder[_]) cramChunks() {
 	sort.SliceStable(y.p, func(i, j int) bool {
 		pi := y.p[i].Chunk
 		pj := y.p[j].Chunk

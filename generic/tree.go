@@ -7,6 +7,7 @@ import (
 
 type node struct {
 	chunkFirst byte
+	chunkEmpty bool
 	hasValue   bool
 	cAmount    byte
 	cFirst     uint
@@ -41,10 +42,11 @@ func (t *tree) Value(n uint) (v uint, has bool) {
 // Chunk returns chunk of node n, if the tree has the node, or empty string
 // otherwise.
 func (t *tree) Chunk(n uint) (chunk string) {
-	if n < t.Size() {
+	if n < t.Size() && !t.nodes[n].chunkEmpty {
+		f := t.nodes[n].chunkFirst
 		l := t.nodes[n].chunkLow
 		h := t.nodes[n].chunkHigh
-		chunk = t.c[l:h]
+		chunk = string(append([]byte{f}, t.c[l:h]...))
 	}
 
 	return
@@ -84,7 +86,7 @@ func (t *tree) Switch(n uint, b byte) (c uint, chunk string, found bool) {
 		b1 := t.nodes[m].chunkFirst
 		switch {
 		case b1 == b:
-			cl := t.nodes[m].chunkLow + 1
+			cl := t.nodes[m].chunkLow
 			ch := t.nodes[m].chunkHigh
 			return m, t.c[cl:ch], true
 		case b1 > b:

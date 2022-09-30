@@ -214,7 +214,7 @@ var treeHoardTests = []struct {
 	result2 uint
 }{
 	{tree: empty, result1: 40, result2: radixt.HoardExactly},
-	{tree: atree, result1: 40 + 51 + 11*40, result2: radixt.HoardExactly},
+	{tree: atree, result1: 40 + 38 + 11*40, result2: radixt.HoardExactly},
 }
 
 const testTreeHoardError = "Tree Hoard Test %d: got %d and %d (should be %d " +
