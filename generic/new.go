@@ -11,13 +11,8 @@ func New(t radixt.Tree) *tree {
 	a := analysis.Do[analysis.Default](t)
 	nodes := make([]node, len(a.N), len(a.N))
 	for _, n := range a.N {
-		chunkFirst := byte(0)
-		if len(n.Chunk) > 0 {
-			chunkFirst = n.Chunk[0]
-		}
-
 		nodes[n.Index] = node{
-			chunkFirst: chunkFirst,
+			chunkFirst: n.ChunkFirst,
 			chunkEmpty: n.ChunkEmpty,
 			hasValue:   n.HasValue,
 			cAmount:    byte(n.ChildrenHigh - n.ChildrenLow),
