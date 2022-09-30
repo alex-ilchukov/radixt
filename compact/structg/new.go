@@ -11,7 +11,7 @@ import (
 // it returns new, compactified representation of the tree and nil for error.
 // In case of an error, it returns nil for tree and the error.
 func New[N node.N](t radixt.Tree) (*tree[N], error) {
-	a := analysis.Do(t)
+	a := analysis.Do[analysis.Default](t)
 	h, nf, err := header.Calc[N](node.BitsLen[N](), a)
 	if err != nil {
 		return nil, err
