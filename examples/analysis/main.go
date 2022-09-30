@@ -45,7 +45,7 @@ const (
 	acma  = "\tMaximum amount of children:              %d"
 )
 
-func printAnalysis(name string, a analysis.A) {
+func printAnalysis(name string, a analysis.A[analysis.Default]) {
 	fmt.Printf("Analysis on %s tree:\n", name)
 	printWithBitsRequired(lenac, uint(len(a.C)))
 	printWithBitsRequired(acml, a.Cml)
