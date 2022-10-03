@@ -10,6 +10,8 @@ import (
 	"github.com/alex-ilchukov/radixt"
 	"github.com/alex-ilchukov/radixt/compact/strg"
 	"github.com/alex-ilchukov/radixt/compact/structg"
+	"github.com/alex-ilchukov/radixt/compact/struct32"
+	"github.com/alex-ilchukov/radixt/compact/struct64"
 	"github.com/alex-ilchukov/radixt/evident"
 	"github.com/alex-ilchukov/radixt/generic"
 	"github.com/alex-ilchukov/radixt/lookup"
@@ -149,6 +151,24 @@ func BenchmarkLookupMethodsInStructgUint64(b *testing.B) {
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupMethodsInStruct32(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(methods)
+	t, err := struct32.New(s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupMethodsInStruct64(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(methods)
+	t, err := struct64.New(s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupMethodsInEvident(b *testing.B) {
 	s, lines := createSaplingTreeFromLines(methods)
 	t := evident.New(s)
@@ -193,6 +213,24 @@ func BenchmarkLookupHeadersInStructgUint64(b *testing.B) {
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupHeadersInStruct32(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(headers)
+	t, err := struct32.New(s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupHeadersInStruct64(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(headers)
+	t, err := struct64.New(s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupHeadersInEvident(b *testing.B) {
 	s, lines := createSaplingTreeFromLines(headers)
 	t := evident.New(s)
@@ -219,6 +257,15 @@ func BenchmarkLookupGoalsInStructgUint64(b *testing.B) {
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupGoalsInStruct64(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(goals)
+	t, err := struct64.New(s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupWords200kInMap(b *testing.B) {
 	m, lines := createMapFromLines(words200k)
 	benchmarkLookupInMap(b, m, chooseSomeLines(lines))
@@ -239,6 +286,15 @@ func BenchmarkLookupWords200kInStructgUint64(b *testing.B) {
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupWords200kInStruct64(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(words200k)
+	t, err := struct64.New(s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupWordsInMap(b *testing.B) {
 	m, lines := createMapFromLines(words)
 	benchmarkLookupInMap(b, m, chooseSomeLines(lines))
@@ -253,6 +309,15 @@ func BenchmarkLookupWordsInGeneric(b *testing.B) {
 func BenchmarkLookupWordsInStructgUint64(b *testing.B) {
 	s, lines := createSaplingTreeFromLines(words)
 	t, err := structg.New[uint64](s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupWordsInStruct64(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(words)
+	t, err := struct64.New(s)
 	if err != nil {
 		panic(err)
 	}
