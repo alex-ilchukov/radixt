@@ -18,3 +18,8 @@ var ErrorOverflow = errors.New("required fields would not fit into node")
 // ErrorChunksOverflow is used by [compact/strg] implementation to indicate,
 // that the chunks of the provided tree would not fit into the implementation.
 var ErrorChunksOverflow = errors.New("chunks would not fit")
+
+// ErrorNodesOverflow is used by [compact/str3] and [compact/str4]
+// implementations to indicate, that the nodes of the provided tree would not
+// fit into the implementation.
+var ErrorNodesOverflow = errors.New("nodes would not fit")
