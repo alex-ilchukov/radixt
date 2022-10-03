@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/alex-ilchukov/radixt"
+	"github.com/alex-ilchukov/radixt/compact/str3"
+	"github.com/alex-ilchukov/radixt/compact/str4"
 	"github.com/alex-ilchukov/radixt/compact/strg"
 	"github.com/alex-ilchukov/radixt/compact/structg"
 	"github.com/alex-ilchukov/radixt/compact/struct32"
@@ -124,9 +126,27 @@ func BenchmarkLookupMethodsInStrgN3(b *testing.B) {
 	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
 }
 
+func BenchmarkLookupMethodsInStr3(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(methods)
+	t, err := str3.New(s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
 func BenchmarkLookupMethodsInStrgN4(b *testing.B) {
 	s, lines := createSaplingTreeFromLines(methods)
 	t, err := strg.New[strg.N4](s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupMethodsInStr4(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(methods)
+	t, err := str4.New(s)
 	if err != nil {
 		panic(err)
 	}
@@ -189,6 +209,15 @@ func BenchmarkLookupHeadersInGeneric(b *testing.B) {
 func BenchmarkLookupHeadersInStrgN4(b *testing.B) {
 	s, lines := createSaplingTreeFromLines(headers)
 	t, err := strg.New[strg.N4](s)
+	if err != nil {
+		panic(err)
+	}
+	benchmarkLookupInTree(b, t, chooseSomeLines(lines))
+}
+
+func BenchmarkLookupHeadersInStr4(b *testing.B) {
+	s, lines := createSaplingTreeFromLines(headers)
+	t, err := str4.New(s)
 	if err != nil {
 		panic(err)
 	}
